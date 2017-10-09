@@ -1,0 +1,29 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8" />
+    <title>dimension</title>
+	<script type="text/javascript" src="js/phaser.min.js"></script>
+	<script type="text/javascript" src="js/preload.js"></script>
+	<script type="text/javascript" src="js/gameplay.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+//taking out the additional arguments from "Hello world"
+	
+let game = new Phaser.Game(1334, 750, Phaser.AUTO);
+game.state.add("Preload", preloadState);
+game.state.add("Game", gameplayState);
+game.state.start("Preload");
+
+</script>
+
+</body>
+</html>
