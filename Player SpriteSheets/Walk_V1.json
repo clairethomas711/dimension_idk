@@ -1,0 +1,48 @@
+{"frames": {
+
+"WalkKey1.png":
+{
+	"frame": {"x":0,"y":0,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"WalkKey2.png":
+{
+	"frame": {"x":0,"y":132,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"WalkKey3.png":
+{
+	"frame": {"x":0,"y":264,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"WalkKey4.png":
+{
+	"frame": {"x":0,"y":396,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Walk_V1.png",
+	"format": "RGBA8888",
+	"size": {"w":96,"h":528},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:9edffec5e876f463526618dc5b30cc55:2e442387083c4cbe5436aab93057688a:5f1aae578e4cc56d7bd1bd55a1c27742$"
+}
+}
