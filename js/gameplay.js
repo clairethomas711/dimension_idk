@@ -21,6 +21,7 @@ gameplayState.prototype.preload = function() {
 }
 
 gameplayState.prototype.create = function() {
+	//game.world.setBounds(0, 0, 1920, 1920); //enable to see how camera works
 	sideFacing = true;
 	game.add.sprite(0, 0, "sky");
 	game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -48,7 +49,13 @@ gameplayState.prototype.create = function() {
 	game.physics.arcade.enable(this.player);
 	this.player.body.gravity.y = 400;
 	this.player.body.bounce.y = 0.15;
-	this.player.body.collideWorldBounds = true;
+	//this.player.body.collideWorldBounds = true;
+	
+	//begin temp cam code
+	
+	game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+	
+	//end temp cam code
 	
 	//begin platform code
 	
