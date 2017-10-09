@@ -21,10 +21,15 @@ gameplayState.prototype.preload = function() {
 }
 
 gameplayState.prototype.create = function() {
-	//game.world.setBounds(0, 0, 1920, 1920); //enable to see how camera works
+	game.world.setBounds(0, 0, 5000, 900); //enable to see how camera works
 	sideFacing = true;
-	game.add.sprite(0, 0, "sky");
+	//game.add.sprite(0, 0, "sky");
 	game.physics.startSystem(Phaser.Physics.ARCADE);
+	
+	//Create the parallaxing background and some variables for it
+	this.createBackground();
+	
+	
 	this.platforms = game.add.group();
 	this.platforms.enableBody = true;
 	
@@ -104,6 +109,10 @@ gameplayState.prototype.update = function() {
 	game.physics.arcade.collide(this.player, this.platforms);
 	game.physics.arcade.collide(this.stars, this.platforms);
 	
+	// Do parallax
+	this.doParallax(this);
+	
+	
 	this.player.body.velocity.x = 0;
 	
 	if(this.cursors.left.isDown) {
@@ -124,7 +133,7 @@ gameplayState.prototype.update = function() {
 			this.player.frame = 5
 	}
 	
-	if(this.cursors.up.isDown && this.player.body.touching.down) {
+	if(this.cursors.up.isDown) {
 		this.player.body.velocity.y = -400;
 	}
 	
@@ -371,42 +380,53 @@ gameplayState.prototype.rotatePlatform = function(platform, state, input) { //pl
 }
 
 
+gameplayState.prototype.createBackground = function() {
+	this.sky = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('fantasy_bg1').height,
+        this.game.width,
+        this.game.cache.getImage('fantasy_bg1').height,
+        'fantasy_bg1'
+    );
+	this.mtn1 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('fantasy_bg2').height,
+        this.game.width,
+        this.game.cache.getImage('fantasy_bg2').height,
+        'fantasy_bg2'
+    );
+	this.mtn2 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('fantasy_bg3').height,
+        this.game.width,
+        this.game.cache.getImage('fantasy_bg3').height,
+        'fantasy_bg3'
+    );
+	this.tree1 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('fantasy_bg4').height,
+        this.game.width,
+        this.game.cache.getImage('fantasy_bg4').height,
+        'fantasy_bg4'
+    );
+	this.tree2 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('fantasy_bg5').height,
+        this.game.width,
+        this.game.cache.getImage('fantasy_bg5').height,
+        'fantasy_bg5'
+    );
+	this.sky.fixedToCamera = true;
+	this.mtn1.fixedToCamera = true;
+	this.mtn2.fixedToCamera = true;
+	this.tree1.fixedToCamera = true;
+	this.tree2.fixedToCamera = true;
+	
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+gameplayState.prototype.doParallax = function() {
+	this.sky.tilePosition.x -= 0.2;
+	this.mtn1.tilePosition.x = game.camera.x * -0.2;
+	this.mtn2.tilePosition.x = game.camera.x * -0.35;
+	this.tree1.tilePosition.x = game.camera.x * -0.5;
+	this.tree2.tilePosition.x = game.camera.x * -0.7;
+	
+}
 
 
 
