@@ -3,17 +3,16 @@ let gameplayState = function() {
 	let played = false;
 	this.score = 0;
 	
-	this.rotating = false;
-	this.state3D = { //this is important
-		XbyY: 1, //X is along the screen X axis and Y is along the screen Y axis
-		ZbyY: 2, //Z is along the screen X axis and Y is along the screen Y axis
-		XbyZ: 3, //X is along the screen X axis and Z is along the screen Y axis
-		YbyX: 4, //Y is along the screen X axis and X is along the screen Y axis
-		YbyZ: 5, //Y is along the screen X axis and Z is along the screen Y axis
-		ZbyX: 6 //Z is along the screen X axis and X is along the screen Y axis
-	};
-	this.platformState = this.state3D.XbyY;
-
+	let rotating = false;
+	/*let enum state3D { //this is important
+		XbyY = 1, //X is along the screen X axis and Y is along the screen Y axis
+		ZbyY = 2, //Z is along the screen X axis and Y is along the screen Y axis
+		XbyZ = 3, //X is along the screen X axis and Z is along the screen Y axis
+		YbyX = 4, //Y is along the screen X axis and X is along the screen Y axis
+		YbyZ = 5, //Y is along the screen X axis and Z is along the screen Y axis
+		ZbyX = 6, //Z is along the screen X axis and X is along the screen Y axis
+	}
+	let platformState = state3D.XbyY;*/
 }
 
 gameplayState.prototype.preload = function() {
@@ -53,7 +52,7 @@ gameplayState.prototype.create = function() {
 	//begin platform code
 	
 	this.platform3D = game.add.sprite(100, 100, "platform3D");
-	//animations from XbyY
+	/*//animations from XbyY
 	this.platform3D.animations.add("XbyYtoZbyYLeft", [0, 1], 10, false);
 	this.platform3D.animations.add("XbyYtoZbyYRight", [0, 1], 10, false);
 	this.platform3D.animations.add("XbyYtoXbyZLeft", [0, 2], 10, false); //in the case of a y rotation, left is up and right is down
@@ -82,7 +81,7 @@ gameplayState.prototype.create = function() {
 	this.platform3D.animations.add("ZbyXtoYbyXLeft", [5, 3], 10, false);
 	this.platform3D.animations.add("ZbyXtoYbyXRight", [5, 3], 10, false);
 	this.platform3D.animations.add("ZbyXtoZbyYLeft", [5, 1], 10, false);
-	this.platform3D.animations.add("ZbyXtoZbyYRight", [5, 1], 10, false);
+	this.platform3D.animations.add("ZbyXtoZbyYRight", [5, 1], 10, false);*/
 	
 	//end platform code
 	this.player.animations.add("left", [0, 1, 2, 3], 10, true);
@@ -123,30 +122,29 @@ gameplayState.prototype.update = function() {
 	
 	//begin platform code
 	let dir = 0;
-	if(this.cursors.up.isDown) //INSERT TIME DELAY AAAAAAA
+	/*if(this.cursors.up.onDown)
 	{
 		dir = 0;
-		this.rotating = true;
+		rotating = true;
 	}
-	if(this.cursors.right.isDown)
+	if(this.cursors.right.onDown)
 	{
 		dir = 1;
-		this.rotating = true;
+		rotating = true;
 	}
-	if(this.cursors.down.isDown)
+	if(this.cursors.down.onDown)
 	{
 		dir = 2;
-		this.rotating = true;
+		rotating = true;
 	}
-	if(this.cursors.left.isDown)
+	if(this.cursors.left.onDown)
 	{
 		dir = 3;
-		this.rotating = true;
-	}
-	if(this.rotating) {
-		this.rotatePlatform(this.platform3D, this.platformState, dir);
-	}
-	this.rotating = false;
+		rotating = true;
+	}*/
+	//if(rotating)
+		//rotatePlatform(platform3D, platformState, dir);
+	rotating = false;
 	
 	//end platform code
 }
@@ -154,29 +152,29 @@ gameplayState.prototype.update = function() {
 gameplayState.prototype.rotatePlatform = function(platform, state, input) { //platform object to rotate will hold state value in future, input is the rotation direction
 	let caseFailure = false;
 	switch(state) {
-		case this.state3D.XbyY: {
+		case state3D.XbyY: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3D.animations.play("XbyYtoXbyZLeft", false);
-					this.platformState = this.state3D.XbyZ;
+					this.platform3D.animations.play("XbyYtoXbyZLeft");
+					platformState = state3D.XbyZ;
 					//set hitbox
 					break;
 				}
 				case 1: {
-					this.platform3D.animations.play("XbyYtoZbyYRight", false);
-					this.platformState = this.state3D.ZbyY;
+					this.platform3D.animations.play("XbyYtoZbyYRight");
+					platformState = state3D.ZbyY;
 					//set hitbox
 					break;
 				}
 				case 2: {
-					this.platform3D.animations.play("XbyYtoXbyZRight", false);
-					this.platformState = this.state3D.XbyZ;
+					this.platform3D.animations.play("XbyYtoXbyZRight");
+					platformState = state3D.XbyZ;
 					//set hitbox
 					break;
 				}
 				case 3: {
-					this.platform3D.animations.play("XbyYtoZbyYLeft", false);
-					this.platformState = this.state3D.ZbyY;
+					this.platform3D.animations.play("XbyYtoZbyYLeft");
+					platformState = state3D.ZbyY;
 					//set hitbox
 					break;
 				}
@@ -187,29 +185,29 @@ gameplayState.prototype.rotatePlatform = function(platform, state, input) { //pl
 			}
 			break;
 		}
-		case this.state3D.ZbyY: {
+		case state3D.ZbyY: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3D.animations.play("ZbyYtoZbyXLeft", false);
-					this.platformState = this.state3D.ZbyX;
+					this.platform3D.animations.play("ZbyYtoZbyXLeft");
+					platformState = state3D.ZbyX;
 					//set hitbox
 					break;
 				}
 				case 1: {
-					this.platform3D.animations.play("ZbyYtoXbyYRight", false);
-					this.platformState = this.state3D.XbyY;
+					this.platform3D.animations.play("ZbyYtoXbyYRight");
+					platformState = state3D.XbyY;
 					//set hitbox
 					break;
 				}
 				case 2: {
-					this.platform3D.animations.play("ZbyYtoZbyXRight", false);
-					this.platformState = this.state3D.ZbyX;
+					this.platform3D.animations.play("ZbyYtoZbyXRight");
+					platformState = state3D.ZbyX;
 					//set hitbox
 					break;
 				}
 				case 3: {
-					this.platform3D.animations.play("ZbyYtoXbyYLeft", false);
-					this.platformState = this.state3D.XbyY;
+					this.platform3D.animations.play("ZbyYtoXbyYLeft");
+					platformState = state3D.XbyY;
 					//set hitbox
 					break;
 				}
@@ -220,29 +218,29 @@ gameplayState.prototype.rotatePlatform = function(platform, state, input) { //pl
 			}
 			break;
 		}
-		case this.state3D.XbyZ: {
+		case state3D.XbyZ: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3D.animations.play("XbyZtoXbyYLeft", false);
-					this.platformState = this.state3D.XbyY;
+					this.platform3D.animations.play("XbyZtoXbyYLeft");
+					platformState = state3D.XbyY;
 					//set hitbox
 					break;
 				}
 				case 1: {
-					this.platform3D.animations.play("XbyZtoYbyZRight", false);
-					this.platformState = this.state3D.YbyZ;
+					this.platform3D.animations.play("XbyZtoYbyZRight");
+					platformState = state3D.YbyZ;
 					//set hitbox
 					break;
 				}
 				case 2: {
-					this.platform3D.animations.play("XbyZtoXbyYRight", false);
-					this.platformState = this.state3D.XbyY;
+					this.platform3D.animations.play("XbyZtoXbyYRight");
+					platformState = state3D.XbyY;
 					//set hitbox
 					break;
 				}
 				case 3: {
-					this.platform3D.animations.play("XbyZtoYbyZLeft", false);
-					this.platformState = this.state3D.YbyZ;
+					this.platform3D.animations.play("XbyZtoYbyZLeft");
+					platformState = state3D.YbyZ;
 					//set hitbox
 					break;
 				}
@@ -253,29 +251,29 @@ gameplayState.prototype.rotatePlatform = function(platform, state, input) { //pl
 			}
 			break;
 		}
-		case this.state3D.YbyX: {
+		case state3D.YbyX: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3D.animations.play("YbyXtoYbyZLeft", false);
-					this.platformState = this.state3D.YbyZ;
+					this.platform3D.animations.play("YbyXtoYbyZLeft");
+					platformState = state3D.YbyZ;
 					//set hitbox
 					break;
 				}
 				case 1: {
-					this.platform3D.animations.play("YbyXtoZbyXRight", false);
-					this.platformState = this.state3D.ZbyX;
+					this.platform3D.animations.play("YbyXtoZbyXRight");
+					platformState = state3D.ZbyX;
 					//set hitbox
 					break;
 				}
 				case 2: {
-					this.platform3D.animations.play("YbyXtoYbyZRight", false);
-					this.platformState = this.state3D.YbyZ;
+					this.platform3D.animations.play("YbyXtoYbyZRight");
+					platformState = state3D.YbyZ;
 					//set hitbox
 					break;
 				}
 				case 3: {
-					this.platform3D.animations.play("YbyXtoZbyXLeft", false);
-					this.platformState = this.state3D.ZbyX;
+					this.platform3D.animations.play("YbyXtoZbyXLeft");
+					platformState = state3D.ZbyX;
 					//set hitbox
 					break;
 				}
@@ -286,29 +284,29 @@ gameplayState.prototype.rotatePlatform = function(platform, state, input) { //pl
 			}
 			break;
 		}
-		case this.state3D.YbyZ: {
+		case state3D.YbyZ: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3D.animations.play("YbyZtoYbyXLeft", false);
-					this.platformState = this.state3D.YbyX;
+					this.platform3D.animations.play("YbyZtoYbyXLeft");
+					platformState = state3D.YbyX;
 					//set hitbox
 					break;
 				}
 				case 1: {
-					this.platform3D.animations.play("YbyZtoXbyZRight", false);
-					this.platformState = this.state3D.XbyZ;
+					this.platform3D.animations.play("YbyZtoXbyZRight");
+					platformState = state3D.XbyZ;
 					//set hitbox
 					break;
 				}
 				case 2: {
-					this.platform3D.animations.play("YbyZtoYbyXRight", false);
-					this.platformState = this.state3D.YbyX;
+					this.platform3D.animations.play("YbyZtoYbyXRight");
+					platformState = state3D.YbyX;
 					//set hitbox
 					break;
 				}
 				case 3: {
-					this.platform3D.animations.play("YbyZtoXbyZLeft", false);
-					this.platformState = this.state3D.XbyZ;
+					this.platform3D.animations.play("YbyZtoXbyZLeft");
+					platformState = state3D.XbyZ;
 					//set hitbox
 					break;
 				}
@@ -319,29 +317,29 @@ gameplayState.prototype.rotatePlatform = function(platform, state, input) { //pl
 			}
 			break;
 		}
-		case this.state3D.ZbyX: {
+		case state3D.ZbyX: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3D.animations.play("ZbyXtoZbyYLeft", false);
-					this.platformState = this.state3D.ZbyY;
+					this.platform3D.animations.play("ZbyXtoZbyYLeft");
+					platformState = state3D.ZbyY;
 					//set hitbox
 					break;
 				}
 				case 1: {
-					this.platform3D.animations.play("ZbyXtoYbyXRight", false);
-					this.platformState = this.state3D.YbyX;
+					this.platform3D.animations.play("ZbyXtoYbyXRight");
+					platformState = state3D.YbyX;
 					//set hitbox
 					break;
 				}
 				case 2: {
-					this.platform3D.animations.play("ZbyXtoZbyYRight", false);
-					this.platformState = this.state3D.ZbyY;
+					this.platform3D.animations.play("ZbyXtoZbyYRight");
+					platformState = state3D.ZbyY;
 					//set hitbox
 					break;
 				}
 				case 3: {
-					this.platform3D.animations.play("ZbyXtoYbyXLeft", false);
-					this.platformState = this.state3D.YbyX;
+					this.platform3D.animations.play("ZbyXtoYbyXLeft");
+					platformState = state3D.YbyX;
 					//set hitbox
 					break;
 				}
@@ -357,9 +355,10 @@ gameplayState.prototype.rotatePlatform = function(platform, state, input) { //pl
 			break;
 		}
 	}
-	if(caseFailure) {
+	if(caseFailure)
+	{
 		let i = 0;
-		alert("CASE FAIL");
+		//print something
 	}
 }
 
