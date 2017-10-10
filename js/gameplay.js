@@ -2,7 +2,8 @@ let gameplayState = function() {
 	let sideFacing = true;
 	let played = false;
 	this.score = 0;
-	this.rotationTimer = this.game.time.totalElapsedSeconds();
+	//this.gameTime = new Phaser.Time(this.game);
+	this.rotationTimer = 0;
 	
 	//begin enum and stuff coding
 	this.rotating = false;
@@ -95,7 +96,6 @@ gameplayState.prototype.create = function() {
 	
 	game.physics.arcade.enable(this.platform3D);
 	this.platform3D.body.immovable = true;
-	this.platform3D.body.setSize(256,128,0,64);
 	
 	//end platform code
 	this.player.animations.add("left", [0, 1, 2, 3], 10, true);
@@ -137,35 +137,35 @@ gameplayState.prototype.update = function() {
 	
 	//begin platform code
 	let dir = 0;
-	if(this.cursors.up.isDown) //INSERT TIME DELAY AAAAAAA
+	if(this.cursors.up.isDown && !this.rotating) //INSERT TIME DELAY AAAAAAA
 	{
 		dir = 0;
 		this.rotating = true;
-		//this.rotationTimer = this.game.time.totalElapsedSeconds();
 	}
-	if(this.cursors.right.isDown)
+	if(this.cursors.right.isDown && !this.rotating)
 	{
 		dir = 1;
 		this.rotating = true;
-		//this.rotationTimer = this.game.time.totalElapsedSeconds();
 	}
-	if(this.cursors.down.isDown)
+	if(this.cursors.down.isDown && !this.rotating)
 	{
 		dir = 2;
 		this.rotating = true;
-		//this.rotationTimer = this.game.time.totalElapsedSeconds();
 	}
-	if(this.cursors.left.isDown)
+	if(this.cursors.left.isDown && !this.rotating)
 	{
 		dir = 3;
 		this.rotating = true;
-		//this.rotationTimer = this.game.time.totalElapsedSeconds();
 	}
-	if(this.rotating) {
+	if(this.rotating && this.rotationTimer == 0) {
 		this.rotatePlatform(this.platform3D, this.platformState, dir);
+		this.rotationTimer = game.time.totalElapsedSeconds();
 	}
-	//if((this.game.time.totalElapsedSeconds() - this.rotationTimer) > 2)
+	if((game.time.totalElapsedSeconds() - this.rotationTimer) >= 2)
+	{
 		this.rotating = false;
+		this.rotationTimer = 0;
+	}
 	//end platform code
 }
 
@@ -378,6 +378,39 @@ gameplayState.prototype.rotatePlatform = function(platform, state, input) { //pl
 	if(caseFailure) {
 		let i = 0;
 		alert("CASE FAIL");
+	}
+	else
+	{
+		state = this.platformState;
+		switch(state) {
+			case this.state3D.XbyY: {
+				this.platform3D.body.setSize(256,128,0,64);
+				break;
+			}
+			case this.state3D.ZbyY: {
+				this.platform3D.body.setSize(64,128,96,64);
+				break;
+			}
+			case this.state3D.XbyZ: {
+				this.platform3D.body.setSize(256,64,0,96);
+				break;
+			}
+			case this.state3D.YbyX: {
+				this.platform3D.body.setSize(128,256,64,0);
+				break;
+			}
+			case this.state3D.YbyZ: {
+				this.platform3D.body.setSize(128,64,64,96);
+				break;
+			}
+			case this.state3D.ZbyX: {
+				this.platform3D.body.setSize(64,256,96,0);
+				break;
+			}
+			default: {
+				break;
+			}
+		}
 	}
 }
 
