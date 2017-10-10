@@ -2,18 +2,20 @@ let gameplayState = function() {
 	let sideFacing = true;
 	let played = false;
 	this.score = 0;
+	this.rotationTimer = this.game.time.totalElapsedSeconds();
 	
+	//begin enum and stuff coding
 	this.rotating = false;
 	this.state3D = { //this is important
-		XbyY: 1, //X is along the screen X axis and Y is along the screen Y axis
-		ZbyY: 2, //Z is along the screen X axis and Y is along the screen Y axis
-		XbyZ: 3, //X is along the screen X axis and Z is along the screen Y axis
-		YbyX: 4, //Y is along the screen X axis and X is along the screen Y axis
-		YbyZ: 5, //Y is along the screen X axis and Z is along the screen Y axis
-		ZbyX: 6 //Z is along the screen X axis and X is along the screen Y axis
+		XbyY: 0, //X is along the screen X axis and Y is along the screen Y axis
+		ZbyY: 1, //Z is along the screen X axis and Y is along the screen Y axis
+		XbyZ: 2, //X is along the screen X axis and Z is along the screen Y axis
+		YbyX: 3, //Y is along the screen X axis and X is along the screen Y axis
+		YbyZ: 4, //Y is along the screen X axis and Z is along the screen Y axis
+		ZbyX: 5 //Z is along the screen X axis and X is along the screen Y axis
 	};
 	this.platformState = this.state3D.XbyY;
-
+	//end enum and stuff coding
 }
 
 gameplayState.prototype.preload = function() {
@@ -91,6 +93,10 @@ gameplayState.prototype.create = function() {
 	this.platform3D.animations.add("ZbyXtoZbyYLeft", [5, 1], 10, false);
 	this.platform3D.animations.add("ZbyXtoZbyYRight", [5, 1], 10, false);
 	
+	game.physics.arcade.enable(this.platform3D);
+	this.platform3D.body.immovable = true;
+	this.platform3D.body.setSize(256,128,0,64);
+	
 	//end platform code
 	this.player.animations.add("left", [0, 1, 2, 3], 10, true);
 	this.player.animations.add("right", [5, 6, 7, 8], 10, true);
@@ -103,6 +109,7 @@ gameplayState.prototype.create = function() {
 gameplayState.prototype.update = function() {
 	game.physics.arcade.collide(this.player, this.platforms);
 	game.physics.arcade.collide(this.stars, this.platforms);
+	game.physics.arcade.collide(this.player, this.platform3D);
 	
 	this.player.body.velocity.x = 0;
 	
@@ -134,27 +141,31 @@ gameplayState.prototype.update = function() {
 	{
 		dir = 0;
 		this.rotating = true;
+		//this.rotationTimer = this.game.time.totalElapsedSeconds();
 	}
 	if(this.cursors.right.isDown)
 	{
 		dir = 1;
 		this.rotating = true;
+		//this.rotationTimer = this.game.time.totalElapsedSeconds();
 	}
 	if(this.cursors.down.isDown)
 	{
 		dir = 2;
 		this.rotating = true;
+		//this.rotationTimer = this.game.time.totalElapsedSeconds();
 	}
 	if(this.cursors.left.isDown)
 	{
 		dir = 3;
 		this.rotating = true;
+		//this.rotationTimer = this.game.time.totalElapsedSeconds();
 	}
 	if(this.rotating) {
 		this.rotatePlatform(this.platform3D, this.platformState, dir);
 	}
-	this.rotating = false;
-	
+	//if((this.game.time.totalElapsedSeconds() - this.rotationTimer) > 2)
+		this.rotating = false;
 	//end platform code
 }
 
