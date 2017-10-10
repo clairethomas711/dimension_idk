@@ -29,9 +29,9 @@ gameplayState.prototype.create = function() {
 	//Create the parallaxing background and some variables for it
 	this.createBackground();
 	
+	//Load and create the level from tiled
+	this.createLevel() ;
 	
-	this.platforms = game.add.group();
-	this.platforms.enableBody = true;
 	
 	this.stars = game.add.group();
 	this.stars.enableBody = true;
@@ -41,16 +41,11 @@ gameplayState.prototype.create = function() {
 		star.body.bounce.y = Math.random();
 	}
 	
-	let ground = this.platforms.create(0, game.world.height - 64, "platform");
-	ground.scale.setTo(2,2);
-	ground.body.immovable = true;
 	
-	let plat = this.platforms.create(400, 400, "platform");
-	plat.body.immovable = true;
-	plat = this.platforms.create(-150, 250, "platform");
-	plat.body.immovable = true;
+	//This finds where the player start is in tiled and gets the position
+	let result = this.findObjectsByType('playerstart',this.map,'objectlayer');
 	
-	this.player = game.add.sprite(32, 450, "shrek");
+	this.player = game.add.sprite(result[0].x, result[0].y, "shrek");
 	game.physics.arcade.enable(this.player);
 	this.player.body.gravity.y = 400;
 	this.player.body.bounce.y = 0.15;
@@ -106,8 +101,8 @@ gameplayState.prototype.create = function() {
 }
 
 gameplayState.prototype.update = function() {
-	game.physics.arcade.collide(this.player, this.platforms);
-	game.physics.arcade.collide(this.stars, this.platforms);
+	game.physics.arcade.collide(this.player, this.walls);
+	game.physics.arcade.collide(this.stars, this.walls);
 	
 	// Do parallax
 	this.doParallax(this);
@@ -428,7 +423,26 @@ gameplayState.prototype.doParallax = function() {
 	
 }
 
+gameplayState.prototype.createLevel = function() {
+	this.map = this.game.add.tilemap('level1');
+	this.map.addTilesetImage('tiletest', 'level1tiles');
+	
+	this.background = this.map.createLayer('background');
+    this.walls = this.map.createLayer('walls');
+	this.map.setCollisionBetween(1, 100, true, 'walls');
+	this.walls.resizeWorld();
+}
 
+gameplayState.prototype.findObjectsByType = function(type, map, layer) {
+    let result = new Array();
+    map.objects[layer].forEach(function(element){
+      if(element.properties.type === type) {
+        element.y -= map.tileHeight;
+        result.push(element);
+      }      
+    });
+    return result;
+}
 
 
 
