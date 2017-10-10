@@ -62,7 +62,10 @@ gameplayState.prototype.create = function() {
 	
 	//begin platform code
 	
-	this.platform3D = game.add.sprite(100, 100, "platform3D");
+	this.platform3DGroup = game.add.group();
+	let tempPlatform3D = this.platform3DGroup.create(100, 100, "platform3D");
+	
+	/*this.platform3D = game.add.sprite(100, 100, "platform3D");
 	//animations from XbyY
 	this.platform3D.animations.add("XbyYtoZbyYLeft", [0, 1], 10, false);
 	this.platform3D.animations.add("XbyYtoZbyYRight", [0, 1], 10, false);
@@ -94,8 +97,46 @@ gameplayState.prototype.create = function() {
 	this.platform3D.animations.add("ZbyXtoZbyYLeft", [5, 1], 10, false);
 	this.platform3D.animations.add("ZbyXtoZbyYRight", [5, 1], 10, false);
 	
-	game.physics.arcade.enable(this.platform3D);
-	this.platform3D.body.immovable = true;
+	//game.physics.arcade.enable(this.platform3D);
+	this.platform3D.body.immovable = true;*/
+	
+	//animations from XbyY
+	tempPlatform3D.animations.add("XbyYtoZbyYLeft", [0, 1], 10, false);
+	tempPlatform3D.animations.add("XbyYtoZbyYRight", [0, 1], 10, false);
+	tempPlatform3D.animations.add("XbyYtoXbyZLeft", [0, 2], 10, false); //in the case of a y rotation, left is up and right is down
+	tempPlatform3D.animations.add("XbyYtoXbyZRight", [0, 2], 10, false);
+	//animations from ZbyY
+	tempPlatform3D.animations.add("ZbyYtoXbyYLeft", [1, 0], 10, false);
+	tempPlatform3D.animations.add("ZbyYtoXbyYRight", [1, 0], 10, false);
+	tempPlatform3D.animations.add("ZbyYtoZbyXLeft", [1, 5], 10, false);
+	tempPlatform3D.animations.add("ZbyYtoZbyXRight", [1, 5], 10, false);
+	//animations from XbyZ
+	tempPlatform3D.animations.add("XbyZtoXbyYLeft", [2, 0], 10, false);
+	tempPlatform3D.animations.add("XbyZtoXbyYRight", [2, 0], 10, false);
+	tempPlatform3D.animations.add("XbyZtoYbyZLeft", [2, 4], 10, false);
+	tempPlatform3D.animations.add("XbyZtoYbyZRight", [2, 4], 10, false);
+	//animations from YbyX
+	tempPlatform3D.animations.add("YbyXtoZbyXLeft", [3, 5], 10, false);
+	tempPlatform3D.animations.add("YbyXtoZbyXRight", [3, 5], 10, false);
+	tempPlatform3D.animations.add("YbyXtoYbyZLeft", [3, 4], 10, false);
+	tempPlatform3D.animations.add("YbyXtoYbyZRight", [3, 4], 10, false);
+	//animations from YbyZ
+	tempPlatform3D.animations.add("YbyZtoYbyXLeft", [4, 3], 10, false);
+	tempPlatform3D.animations.add("YbyZtoYbyXRight", [4, 3], 10, false);
+	tempPlatform3D.animations.add("YbyZtoXbyZLeft", [4, 2], 10, false);
+	tempPlatform3D.animations.add("YbyZtoXbyZRight", [4, 2], 10, false);
+	//animations from ZbyX
+	tempPlatform3D.animations.add("ZbyXtoYbyXLeft", [5, 3], 10, false);
+	tempPlatform3D.animations.add("ZbyXtoYbyXRight", [5, 3], 10, false);
+	tempPlatform3D.animations.add("ZbyXtoZbyYLeft", [5, 1], 10, false);
+	tempPlatform3D.animations.add("ZbyXtoZbyYRight", [5, 1], 10, false);
+	
+	//game.physics.arcade.enable(tempPlatform3D);
+	//platform3DGroup.body.immovable = true;
+	
+	
+	
+	game.physics.arcade.enable(this.platform3DGroup);
 	
 	//end platform code
 	this.player.animations.add("left", [0, 1, 2, 3], 10, true);
