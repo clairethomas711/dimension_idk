@@ -1,0 +1,75 @@
+{"frames": {
+
+"IdleKey1.png":
+{
+	"frame": {"x":0,"y":0,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"IdleKey2.png":
+{
+	"frame": {"x":0,"y":132,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"JumpKey.png":
+{
+	"frame": {"x":0,"y":264,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"WalkKey1.png":
+{
+	"frame": {"x":0,"y":396,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"WalkKey2.png":
+{
+	"frame": {"x":0,"y":528,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"WalkKey3.png":
+{
+	"frame": {"x":0,"y":660,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"WalkKey4.png":
+{
+	"frame": {"x":0,"y":792,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Doddy.png",
+	"format": "RGBA8888",
+	"size": {"w":96,"h":924},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:439ab469bf7a72e1f15771c3c836ff1c:a1759afd57b2d39c472d40468c7a1d2d:b4e60462628097d9b3e707b83fbb1138$"
+}
+}
