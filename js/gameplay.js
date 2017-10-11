@@ -137,7 +137,7 @@ gameplayState.prototype.create = function() {
 
 gameplayState.prototype.update = function() {
 	game.physics.arcade.collide(this.player, this.walls);
-	game.physics.arcade.collide(this.player, this.platform3D);
+	game.physics.arcade.collide(this.player, this.platform3DGroup);
 	
 	// Do parallax
 	this.doParallax(this);
