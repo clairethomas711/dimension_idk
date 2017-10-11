@@ -35,15 +35,6 @@ gameplayState.prototype.create = function() {
 	this.createLevel() ;
 	
 	
-	this.stars = game.add.group();
-	this.stars.enableBody = true;
-	for(let i = 0;i < 12;i++) {
-		let star = this.stars.create(i * 70, 0, "star");
-		star.body.gravity.y = 2000;
-		star.body.bounce.y = Math.random();
-	}
-	
-	
 	//This finds where the player start is in tiled and gets the position
 	let result = this.findObjectsByType('playerstart',this.map,'objectlayer');
 	
@@ -108,7 +99,6 @@ gameplayState.prototype.create = function() {
 
 gameplayState.prototype.update = function() {
 	game.physics.arcade.collide(this.player, this.walls);
-	game.physics.arcade.collide(this.stars, this.walls);
 	game.physics.arcade.collide(this.player, this.platform3D);
 	
 	// Do parallax
