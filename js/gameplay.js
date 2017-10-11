@@ -424,27 +424,27 @@ gameplayState.prototype.setPlatformPhysics = function(pos) {
 		state = this.platformStates[pos];
 		switch(state) {
 			case this.state3D.XbyY: {
-				this.platform3DGroup.children[pos].body.setSize(256,128,0,64);
-				break;
-			}
-			case this.state3D.ZbyY: {
-				this.platform3DGroup.children[pos].body.setSize(64,128,96,64);
-				break;
-			}
-			case this.state3D.XbyZ: {
 				this.platform3DGroup.children[pos].body.setSize(256,64,0,96);
 				break;
 			}
-			case this.state3D.YbyX: {
-				this.platform3DGroup.children[pos].body.setSize(128,256,64,0);
-				break;
-			}
-			case this.state3D.YbyZ: {
+			case this.state3D.ZbyY: {
 				this.platform3DGroup.children[pos].body.setSize(128,64,64,96);
 				break;
 			}
-			case this.state3D.ZbyX: {
+			case this.state3D.XbyZ: {
+				this.platform3DGroup.children[pos].body.setSize(256,128,0,64);
+				break;
+			}
+			case this.state3D.YbyX: {
 				this.platform3DGroup.children[pos].body.setSize(64,256,96,0);
+				break;
+			}
+			case this.state3D.YbyZ: {
+				this.platform3DGroup.children[pos].body.setSize(64,128,96,64);
+				break;
+			}
+			case this.state3D.ZbyX: {
+				this.platform3DGroup.children[pos].body.setSize(128,256,64,0);
 				break;
 			}
 			default: {
