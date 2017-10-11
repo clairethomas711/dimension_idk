@@ -51,6 +51,7 @@ gameplayState.prototype.create = function() {
 	game.physics.arcade.enable(this.player);
 	this.player.body.gravity.y = 400;
 	this.player.body.bounce.y = 0.15;
+	this.player.anchor.setTo(.5,.5);
 	//this.player.body.collideWorldBounds = true;
 	
 	//begin temp cam code
@@ -117,13 +118,13 @@ gameplayState.prototype.update = function() {
 	this.player.body.velocity.x = 0;
 	
 	if(this.cursors.left.isDown) {
-		//this.player.sprite.scale.x *= -1
+		this.player.scale.x = -1;
 		this.player.animations.play("walk");
 		this.player.body.velocity.x = -400;
 		sideFacing = false;
 	}
 	else if(this.cursors.right.isDown) {
-
+		this.player.scale.x = 1;
 		this.player.animations.play("walk");
 		this.player.body.velocity.x = 400;
 		sideFacing = true;
