@@ -45,6 +45,7 @@ gameplayState.prototype.create = function() {
 	this.player.body.gravity.y = 400;
 	this.player.body.bounce.y = 0.15;
 	this.player.anchor.setTo(.5,.5);
+	this.player.body.setSize(60,120,18,6);
 	//this.player.body.collideWorldBounds = true;
 	
 	//begin temp cam code
@@ -504,7 +505,7 @@ gameplayState.prototype.doParallax = function() {
 
 gameplayState.prototype.createLevel = function() {
 	this.map = this.game.add.tilemap('level1');
-	this.map.addTilesetImage('tiletest', 'level1tiles');
+	this.map.addTilesetImage('FantasyTiles', 'level1tiles');
 	
 	this.background = this.map.createLayer('background');
     this.walls = this.map.createLayer('walls');
