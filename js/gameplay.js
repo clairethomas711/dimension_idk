@@ -14,7 +14,7 @@ let gameplayState = function() {
 		YbyZ: 4, //Y is along the screen X axis and Z is along the screen Y axis
 		ZbyX: 5 //Z is along the screen X axis and X is along the screen Y axis
 	};
-	this.platformStates = [0,1,2,2];
+	this.platformStates = [0,1,4,5];
 	this.platformsX = [100,200,300,400];
 	this.platformsY = [100,200,300,400];
 	//end enum and stuff coding
@@ -60,35 +60,35 @@ gameplayState.prototype.create = function() {
 		let tempPlatform3D = this.platform3DGroup.create(this.platformsX[i], this.platformsY[i], "platform3D");
 		
 		//animations from XbyY
-		tempPlatform3D.animations.add("XbyYtoZbyYLeft", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 10, false); //rotate by 90
-		tempPlatform3D.animations.add("XbyYtoZbyYRight", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 10, false); //opposite rotate by 90
+		tempPlatform3D.animations.add("XbyYtoZbyYLeft", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 25, false); //rotate by 90
+		tempPlatform3D.animations.add("XbyYtoZbyYRight", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 25, false); //opposite rotate by 90
 		tempPlatform3D.animations.add("XbyYtoXbyZLeft", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14], 25, false); //in the case of a y rotation, left is up and right is down
-		tempPlatform3D.animations.add("XbyYtoXbyZRight", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14], 10, false); //make scale*-1
+		tempPlatform3D.animations.add("XbyYtoXbyZRight", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14], 25, false); //by 180
 		//animations from ZbyY
-		tempPlatform3D.animations.add("ZbyYtoXbyYLeft", [30,31,32,33,34,35,36,37,38,39,40,41,42,43,44], 10, false);
-		tempPlatform3D.animations.add("ZbyYtoXbyYRight", [1, 0], 10, false);
-		tempPlatform3D.animations.add("ZbyYtoZbyXLeft", [1, 5], 10, false);
-		tempPlatform3D.animations.add("ZbyYtoZbyXRight", [1, 5], 10, false);
+		tempPlatform3D.animations.add("ZbyYtoXbyYLeft", [30,31,32,33,34,35,36,37,38,39,40,41,42,43,44], 25, false);
+		tempPlatform3D.animations.add("ZbyYtoXbyYRight", [30,31,32,33,34,35,36,37,38,39,40,41,42,43,44], 25, false);
+		tempPlatform3D.animations.add("ZbyYtoZbyXLeft", [29,28,27,26,25,24,23,22,21,20,19,18,17,16,15], 25, false);
+		tempPlatform3D.animations.add("ZbyYtoZbyXRight", [29,28,27,26,25,24,23,22,21,20,19,18,17,16,15], 25, false);
 		//animations from XbyZ
-		tempPlatform3D.animations.add("XbyZtoXbyYLeft", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 10, false);
-		tempPlatform3D.animations.add("XbyZtoXbyYRight", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 10, false);
-		tempPlatform3D.animations.add("XbyZtoYbyZLeft", [2, 4], 10, false);
-		tempPlatform3D.animations.add("XbyZtoYbyZRight", [2, 4], 10, false);
+		tempPlatform3D.animations.add("XbyZtoXbyYLeft", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 25, false);
+		tempPlatform3D.animations.add("XbyZtoXbyYRight", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 25, false);
+		tempPlatform3D.animations.add("XbyZtoYbyZLeft", [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29], 25, false);
+		tempPlatform3D.animations.add("XbyZtoYbyZRight", [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29], 25, false);
 		//animations from YbyX
-		tempPlatform3D.animations.add("YbyXtoZbyXLeft", [3, 5], 10, false);
-		tempPlatform3D.animations.add("YbyXtoZbyXRight", [3, 5], 10, false);
-		tempPlatform3D.animations.add("YbyXtoYbyZLeft", [3, 4], 10, false);
-		tempPlatform3D.animations.add("YbyXtoYbyZRight", [3, 4], 10, false);
+		tempPlatform3D.animations.add("YbyXtoZbyXLeft", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 25, false); //by 90
+		tempPlatform3D.animations.add("YbyXtoZbyXRight", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 25, false); //by 270?
+		tempPlatform3D.animations.add("YbyXtoYbyZLeft", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 25, false);
+		tempPlatform3D.animations.add("YbyXtoYbyZRight", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 25, false);//by 180
 		//animations from YbyZ
-		tempPlatform3D.animations.add("YbyZtoYbyXLeft", [4, 3], 10, false);
-		tempPlatform3D.animations.add("YbyZtoYbyXRight", [4, 3], 10, false);
-		tempPlatform3D.animations.add("YbyZtoXbyZLeft", [4, 2], 10, false);
-		tempPlatform3D.animations.add("YbyZtoXbyZRight", [4, 2], 10, false);
+		tempPlatform3D.animations.add("YbyZtoYbyXLeft", [30,31,32,33,34,35,36,37,38,39,40,41,42,43,44], 25, false);
+		tempPlatform3D.animations.add("YbyZtoYbyXRight", [30,31,32,33,34,35,36,37,38,39,40,41,42,43,44], 25, false);
+		tempPlatform3D.animations.add("YbyZtoXbyZLeft", [29,28,27,26,25,24,23,22,21,20,19,18,17,16,15], 25, false);
+		tempPlatform3D.animations.add("YbyZtoXbyZRight", [29,28,27,26,25,24,23,22,21,20,19,18,17,16,15], 25, false);
 		//animations from ZbyX
-		tempPlatform3D.animations.add("ZbyXtoYbyXLeft", [5, 3], 10, false);
-		tempPlatform3D.animations.add("ZbyXtoYbyXRight", [5, 3], 10, false);
-		tempPlatform3D.animations.add("ZbyXtoZbyYLeft", [5, 1], 10, false);
-		tempPlatform3D.animations.add("ZbyXtoZbyYRight", [5, 1], 10, false);
+		tempPlatform3D.animations.add("ZbyXtoYbyXLeft", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 25, false);
+		tempPlatform3D.animations.add("ZbyXtoYbyXRight", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 25, false);
+		tempPlatform3D.animations.add("ZbyXtoZbyYLeft", [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29], 25, false);
+		tempPlatform3D.animations.add("ZbyXtoZbyYRight", [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29], 25, false);
 		
 		game.physics.arcade.enable(tempPlatform3D);
 		tempPlatform3D.body.immovable = true;
@@ -217,7 +217,7 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 0: {
 					this.platform3DGroup.children[pos].animations.play("XbyYtoXbyZLeft", false);
 					this.platformStates[pos] = this.state3D.XbyZ;
-					//this.platform3DGroup.children[pos].scale *= -1;
+					this.platform3DGroup.children[pos].angle = 180;
 					break;
 				}
 				case 1: {
@@ -250,21 +250,25 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 0: {
 					this.platform3DGroup.children[pos].animations.play("ZbyYtoZbyXLeft", false);
 					this.platformStates[pos] = this.state3D.ZbyX;
+					this.platform3DGroup.children[pos].angle = 90;
 					break;
 				}
 				case 1: {
 					this.platform3DGroup.children[pos].animations.play("ZbyYtoXbyYRight", false);
 					this.platformStates[pos] = this.state3D.XbyY;
+					this.platform3DGroup.children[pos].angle = 270;
 					break;
 				}
 				case 2: {
 					this.platform3DGroup.children[pos].animations.play("ZbyYtoZbyXRight", false);
 					this.platformStates[pos] = this.state3D.ZbyX;
+					this.platform3DGroup.children[pos].angle = 270;
 					break;
 				}
 				case 3: {
 					this.platform3DGroup.children[pos].animations.play("ZbyYtoXbyYLeft", false);
 					this.platformStates[pos] = this.state3D.XbyY;
+					this.platform3DGroup.children[pos].angle = 90;
 					break;
 				}
 				default: {
@@ -284,11 +288,13 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 1: {
 					this.platform3DGroup.children[pos].animations.play("XbyZtoYbyZRight", false);
 					this.platformStates[pos] = this.state3D.YbyZ;
+					this.platform3DGroup.children[pos].angle = 180;
 					break;
 				}
 				case 2: {
 					this.platform3DGroup.children[pos].animations.play("XbyZtoXbyYRight", false);
 					this.platformStates[pos] = this.state3D.XbyY;
+					this.platform3DGroup.children[pos].angle = 180;
 					break;
 				}
 				case 3: {
@@ -313,16 +319,19 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 1: {
 					this.platform3DGroup.children[pos].animations.play("YbyXtoZbyXRight", false);
 					this.platformStates[pos] = this.state3D.ZbyX;
+					this.platform3DGroup.children[pos].angle = 270;
 					break;
 				}
 				case 2: {
 					this.platform3DGroup.children[pos].animations.play("YbyXtoYbyZRight", false);
 					this.platformStates[pos] = this.state3D.YbyZ;
+					this.platform3DGroup.children[pos].angle = 180;
 					break;
 				}
 				case 3: {
 					this.platform3DGroup.children[pos].animations.play("YbyXtoZbyXLeft", false);
 					this.platformStates[pos] = this.state3D.ZbyX;
+					this.platform3DGroup.children[pos].angle = 90;
 					break;
 				}
 				default: {
@@ -337,21 +346,25 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 0: {
 					this.platform3DGroup.children[pos].animations.play("YbyZtoYbyXLeft", false);
 					this.platformStates[pos] = this.state3D.YbyX;
+					this.platform3DGroup.children[pos].angle = 90;
 					break;
 				}
 				case 1: {
 					this.platform3DGroup.children[pos].animations.play("YbyZtoXbyZRight", false);
 					this.platformStates[pos] = this.state3D.XbyZ;
+					this.platform3DGroup.children[pos].angle = 270;
 					break;
 				}
 				case 2: {
 					this.platform3DGroup.children[pos].animations.play("YbyZtoYbyXRight", false);
 					this.platformStates[pos] = this.state3D.YbyX;
+					this.platform3DGroup.children[pos].angle = 270;
 					break;
 				}
 				case 3: {
 					this.platform3DGroup.children[pos].animations.play("YbyZtoXbyZLeft", false);
 					this.platformStates[pos] = this.state3D.XbyZ;
+					this.platform3DGroup.children[pos].angle = 90;
 					break;
 				}
 				default: {
@@ -366,21 +379,25 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 0: {
 					this.platform3DGroup.children[pos].animations.play("ZbyXtoZbyYLeft", false);
 					this.platformStates[pos] = this.state3D.ZbyY;
+					this.platform3DGroup.children[pos].angle = 90;
 					break;
 				}
 				case 1: {
 					this.platform3DGroup.children[pos].animations.play("ZbyXtoYbyXRight", false);
 					this.platformStates[pos] = this.state3D.YbyX;
+					this.platform3DGroup.children[pos].angle = 270;
 					break;
 				}
 				case 2: {
 					this.platform3DGroup.children[pos].animations.play("ZbyXtoZbyYRight", false);
 					this.platformStates[pos] = this.state3D.ZbyY;
+					this.platform3DGroup.children[pos].angle = 270;
 					break;
 				}
 				case 3: {
 					this.platform3DGroup.children[pos].animations.play("ZbyXtoYbyXLeft", false);
 					this.platformStates[pos] = this.state3D.YbyX;
+					this.platform3DGroup.children[pos].angle = 90;
 					break;
 				}
 				default: {
