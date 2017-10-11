@@ -3,7 +3,7 @@ let preloadState = function() {
 }
 
 preloadState.prototype.preload = function() {
-	game.load.spritesheet("platform3D", "assets/Platform_Test.png", 256, 256);
+	game.load.spritesheet("platform3D", "assets/blockRotationSheet.png", 256, 256);
 	game.load.spritesheet("shrek", "assets/dude.png", 32, 48);
 	game.load.spritesheet("doddy", "assets/Doddy.png", 96, 132);
 	
