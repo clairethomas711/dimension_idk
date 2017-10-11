@@ -47,7 +47,7 @@ gameplayState.prototype.create = function() {
 	//This finds where the player start is in tiled and gets the position
 	let result = this.findObjectsByType('playerstart',this.map,'objectlayer');
 	
-	this.player = game.add.sprite(result[0].x, result[0].y, "shrek");
+	this.player = game.add.sprite(result[0].x, result[0].y, "doddy");
 	game.physics.arcade.enable(this.player);
 	this.player.body.gravity.y = 400;
 	this.player.body.bounce.y = 0.15;
@@ -96,9 +96,10 @@ gameplayState.prototype.create = function() {
 	game.physics.arcade.enable(this.platform3D);
 	this.platform3D.body.immovable = true;
 	//end platform code
-	this.player.animations.add("left", [0, 1, 2, 3], 10, true);
-	this.player.animations.add("right", [5, 6, 7, 8], 10, true);
-	
+	this.player.animations.add("walk", [3, 4, 5, 6], 10, true);
+	//this.player.animations.add("right", [5, 6, 7, 8], 10, true);
+	this.player.animations.add("idle", [0,1], 5, true);
+	this.player.animations.add("jump", [2], 10, false);
 	this.scoreText = game.add.text(16, 16, "Score: 0", {fontSize: "32pt", fill: "#000000"});
 	
 	this.cursors = game.input.keyboard.createCursorKeys();
@@ -116,24 +117,28 @@ gameplayState.prototype.update = function() {
 	this.player.body.velocity.x = 0;
 	
 	if(this.cursors.left.isDown) {
-		this.player.animations.play("left");
+		//this.player.sprite.scale.x *= -1
+		this.player.animations.play("walk");
 		this.player.body.velocity.x = -400;
 		sideFacing = false;
 	}
 	else if(this.cursors.right.isDown) {
-		this.player.animations.play("right");
+
+		this.player.animations.play("walk");
 		this.player.body.velocity.x = 400;
 		sideFacing = true;
 	}
 	else {
-		this.player.animations.stop();
-		if(!sideFacing)
-			this.player.frame = 0;
-		else
-			this.player.frame = 5
+		this.player.animations.play("idle");
+		//if(!sideFacing)
+			//this.player.frame = 0;
+		//else
+			//this.player.frame = 5
 	}
 	
 	if(this.cursors.up.isDown) {
+		this.player.animations.play("jump");
+		this.player.frame = 2;
 		this.player.body.velocity.y = -400;
 	}
 	
