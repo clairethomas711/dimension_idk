@@ -14,7 +14,9 @@ let gameplayState = function() {
 		YbyZ: 4, //Y is along the screen X axis and Z is along the screen Y axis
 		ZbyX: 5 //Z is along the screen X axis and X is along the screen Y axis
 	};
-	this.platformState = this.state3D.XbyY;
+	this.platformStates = [0,1,2,2];
+	this.platformsX = [100,200,300,400];
+	this.platformsY = [100,200,300,400];
 	//end enum and stuff coding
 }
 
@@ -61,40 +63,84 @@ gameplayState.prototype.create = function() {
 	
 	//begin platform code
 	
-	this.platform3D = game.add.sprite(100, 100, "platform3D");
-	//animations from XbyY
-	this.platform3D.animations.add("XbyYtoZbyYLeft", [0, 1], 10, false);
-	this.platform3D.animations.add("XbyYtoZbyYRight", [0, 1], 10, false);
-	this.platform3D.animations.add("XbyYtoXbyZLeft", [0, 2], 10, false); //in the case of a y rotation, left is up and right is down
-	this.platform3D.animations.add("XbyYtoXbyZRight", [0, 2], 10, false);
-	//animations from ZbyY
-	this.platform3D.animations.add("ZbyYtoXbyYLeft", [1, 0], 10, false);
-	this.platform3D.animations.add("ZbyYtoXbyYRight", [1, 0], 10, false);
-	this.platform3D.animations.add("ZbyYtoZbyXLeft", [1, 5], 10, false);
-	this.platform3D.animations.add("ZbyYtoZbyXRight", [1, 5], 10, false);
-	//animations from XbyZ
-	this.platform3D.animations.add("XbyZtoXbyYLeft", [2, 0], 10, false);
-	this.platform3D.animations.add("XbyZtoXbyYRight", [2, 0], 10, false);
-	this.platform3D.animations.add("XbyZtoYbyZLeft", [2, 4], 10, false);
-	this.platform3D.animations.add("XbyZtoYbyZRight", [2, 4], 10, false);
-	//animations from YbyX
-	this.platform3D.animations.add("YbyXtoZbyXLeft", [3, 5], 10, false);
-	this.platform3D.animations.add("YbyXtoZbyXRight", [3, 5], 10, false);
-	this.platform3D.animations.add("YbyXtoYbyZLeft", [3, 4], 10, false);
-	this.platform3D.animations.add("YbyXtoYbyZRight", [3, 4], 10, false);
-	//animations from YbyZ
-	this.platform3D.animations.add("YbyZtoYbyXLeft", [4, 3], 10, false);
-	this.platform3D.animations.add("YbyZtoYbyXRight", [4, 3], 10, false);
-	this.platform3D.animations.add("YbyZtoXbyZLeft", [4, 2], 10, false);
-	this.platform3D.animations.add("YbyZtoXbyZRight", [4, 2], 10, false);
-	//animations from ZbyX
-	this.platform3D.animations.add("ZbyXtoYbyXLeft", [5, 3], 10, false);
-	this.platform3D.animations.add("ZbyXtoYbyXRight", [5, 3], 10, false);
-	this.platform3D.animations.add("ZbyXtoZbyYLeft", [5, 1], 10, false);
-	this.platform3D.animations.add("ZbyXtoZbyYRight", [5, 1], 10, false);
+	this.platform3DGroup = game.add.group();
+	for(let i = 0;i < 4;i++)
+	{
+		let tempPlatform3D = this.platform3DGroup.create(this.platformsX[i], this.platformsY[i], "platform3D");
+		
+		/*this.platform3D = game.add.sprite(100, 100, "platform3D");
+		//animations from XbyY
+		this.platform3D.animations.add("XbyYtoZbyYLeft", [0, 1], 10, false);
+		this.platform3D.animations.add("XbyYtoZbyYRight", [0, 1], 10, false);
+		this.platform3D.animations.add("XbyYtoXbyZLeft", [0, 2], 10, false); //in the case of a y rotation, left is up and right is down
+		this.platform3D.animations.add("XbyYtoXbyZRight", [0, 2], 10, false);
+		//animations from ZbyY
+		this.platform3D.animations.add("ZbyYtoXbyYLeft", [1, 0], 10, false);
+		this.platform3D.animations.add("ZbyYtoXbyYRight", [1, 0], 10, false);
+		this.platform3D.animations.add("ZbyYtoZbyXLeft", [1, 5], 10, false);
+		this.platform3D.animations.add("ZbyYtoZbyXRight", [1, 5], 10, false);
+		//animations from XbyZ
+		this.platform3D.animations.add("XbyZtoXbyYLeft", [2, 0], 10, false);
+		this.platform3D.animations.add("XbyZtoXbyYRight", [2, 0], 10, false);
+		this.platform3D.animations.add("XbyZtoYbyZLeft", [2, 4], 10, false);
+		this.platform3D.animations.add("XbyZtoYbyZRight", [2, 4], 10, false);
+		//animations from YbyX
+		this.platform3D.animations.add("YbyXtoZbyXLeft", [3, 5], 10, false);
+		this.platform3D.animations.add("YbyXtoZbyXRight", [3, 5], 10, false);
+		this.platform3D.animations.add("YbyXtoYbyZLeft", [3, 4], 10, false);
+		this.platform3D.animations.add("YbyXtoYbyZRight", [3, 4], 10, false);
+		//animations from YbyZ
+		this.platform3D.animations.add("YbyZtoYbyXLeft", [4, 3], 10, false);
+		this.platform3D.animations.add("YbyZtoYbyXRight", [4, 3], 10, false);
+		this.platform3D.animations.add("YbyZtoXbyZLeft", [4, 2], 10, false);
+		this.platform3D.animations.add("YbyZtoXbyZRight", [4, 2], 10, false);
+		//animations from ZbyX
+		this.platform3D.animations.add("ZbyXtoYbyXLeft", [5, 3], 10, false);
+		this.platform3D.animations.add("ZbyXtoYbyXRight", [5, 3], 10, false);
+		this.platform3D.animations.add("ZbyXtoZbyYLeft", [5, 1], 10, false);
+		this.platform3D.animations.add("ZbyXtoZbyYRight", [5, 1], 10, false);
+		
+		//game.physics.arcade.enable(this.platform3D);
+		this.platform3D.body.immovable = true;*/
+		
+		//animations from XbyY
+		tempPlatform3D.animations.add("XbyYtoZbyYLeft", [0, 1], 10, false);
+		tempPlatform3D.animations.add("XbyYtoZbyYRight", [0, 1], 10, false);
+		tempPlatform3D.animations.add("XbyYtoXbyZLeft", [0, 2], 10, false); //in the case of a y rotation, left is up and right is down
+		tempPlatform3D.animations.add("XbyYtoXbyZRight", [0, 2], 10, false);
+		//animations from ZbyY
+		tempPlatform3D.animations.add("ZbyYtoXbyYLeft", [1, 0], 10, false);
+		tempPlatform3D.animations.add("ZbyYtoXbyYRight", [1, 0], 10, false);
+		tempPlatform3D.animations.add("ZbyYtoZbyXLeft", [1, 5], 10, false);
+		tempPlatform3D.animations.add("ZbyYtoZbyXRight", [1, 5], 10, false);
+		//animations from XbyZ
+		tempPlatform3D.animations.add("XbyZtoXbyYLeft", [2, 0], 10, false);
+		tempPlatform3D.animations.add("XbyZtoXbyYRight", [2, 0], 10, false);
+		tempPlatform3D.animations.add("XbyZtoYbyZLeft", [2, 4], 10, false);
+		tempPlatform3D.animations.add("XbyZtoYbyZRight", [2, 4], 10, false);
+		//animations from YbyX
+		tempPlatform3D.animations.add("YbyXtoZbyXLeft", [3, 5], 10, false);
+		tempPlatform3D.animations.add("YbyXtoZbyXRight", [3, 5], 10, false);
+		tempPlatform3D.animations.add("YbyXtoYbyZLeft", [3, 4], 10, false);
+		tempPlatform3D.animations.add("YbyXtoYbyZRight", [3, 4], 10, false);
+		//animations from YbyZ
+		tempPlatform3D.animations.add("YbyZtoYbyXLeft", [4, 3], 10, false);
+		tempPlatform3D.animations.add("YbyZtoYbyXRight", [4, 3], 10, false);
+		tempPlatform3D.animations.add("YbyZtoXbyZLeft", [4, 2], 10, false);
+		tempPlatform3D.animations.add("YbyZtoXbyZRight", [4, 2], 10, false);
+		//animations from ZbyX
+		tempPlatform3D.animations.add("ZbyXtoYbyXLeft", [5, 3], 10, false);
+		tempPlatform3D.animations.add("ZbyXtoYbyXRight", [5, 3], 10, false);
+		tempPlatform3D.animations.add("ZbyXtoZbyYLeft", [5, 1], 10, false);
+		tempPlatform3D.animations.add("ZbyXtoZbyYRight", [5, 1], 10, false);
 	
-	game.physics.arcade.enable(this.platform3D);
-	this.platform3D.body.immovable = true;
+		game.physics.arcade.enable(tempPlatform3D);
+		tempPlatform3D.body.immovable = true;
+		setPlatformPhysics(tempPlatform3D, pos);
+		//set visual to line up
+	}
+	
+	game.physics.arcade.enable(this.platform3DGroup);
 	//end platform code
 	this.player.animations.add("left", [0, 1, 2, 3], 10, true);
 	this.player.animations.add("right", [5, 6, 7, 8], 10, true);
@@ -107,7 +153,7 @@ gameplayState.prototype.create = function() {
 gameplayState.prototype.update = function() {
 	game.physics.arcade.collide(this.player, this.walls);
 	game.physics.arcade.collide(this.stars, this.walls);
-	game.physics.arcade.collide(this.player, this.platform3D);
+	game.physics.arcade.collide(this.player, this.platform3DGroup);
 	
 	// Do parallax
 	this.doParallax(this);
@@ -160,7 +206,8 @@ gameplayState.prototype.update = function() {
 		this.rotating = true;
 	}
 	if(this.rotating && this.rotationTimer == 0) {
-		this.rotatePlatform(this.platform3D, this.platformState, dir);
+		for(let i = 0;i < 4;i++)
+			this.rotatePlatform(i, dir);
 		this.rotationTimer = game.time.totalElapsedSeconds();
 	}
 	if((game.time.totalElapsedSeconds() - this.rotationTimer) >= 2)
@@ -171,9 +218,9 @@ gameplayState.prototype.update = function() {
 	//end platform code
 }
 
-gameplayState.prototype.rotatePlatform = function(platform, state, input) { //platform object to rotate will hold state value in future, input is the rotation direction
+gameplayState.prototype.rotatePlatform = function(pos, input) {
 	let caseFailure = false;
-	switch(state) {
+	switch(platformStates[pos]) {
 		case this.state3D.XbyY: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
@@ -365,8 +412,9 @@ gameplayState.prototype.rotatePlatform = function(platform, state, input) { //pl
 		let i = 0;
 		alert("CASE FAIL");
 	}
-	else
-	{
+}
+
+gameplayState.prototype.setPlatformPhysics = function(platform, state) {
 		state = this.platformState;
 		switch(state) {
 			case this.state3D.XbyY: {
@@ -398,7 +446,6 @@ gameplayState.prototype.rotatePlatform = function(platform, state, input) { //pl
 			}
 		}
 	}
-}
 
 
 gameplayState.prototype.createBackground = function() {
