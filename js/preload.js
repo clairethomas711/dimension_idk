@@ -8,6 +8,8 @@ preloadState.prototype.preload = function() {
 	game.load.image("star", "assets/star.png");
 	game.load.spritesheet("platform3D", "assets/blockRotationSheet.png", 256, 256);
 	game.load.spritesheet("shrek", "assets/dude.png", 32, 48);
+	game.load.spritesheet("doddy", "assets/Doddy.png", 96, 132);
+	
 	
 	// Load the background
 	game.load.image("fantasy_bg1", "Backgrounds/level1/Background_Fantasy_1.png");

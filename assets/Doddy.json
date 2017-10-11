@@ -1,6 +1,6 @@
 {"frames": {
 
-"WalkKey1.png":
+"IdleKey1.png":
 {
 	"frame": {"x":0,"y":0,"w":96,"h":132},
 	"rotated": false,
@@ -9,7 +9,7 @@
 	"sourceSize": {"w":96,"h":132},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"WalkKey2.png":
+"IdleKey2.png":
 {
 	"frame": {"x":0,"y":132,"w":96,"h":132},
 	"rotated": false,
@@ -18,7 +18,7 @@
 	"sourceSize": {"w":96,"h":132},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"WalkKey3.png":
+"JumpKey.png":
 {
 	"frame": {"x":0,"y":264,"w":96,"h":132},
 	"rotated": false,
@@ -27,9 +27,36 @@
 	"sourceSize": {"w":96,"h":132},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"WalkKey4.png":
+"WalkKey1.png":
 {
 	"frame": {"x":0,"y":396,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"WalkKey2.png":
+{
+	"frame": {"x":0,"y":528,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"WalkKey3.png":
+{
+	"frame": {"x":0,"y":660,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"WalkKey4.png":
+{
+	"frame": {"x":0,"y":792,"w":96,"h":132},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
@@ -39,10 +66,10 @@
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": "Walk_V1.png",
+	"image": "Doddy.png",
 	"format": "RGBA8888",
-	"size": {"w":96,"h":528},
+	"size": {"w":96,"h":924},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:9edffec5e876f463526618dc5b30cc55:2e442387083c4cbe5436aab93057688a:5f1aae578e4cc56d7bd1bd55a1c27742$"
+	"smartupdate": "$TexturePacker:SmartUpdate:439ab469bf7a72e1f15771c3c836ff1c:a1759afd57b2d39c472d40468c7a1d2d:b4e60462628097d9b3e707b83fbb1138$"
 }
 }

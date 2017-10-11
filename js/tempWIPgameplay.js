@@ -48,7 +48,7 @@ gameplayState.prototype.create = function() {
 	plat = this.platforms.create(-150, 250, "platform");
 	plat.body.immovable = true;
 	
-	this.player = game.add.sprite(32, 450, "shrek");
+	this.player = game.add.sprite(32, 450, "doddy");
 	game.physics.arcade.enable(this.player);
 	this.player.body.gravity.y = 400;
 	this.player.body.bounce.y = 0.15;
