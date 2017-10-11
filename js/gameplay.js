@@ -60,18 +60,18 @@ gameplayState.prototype.create = function() {
 		let tempPlatform3D = this.platform3DGroup.create(this.platformsX[i], this.platformsY[i], "platform3D");
 		
 		//animations from XbyY
-		tempPlatform3D.animations.add("XbyYtoZbyYLeft", [0, 1], 10, false);
-		tempPlatform3D.animations.add("XbyYtoZbyYRight", [0, 1], 10, false);
-		tempPlatform3D.animations.add("XbyYtoXbyZLeft", [0, 2], 10, false); //in the case of a y rotation, left is up and right is down
-		tempPlatform3D.animations.add("XbyYtoXbyZRight", [0, 2], 10, false);
+		tempPlatform3D.animations.add("XbyYtoZbyYLeft", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 10, false); //rotate by 90
+		tempPlatform3D.animations.add("XbyYtoZbyYRight", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 10, false); //opposite rotate by 90
+		tempPlatform3D.animations.add("XbyYtoXbyZLeft", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14], 25, false); //in the case of a y rotation, left is up and right is down
+		tempPlatform3D.animations.add("XbyYtoXbyZRight", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14], 10, false); //make scale*-1
 		//animations from ZbyY
-		tempPlatform3D.animations.add("ZbyYtoXbyYLeft", [1, 0], 10, false);
+		tempPlatform3D.animations.add("ZbyYtoXbyYLeft", [30,31,32,33,34,35,36,37,38,39,40,41,42,43,44], 10, false);
 		tempPlatform3D.animations.add("ZbyYtoXbyYRight", [1, 0], 10, false);
 		tempPlatform3D.animations.add("ZbyYtoZbyXLeft", [1, 5], 10, false);
 		tempPlatform3D.animations.add("ZbyYtoZbyXRight", [1, 5], 10, false);
 		//animations from XbyZ
-		tempPlatform3D.animations.add("XbyZtoXbyYLeft", [2, 0], 10, false);
-		tempPlatform3D.animations.add("XbyZtoXbyYRight", [2, 0], 10, false);
+		tempPlatform3D.animations.add("XbyZtoXbyYLeft", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 10, false);
+		tempPlatform3D.animations.add("XbyZtoXbyYRight", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 10, false);
 		tempPlatform3D.animations.add("XbyZtoYbyZLeft", [2, 4], 10, false);
 		tempPlatform3D.animations.add("XbyZtoYbyZRight", [2, 4], 10, false);
 		//animations from YbyX
@@ -99,29 +99,32 @@ gameplayState.prototype.create = function() {
 				break;
 			}
 			case this.state3D.ZbyY: {
-				this.platform3DGroup.children[i].frame = 1;
+				this.platform3DGroup.children[i].frame = 29;
+				this.platform3DGroup.children[i].angle = 90;
 				break;
 			}
 			case this.state3D.XbyZ: {
-				this.platform3DGroup.children[i].frame = 2;
+				this.platform3DGroup.children[i].frame = 14;
 				break;
 			}
 			case this.state3D.YbyX: {
-				this.platform3DGroup.children[i].frame = 3;
+				this.platform3DGroup.children[i].frame = 44;
 				break;
 			}
 			case this.state3D.YbyZ: {
-				this.platform3DGroup.children[i].frame = 4;
+				this.platform3DGroup.children[i].frame = 29;
 				break;
 			}
 			case this.state3D.ZbyX: {
-				this.platform3DGroup.children[i].frame = 5;
+				this.platform3DGroup.children[i].frame = 14;
+				this.platform3DGroup.children[i].angle = 90;
 				break;
 			}
 			default: {
 				break;
 			}
 		}
+		tempPlatform3D.anchor.setTo(.5,.5);
 	}
 	
 	game.physics.arcade.enable(this.platform3DGroup);
@@ -214,21 +217,25 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 0: {
 					this.platform3DGroup.children[pos].animations.play("XbyYtoXbyZLeft", false);
 					this.platformStates[pos] = this.state3D.XbyZ;
+					//this.platform3DGroup.children[pos].scale *= -1;
 					break;
 				}
 				case 1: {
 					this.platform3DGroup.children[pos].animations.play("XbyYtoZbyYRight", false);
 					this.platformStates[pos] = this.state3D.ZbyY;
+					this.platform3DGroup.children[pos].angle = 90;
 					break;
 				}
 				case 2: {
 					this.platform3DGroup.children[pos].animations.play("XbyYtoXbyZRight", false);
 					this.platformStates[pos] = this.state3D.XbyZ;
+					this.platform3DGroup.children[pos].angle = 0;
 					break;
 				}
 				case 3: {
 					this.platform3DGroup.children[pos].animations.play("XbyYtoZbyYLeft", false);
 					this.platformStates[pos] = this.state3D.ZbyY;
+					this.platform3DGroup.children[pos].angle = 270;
 					break;
 				}
 				default: {
