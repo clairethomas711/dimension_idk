@@ -16,8 +16,8 @@ preloadState.prototype.preload = function() {
 	game.load.image("fantasy_bg5", "Backgrounds/level1/Background_Fantasy_5.png");
 	
 	// Load the levels and tilesets
-	game.load.tilemap('level1', 'assets/test.json', null, Phaser.Tilemap.TILED_JSON);
-	this.load.image('level1tiles', 'assets/tiletest.png');
+	game.load.tilemap('level1', 'assets/level1.json', null, Phaser.Tilemap.TILED_JSON);
+	this.load.image('level1tiles', 'assets/FantasyTIles.png');
 	
 }
 
