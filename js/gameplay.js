@@ -75,8 +75,8 @@ gameplayState.prototype.create = function() {
 		tempPlatform3D.animations.add("XbyZtoYbyZLeft", [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29], 25, false);
 		tempPlatform3D.animations.add("XbyZtoYbyZRight", [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29], 25, false);
 		//animations from YbyX
-		tempPlatform3D.animations.add("YbyXtoZbyXLeft", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 25, false); //by 90
-		tempPlatform3D.animations.add("YbyXtoZbyXRight", [14,13,12,11,10,9,8,7,6,5,4,3,2,1,0], 25, false); //by 270?
+		tempPlatform3D.animations.add("YbyXtoZbyXLeft", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14], 25, false); //by 90
+		tempPlatform3D.animations.add("YbyXtoZbyXRight", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14], 25, false); //by 270?
 		tempPlatform3D.animations.add("YbyXtoYbyZLeft", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 25, false);
 		tempPlatform3D.animations.add("YbyXtoYbyZRight", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 25, false);//by 180
 		//animations from YbyZ
@@ -223,7 +223,7 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 1: {
 					this.platform3DGroup.children[pos].animations.play("XbyYtoZbyYRight", false);
 					this.platformStates[pos] = this.state3D.ZbyY;
-					this.platform3DGroup.children[pos].angle = 90;
+					this.platform3DGroup.children[pos].angle = 270;
 					break;
 				}
 				case 2: {
@@ -235,7 +235,7 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 3: {
 					this.platform3DGroup.children[pos].animations.play("XbyYtoZbyYLeft", false);
 					this.platformStates[pos] = this.state3D.ZbyY;
-					this.platform3DGroup.children[pos].angle = 270;
+					this.platform3DGroup.children[pos].angle = 90;
 					break;
 				}
 				default: {
@@ -250,7 +250,7 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 0: {
 					this.platform3DGroup.children[pos].animations.play("ZbyYtoZbyXLeft", false);
 					this.platformStates[pos] = this.state3D.ZbyX;
-					this.platform3DGroup.children[pos].angle = 90;
+					this.platform3DGroup.children[pos].angle = 270;
 					break;
 				}
 				case 1: {
@@ -262,7 +262,7 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 2: {
 					this.platform3DGroup.children[pos].animations.play("ZbyYtoZbyXRight", false);
 					this.platformStates[pos] = this.state3D.ZbyX;
-					this.platform3DGroup.children[pos].angle = 270;
+					this.platform3DGroup.children[pos].angle = 90;
 					break;
 				}
 				case 3: {
@@ -283,6 +283,7 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 0: {
 					this.platform3DGroup.children[pos].animations.play("XbyZtoXbyYLeft", false);
 					this.platformStates[pos] = this.state3D.XbyY;
+					this.platform3DGroup.children[pos].angle = 180;
 					break;
 				}
 				case 1: {
@@ -294,7 +295,6 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 2: {
 					this.platform3DGroup.children[pos].animations.play("XbyZtoXbyYRight", false);
 					this.platformStates[pos] = this.state3D.XbyY;
-					this.platform3DGroup.children[pos].angle = 180;
 					break;
 				}
 				case 3: {
@@ -314,6 +314,7 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 0: {
 					this.platform3DGroup.children[pos].animations.play("YbyXtoYbyZLeft", false);
 					this.platformStates[pos] = this.state3D.YbyZ;
+					this.platform3DGroup.children[pos].angle = 180;
 					break;
 				}
 				case 1: {
@@ -325,7 +326,6 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 2: {
 					this.platform3DGroup.children[pos].animations.play("YbyXtoYbyZRight", false);
 					this.platformStates[pos] = this.state3D.YbyZ;
-					this.platform3DGroup.children[pos].angle = 180;
 					break;
 				}
 				case 3: {
@@ -346,7 +346,7 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 0: {
 					this.platform3DGroup.children[pos].animations.play("YbyZtoYbyXLeft", false);
 					this.platformStates[pos] = this.state3D.YbyX;
-					this.platform3DGroup.children[pos].angle = 90;
+					this.platform3DGroup.children[pos].angle = 270;
 					break;
 				}
 				case 1: {
@@ -358,7 +358,7 @@ gameplayState.prototype.rotatePlatform = function(pos, input) {
 				case 2: {
 					this.platform3DGroup.children[pos].animations.play("YbyZtoYbyXRight", false);
 					this.platformStates[pos] = this.state3D.YbyX;
-					this.platform3DGroup.children[pos].angle = 270;
+					this.platform3DGroup.children[pos].angle = 90;
 					break;
 				}
 				case 3: {
