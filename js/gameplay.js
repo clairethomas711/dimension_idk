@@ -120,13 +120,13 @@ gameplayState.prototype.update = function() {
 	if(this.cursors.left.isDown) {
 		this.player.scale.x = -1;
 		this.player.animations.play("walk");
-		this.player.body.velocity.x = -400;
+		this.player.body.velocity.x = -300;
 		sideFacing = false;
 	}
 	else if(this.cursors.right.isDown) {
 		this.player.scale.x = 1;
 		this.player.animations.play("walk");
-		this.player.body.velocity.x = 400;
+		this.player.body.velocity.x = 300;
 		sideFacing = true;
 	}
 	else {
