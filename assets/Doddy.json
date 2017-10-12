@@ -27,7 +27,7 @@
 	"sourceSize": {"w":96,"h":132},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"WalkKey1.png":
+"Walk01.png":
 {
 	"frame": {"x":0,"y":396,"w":96,"h":132},
 	"rotated": false,
@@ -36,7 +36,7 @@
 	"sourceSize": {"w":96,"h":132},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"WalkKey2.png":
+"Walk02.png":
 {
 	"frame": {"x":0,"y":528,"w":96,"h":132},
 	"rotated": false,
@@ -45,7 +45,7 @@
 	"sourceSize": {"w":96,"h":132},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"WalkKey3.png":
+"Walk03.png":
 {
 	"frame": {"x":0,"y":660,"w":96,"h":132},
 	"rotated": false,
@@ -54,9 +54,45 @@
 	"sourceSize": {"w":96,"h":132},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"WalkKey4.png":
+"Walk04.png":
 {
 	"frame": {"x":0,"y":792,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"Walk05.png":
+{
+	"frame": {"x":0,"y":924,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"Walk06.png":
+{
+	"frame": {"x":0,"y":1056,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"Walk07.png":
+{
+	"frame": {"x":0,"y":1188,"w":96,"h":132},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
+	"sourceSize": {"w":96,"h":132},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"Walk08.png":
+{
+	"frame": {"x":0,"y":1320,"w":96,"h":132},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":96,"h":132},
@@ -68,8 +104,8 @@
 	"version": "1.0",
 	"image": "Doddy.png",
 	"format": "RGBA8888",
-	"size": {"w":96,"h":924},
+	"size": {"w":96,"h":1452},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:439ab469bf7a72e1f15771c3c836ff1c:a1759afd57b2d39c472d40468c7a1d2d:b4e60462628097d9b3e707b83fbb1138$"
+	"smartupdate": "$TexturePacker:SmartUpdate:5570bf4966cce5873b1c8f6ead5b8f1d:300d0256dc087c44da73a3f48d6d95af:b4e60462628097d9b3e707b83fbb1138$"
 }
 }
