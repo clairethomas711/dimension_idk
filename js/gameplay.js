@@ -1,8 +1,6 @@
 let gameplayState = function() {
 	let sideFacing = true;
 	let played = false;
-	this.score = 0;
-	//this.gameTime = new Phaser.Time(this.game);
 	this.rotationTimer = 0;
 	
 	//begin enum and stuff coding
@@ -134,7 +132,6 @@ gameplayState.prototype.create = function() {
 	//this.player.animations.add("right", [5, 6, 7, 8], 10, true);
 	this.player.animations.add("idle", [0,1], 5, true);
 	this.player.animations.add("jump", [2], 10, false);
-	this.scoreText = game.add.text(16, 16, "Score: 0", {fontSize: "32pt", fill: "#000000"});
 	
 	this.cursors = game.input.keyboard.createCursorKeys();
 }

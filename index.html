@@ -6,6 +6,7 @@
         <script type="text/javascript" src="js/phaser.min.js"></script>
         <script type="text/javascript" src="js/preload.js"></script>
         <script type="text/javascript" src="js/gameplay.js"></script>
+		<script type="text/javascript" src="js/credits.js"></script>
 		<style type="text/css">
 			body {
 				margin: 0;
@@ -19,6 +20,7 @@
 	let game = new Phaser.Game(1334, 750, Phaser.AUTO, "phaser_example");
 	game.state.add("Preload", preloadState);
 	game.state.add("Gameplay", gameplayState);
+	game.state.add("Credits", creditState);
 	game.state.start("Preload");
 
     </script>

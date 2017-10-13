@@ -4,9 +4,7 @@ let preloadState = function() {
 
 preloadState.prototype.preload = function() {
 	game.load.spritesheet("platform3D", "assets/FantasyPlatform3D.png", 256, 256);
-	game.load.spritesheet("shrek", "assets/dude.png", 32, 48);
 	game.load.spritesheet("doddy", "assets/Doddy.png", 96, 132);
-	
 	
 	// Load the background
 	game.load.image("fantasy_bg1", "Backgrounds/level1/Background_Fantasy_1.png");
@@ -18,6 +16,9 @@ preloadState.prototype.preload = function() {
 	// Load the levels and tilesets
 	game.load.tilemap('level1', 'assets/level1.json', null, Phaser.Tilemap.TILED_JSON);
 	this.load.image('level1tiles', 'assets/FantasyTIles.png');
+	
+	//Load the Credits
+	game.load.text("Credits", "assets/credits.txt");
 	
 }
 
