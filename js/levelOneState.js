@@ -1,4 +1,4 @@
-let gameplayState = function() {
+let levelOneState = function() {
 	let sideFacing = true;
 	let played = false;
 	this.rotationTimer = 0;
@@ -18,11 +18,11 @@ let gameplayState = function() {
 	//end enum and stuff coding
 }
 
-gameplayState.prototype.preload = function() {
+levelOneState.prototype.preload = function() {
 	
 }
 
-gameplayState.prototype.create = function() {
+levelOneState.prototype.create = function() {
 	this.gameFunctions = new gameplayFunctions(); //THIS LINE IS IMPORTANT
 	game.world.setBounds(0, 0, 5000, 900); //enable to see how camera works
 	sideFacing = true;
@@ -137,7 +137,7 @@ gameplayState.prototype.create = function() {
 	this.cursors = game.input.keyboard.createCursorKeys();
 }
 
-gameplayState.prototype.update = function() {
+levelOneState.prototype.update = function() {
 	game.physics.arcade.collide(this.player, this.walls);
 	game.physics.arcade.collide(this.player, this.platform3DGroup);
 	
@@ -174,8 +174,8 @@ gameplayState.prototype.update = function() {
 	}
 	
 	//begin platform code
-	let dir = 0;
-	if(this.cursors.up.isDown && !this.rotating) //INSERT TIME DELAY AAAAAAA
+	let dir = 0; //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
+	if(this.cursors.up.isDown && !this.rotating)
 	{
 		dir = 0;
 		this.rotating = true;
@@ -220,7 +220,7 @@ gameplayState.prototype.update = function() {
 	//end switching level code
 }
 
-gameplayState.prototype.rotatePlatform = function(pos, input) { //change to receive platform, then place in separate file
+levelOneState.prototype.rotatePlatform = function(pos, input) { //change to receive platform, then place in separate file
 	let caseFailure = false;
 	switch(this.platformStates[pos]) {
 		case this.state3D.XbyY: {
@@ -433,7 +433,7 @@ gameplayState.prototype.rotatePlatform = function(pos, input) { //change to rece
 		this.setPlatformPhysics(pos);
 }
 
-gameplayState.prototype.setPlatformPhysics = function(pos) { //change to receive platform, then place in separate file
+levelOneState.prototype.setPlatformPhysics = function(pos) { //change to receive platform, then place in separate file
 		state = this.platformStates[pos];
 		switch(state) {
 			case this.state3D.XbyY: {
@@ -467,7 +467,7 @@ gameplayState.prototype.setPlatformPhysics = function(pos) { //change to receive
 	}
 
 
-gameplayState.prototype.createBackground = function() {
+levelOneState.prototype.createBackground = function() {
 	this.sky = this.game.add.tileSprite(0,
         this.game.height - this.game.cache.getImage('fantasy_bg1').height,
         this.game.width,
@@ -506,7 +506,7 @@ gameplayState.prototype.createBackground = function() {
 	
 }
 
-gameplayState.prototype.doParallax = function() {
+levelOneState.prototype.doParallax = function() {
 	this.sky.tilePosition.x -= 0.2;
 	this.mtn1.tilePosition.x = game.camera.x * -0.2;
 	this.mtn2.tilePosition.x = game.camera.x * -0.35;
@@ -515,7 +515,7 @@ gameplayState.prototype.doParallax = function() {
 	
 }
 
-gameplayState.prototype.createLevel = function() {
+levelOneState.prototype.createLevel = function() {
 	this.map = this.game.add.tilemap('level1');
 	this.map.addTilesetImage('FantasyTiles', 'level1tiles');
 	
@@ -525,7 +525,7 @@ gameplayState.prototype.createLevel = function() {
 	this.walls.resizeWorld();
 }
 
-/*gameplayState.prototype.findObjectsByType = function(type, map, layer) {
+/*levelOneState.prototype.findObjectsByType = function(type, map, layer) {
     let result = new Array();
     map.objects[layer].forEach(function(element){
       if(element.properties.type === type) {

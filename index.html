@@ -4,8 +4,11 @@
         <meta charset="UTF-8" />
         <title>why is this still called i am gay</title>
         <script type="text/javascript" src="js/phaser.min.js"></script>
-        <script type="text/javascript" src="js/preload.js"></script>
-        <script type="text/javascript" src="js/gameplay.js"></script>
+        <script type="text/javascript" src="js/gameplayFunctions.js"></script>
+        <script type="text/javascript" src="js/preloadOneState.js"></script>
+        <script type="text/javascript" src="js/levelOneState.js"></script>
+        <script type="text/javascript" src="js/preloadTwoState.js"></script>
+        <script type="text/javascript" src="js/levelTwoState.js"></script>
 		<script type="text/javascript" src="js/credits.js"></script>
 		<style type="text/css">
 			body {
@@ -18,10 +21,12 @@
     <script type="text/javascript">
 
 	let game = new Phaser.Game(1334, 750, Phaser.AUTO, "phaser_example");
-	game.state.add("Preload", preloadState);
-	game.state.add("Gameplay", gameplayState);
+	game.state.add("PreloadOneState", preloadOneState);
+	game.state.add("LevelOneState", levelOneState);
+	game.state.add("PreloadTwoState", preloadTwoState);
+	game.state.add("LevelTwoState", levelTwoState);
 	game.state.add("Credits", creditState);
-	game.state.start("Preload");
+	game.state.start("PreloadOneState");
 
     </script>
 

@@ -1,4 +1,4 @@
-let gameplayState = function() {
+let levelTwoState = function() {
 	let sideFacing = true;
 	let played = false;
 	this.rotationTimer = 0;
@@ -18,12 +18,11 @@ let gameplayState = function() {
 	//end enum and stuff coding
 }
 
-gameplayState.prototype.preload = function() {
+levelTwoState.prototype.preload = function() {
 	
 }
 
-gameplayState.prototype.create = function() {
-	this.gameFunctions = new gameplayFunctions(); //THIS LINE IS IMPORTANT
+levelTwoState.prototype.create = function() {
 	game.world.setBounds(0, 0, 5000, 900); //enable to see how camera works
 	sideFacing = true;
 	//game.add.sprite(0, 0, "sky");
@@ -37,7 +36,7 @@ gameplayState.prototype.create = function() {
 	
 	
 	//This finds where the player start is in tiled and gets the position
-	let result = this.gameFunctions.findObjectsByType('playerstart',this.map,'objectlayer'); //EDITED TAKE NOTE
+	let result = this.findObjectsByType('playerstart',this.map,'objectlayer');
 	
 	this.player = game.add.sprite(result[0].x, result[0].y, "doddy");
 	game.physics.arcade.enable(this.player);
@@ -51,6 +50,7 @@ gameplayState.prototype.create = function() {
 	
 	game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 	
+	this.az = 0;
 	//end temp cam code
 	
 	//begin platform code
@@ -137,7 +137,7 @@ gameplayState.prototype.create = function() {
 	this.cursors = game.input.keyboard.createCursorKeys();
 }
 
-gameplayState.prototype.update = function() {
+levelTwoState.prototype.update = function() {
 	game.physics.arcade.collide(this.player, this.walls);
 	game.physics.arcade.collide(this.player, this.platform3DGroup);
 	
@@ -208,19 +208,16 @@ gameplayState.prototype.update = function() {
 	//end platform code
 	
 	//begin switching level code
-	this.az = 0;
-	if(this.az == 1)//UPON REACH END
+	if(this.az == 0)//UPON REACH END
 	{
-		//StateManager sm = new StateManager(this);
-		game.state.start("PreloadTwoState");
-		//sm.start("Preload2State");
+		alert("DOGS ARE COOL");
 		this.az++;
 	}
 	
 	//end switching level code
 }
 
-gameplayState.prototype.rotatePlatform = function(pos, input) { //change to receive platform, then place in separate file
+levelTwoState.prototype.rotatePlatform = function(pos, input) {
 	let caseFailure = false;
 	switch(this.platformStates[pos]) {
 		case this.state3D.XbyY: {
@@ -433,7 +430,7 @@ gameplayState.prototype.rotatePlatform = function(pos, input) { //change to rece
 		this.setPlatformPhysics(pos);
 }
 
-gameplayState.prototype.setPlatformPhysics = function(pos) { //change to receive platform, then place in separate file
+levelTwoState.prototype.setPlatformPhysics = function(pos) {
 		state = this.platformStates[pos];
 		switch(state) {
 			case this.state3D.XbyY: {
@@ -467,7 +464,7 @@ gameplayState.prototype.setPlatformPhysics = function(pos) { //change to receive
 	}
 
 
-gameplayState.prototype.createBackground = function() {
+levelTwoState.prototype.createBackground = function() {
 	this.sky = this.game.add.tileSprite(0,
         this.game.height - this.game.cache.getImage('fantasy_bg1').height,
         this.game.width,
@@ -506,7 +503,7 @@ gameplayState.prototype.createBackground = function() {
 	
 }
 
-gameplayState.prototype.doParallax = function() {
+levelTwoState.prototype.doParallax = function() {
 	this.sky.tilePosition.x -= 0.2;
 	this.mtn1.tilePosition.x = game.camera.x * -0.2;
 	this.mtn2.tilePosition.x = game.camera.x * -0.35;
@@ -515,7 +512,7 @@ gameplayState.prototype.doParallax = function() {
 	
 }
 
-gameplayState.prototype.createLevel = function() {
+levelTwoState.prototype.createLevel = function() {
 	this.map = this.game.add.tilemap('level1');
 	this.map.addTilesetImage('FantasyTiles', 'level1tiles');
 	
@@ -525,7 +522,7 @@ gameplayState.prototype.createLevel = function() {
 	this.walls.resizeWorld();
 }
 
-/*gameplayState.prototype.findObjectsByType = function(type, map, layer) {
+levelTwoState.prototype.findObjectsByType = function(type, map, layer) {
     let result = new Array();
     map.objects[layer].forEach(function(element){
       if(element.properties.type === type) {
@@ -534,7 +531,7 @@ gameplayState.prototype.createLevel = function() {
       }      
     });
     return result;
-}*/
+}
 
 
 
