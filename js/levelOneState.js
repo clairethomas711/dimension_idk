@@ -140,7 +140,7 @@ levelOneState.prototype.create = function() {
 levelOneState.prototype.update = function() {
 	game.physics.arcade.collide(this.player, this.walls);
 	game.physics.arcade.collide(this.player, this.platform3DGroup);
-	game.physics.arcade.overlap(this.player, this.danger, this.gameFunctions.kill, null, this);
+	game.physics.arcade.collide(this.player, this.danger, this.gameFunctions.kill, null, this);
 	
 	// Do parallax
 	this.doParallax(this);
