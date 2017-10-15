@@ -3,6 +3,9 @@ let levelOneState = function() {
 	let played = false;
 	this.rotationTimer = 0;
 	
+	this.checkX = 0;
+	this.checkY = 0;
+	
 	//begin enum and stuff coding
 	this.state3D = { //this is important
 		XbyY: 0, //X is along the screen X axis and Y is along the screen Y axis
@@ -40,6 +43,8 @@ levelOneState.prototype.create = function() {
 	let result = this.gameFunctions.findObjectsByType('playerstart',this.map,'objectlayer'); //EDITED TAKE NOTE
 	
 	this.player = game.add.sprite(result[0].x, result[0].y, "doddy");
+	this.checkX = result[0].x;
+	this.checkY = result[0].y;
 	game.physics.arcade.enable(this.player);
 	this.player.body.gravity.y = 400;
 	//this.player.body.bounce.y = 0.15;
