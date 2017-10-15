@@ -546,5 +546,3 @@ levelTwoState.prototype.findObjectsByType = function(type, map, layer) {
 
 
 
-
-
