@@ -140,6 +140,7 @@ levelOneState.prototype.create = function() {
 levelOneState.prototype.update = function() {
 	game.physics.arcade.collide(this.player, this.walls);
 	game.physics.arcade.collide(this.player, this.platform3DGroup);
+	game.physics.arcade.overlap(this.player, this.danger, this.gameFunctions.kill, null, this);
 	
 	// Do parallax
 	this.doParallax(this);
@@ -530,10 +531,14 @@ levelOneState.prototype.createLevel = function() {
 	this.map.addTilesetImage('FantasyTiles', 'level1tiles');
 	
 	this.background = this.map.createLayer('background');
+	this.danger = this.map.createLayer('danger');
     this.walls = this.map.createLayer('walls');
-	this.map.setCollisionBetween(1, 100, true, 'walls');
+	this.map.setCollisionBetween(1, 1000, true, 'walls');
+	this.map.setCollisionBetween(1, 1000, true, 'danger');
 	this.walls.resizeWorld();
 }
+
+
 
 /*levelOneState.prototype.findObjectsByType = function(type, map, layer) {
     let result = new Array();
