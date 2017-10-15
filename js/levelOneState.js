@@ -42,7 +42,7 @@ levelOneState.prototype.create = function() {
 	this.player = game.add.sprite(result[0].x, result[0].y, "doddy");
 	game.physics.arcade.enable(this.player);
 	this.player.body.gravity.y = 400;
-	this.player.body.bounce.y = 0.15;
+	//this.player.body.bounce.y = 0.15;
 	this.player.anchor.setTo(.5,.5);
 	this.player.body.setSize(60,120,18,6);
 	//this.player.body.collideWorldBounds = true;
@@ -129,10 +129,10 @@ levelOneState.prototype.create = function() {
 	
 	game.physics.arcade.enable(this.platform3DGroup);
 	//end platform code
-	this.player.animations.add("walk", [7, 8, 9, 10, 11, 12, 13, 14], 10, true);
+	this.player.animations.add("walk", [8, 9, 10, 11, 12, 13, 14, 15], 10, true);
 	//this.player.animations.add("right", [5, 6, 7, 8], 10, true);
 	this.player.animations.add("idle", [0, 1, 2, 3, 4, 5], 10, true);
-	this.player.animations.add("jump", [6], 10, false);
+	this.player.animations.add("jump", [6, 7], 10, false);
 	
 	this.cursors = game.input.keyboard.createCursorKeys();
 }
@@ -146,16 +146,26 @@ levelOneState.prototype.update = function() {
 	
 	
 	this.player.body.velocity.x = 0;
+
+	if(this.player.body.velocity.y > 0) {
+		this.player.frame = 7;
+	} else if (this.player.body.velocity.y < 0) {
+		this.player.frame = 6;
+	}
 	
 	if(this.cursors.left.isDown) {
 		this.player.scale.x = -1;
-		this.player.animations.play("walk");
+		if(this.player.body.velocity.y === 0) {
+			this.player.animations.play("walk");
+		}	
 		this.player.body.velocity.x = -300;
 		sideFacing = false;
 	}
 	else if(this.cursors.right.isDown) {
 		this.player.scale.x = 1;
-		this.player.animations.play("walk");
+		if(this.player.body.velocity.y === 0) {
+			this.player.animations.play("walk");
+		}	
 		this.player.body.velocity.x = 300;
 		sideFacing = true;
 	}
@@ -168,8 +178,8 @@ levelOneState.prototype.update = function() {
 	}
 	
 	if(this.cursors.up.isDown) {
-		this.player.animations.play("jump");
-		this.player.frame = 2;
+		//this.player.animations.play("jump");
+		//this.player.frame = 2;
 		this.player.body.velocity.y = -400;
 	}
 	
