@@ -61,8 +61,6 @@ levelOneState.prototype.create = function() {
 	//begin platform code
 	this.platform3DGroup = game.add.group();
 	let result = this.gameFunctions.findObjectsByType('platform',this.map,'objectlayer');
-	console.log(result.length);
-	console.log(result[0]);
 	for(let i = 0;i < result.length;i++)
 	{
 		let tempPlatform3D = this.platform3DGroup.create(result[i].x + 128, result[i].y + 128, "platform3D");
@@ -134,7 +132,6 @@ levelOneState.prototype.create = function() {
 			}
 		}
 		tempPlatform3D.anchor.setTo(.5,.5);
-		console.log(tempPlatform3D.state);
 	}
 	
 	
