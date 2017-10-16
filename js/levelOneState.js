@@ -19,6 +19,12 @@ let levelOneState = function() {
 	this.platformsX = [100,200,300,400];
 	this.platformsY = [100,200,300,400];
 	//end enum and stuff coding
+	
+	
+	// Cutscene stuff
+	this.inCutscene = false;
+	this.cutsceneIndex = 0;
+	this.styleDoddy = { font: "16px Arial", fill: "#000000", align: "center"};
 }
 
 levelOneState.prototype.preload = function() {
@@ -49,7 +55,7 @@ levelOneState.prototype.create = function() {
 	this.player.body.gravity.y = 400;
 	//this.player.body.bounce.y = 0.15;
 	this.player.anchor.setTo(.5,.5);
-	this.player.body.setSize(60,120,18,6);
+	this.player.body.setSize(60,120,24,12);
 	//this.player.body.collideWorldBounds = true;
 	
 	//begin temp cam code
@@ -143,99 +149,114 @@ levelOneState.prototype.create = function() {
 	this.player.animations.add("jump", [6, 7], 10, false);
 	
 	this.cursors = game.input.keyboard.createCursorKeys();
+	
+	///////////////////
+	// Cutscene Code //
+	///////////////////
+	game.input.onDown.add(this.mouseDown, this);
+	//game.input.onUp.add(this.mouseUp, this);
+	
+	
 }
 
 levelOneState.prototype.update = function() {
+	
+	
+	
+	
+	
 	game.physics.arcade.collide(this.player, this.walls);
 	game.physics.arcade.collide(this.player, this.platform3DGroup);
 	game.physics.arcade.collide(this.player, this.danger, this.gameFunctions.kill, null, this);
-	
+		
 	// Do parallax
 	this.doParallax(this);
-	
+		
 	
 	this.player.body.velocity.x = 0;
-
-	if(this.player.body.velocity.y > 0) {
-		this.player.frame = 7;
-	} else if (this.player.body.velocity.y < 0) {
-		this.player.frame = 6;
+	if (!this.inCutscene) {
+		if(this.player.body.velocity.y > 0) {
+			this.player.frame = 7;
+		} else if (this.player.body.velocity.y < 0) {
+			this.player.frame = 6;
+		}
+		
+		if(this.cursors.left.isDown) {
+			this.player.scale.x = -1;
+			if(this.player.body.velocity.y === 0) {
+				this.player.animations.play("walk");
+			}	
+			this.player.body.velocity.x = -300;
+			sideFacing = false;
+		}
+		else if(this.cursors.right.isDown) {
+			this.player.scale.x = 1;
+			if(this.player.body.velocity.y === 0) {
+				this.player.animations.play("walk");
+			}	
+			this.player.body.velocity.x = 300;
+			sideFacing = true;
+		}
+		else {
+			this.player.animations.play("idle");
+			//if(!sideFacing)
+				//this.player.frame = 0;
+			//else
+				//this.player.frame = 5
+		}
+		
+		if(this.cursors.up.isDown) {
+			//this.player.animations.play("jump");
+			//this.player.frame = 2;
+			this.player.body.velocity.y = -400;
+		}
+		
+		//begin platform code
+		let dir = 0; //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
+		if(this.cursors.up.isDown && !this.rotating)
+		{
+			dir = 0;
+			this.rotating = true;
+		}
+		if(this.cursors.right.isDown && !this.rotating)
+		{
+			dir = 1;
+			this.rotating = true;
+		}
+		if(this.cursors.down.isDown && !this.rotating)
+		{
+			dir = 2;
+			this.rotating = true;
+		}
+		if(this.cursors.left.isDown && !this.rotating)
+		{
+			dir = 3;
+			this.rotating = true;
+		}
+		if(this.rotating && this.rotationTimer == 0) {
+			this.platform3DGroup.forEach(this.rotatePlatform, this, true, dir);
+			this.rotationTimer = game.time.totalElapsedSeconds();
+		}
+		if((game.time.totalElapsedSeconds() - this.rotationTimer) >= 2)
+		{
+			this.rotating = false;
+			this.rotationTimer = 0;
+		}
+		//end platform code
+		
+		//begin switching level code
+		this.az = 0;
+		if(this.az == 1)//UPON REACH END
+		{
+			//StateManager sm = new StateManager(this);
+			game.state.start("PreloadTwoState");
+			//sm.start("Preload2State");
+			this.az++;
+		}
+		
+		//end switching level code
+		
 	}
-	
-	if(this.cursors.left.isDown) {
-		this.player.scale.x = -1;
-		if(this.player.body.velocity.y === 0) {
-			this.player.animations.play("walk");
-		}	
-		this.player.body.velocity.x = -300;
-		sideFacing = false;
-	}
-	else if(this.cursors.right.isDown) {
-		this.player.scale.x = 1;
-		if(this.player.body.velocity.y === 0) {
-			this.player.animations.play("walk");
-		}	
-		this.player.body.velocity.x = 300;
-		sideFacing = true;
-	}
-	else {
-		this.player.animations.play("idle");
-		//if(!sideFacing)
-			//this.player.frame = 0;
-		//else
-			//this.player.frame = 5
-	}
-	
-	if(this.cursors.up.isDown) {
-		//this.player.animations.play("jump");
-		//this.player.frame = 2;
-		this.player.body.velocity.y = -400;
-	}
-	
-	//begin platform code
-	let dir = 0; //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
-	if(this.cursors.up.isDown && !this.rotating)
-	{
-		dir = 0;
-		this.rotating = true;
-	}
-	if(this.cursors.right.isDown && !this.rotating)
-	{
-		dir = 1;
-		this.rotating = true;
-	}
-	if(this.cursors.down.isDown && !this.rotating)
-	{
-		dir = 2;
-		this.rotating = true;
-	}
-	if(this.cursors.left.isDown && !this.rotating)
-	{
-		dir = 3;
-		this.rotating = true;
-	}
-	if(this.rotating && this.rotationTimer == 0) {
-		this.platform3DGroup.forEach(this.rotatePlatform, this, true, dir);
-		this.rotationTimer = game.time.totalElapsedSeconds();
-	}
-	if((game.time.totalElapsedSeconds() - this.rotationTimer) >= 2)
-	{
-		this.rotating = false;
-		this.rotationTimer = 0;
-	}
-	//end platform code
-	
-	//begin switching level code
-	this.az = 0;
-	if(this.az == 1)//UPON REACH END
-	{
-		//StateManager sm = new StateManager(this);
-		game.state.start("PreloadTwoState");
-		//sm.start("Preload2State");
-		this.az++;
-	}
-	
-	//end switching level code
 }
 
 levelOneState.prototype.render = function() {
@@ -567,9 +588,33 @@ levelOneState.prototype.createLevel = function() {
 }*/
 
 
+levelOneState.prototype.mouseDown = function() {
+	if (this.inCutscene) {
+		this.playCutscene();
+	} else {
+		this.inCutscene = true;
+		this.player.animations.play("idle")
+		this.player.body.velocity.y = 0;
+		this.playCutscene();
+	}
+}
 
-
-
+levelOneState.prototype.playCutscene = function() {
+	switch(this.cutsceneIndex) {
+		case 0: {
+			this.currentText = game.add.text(this.player.x, this.player.y - 64, "You Dastardly Devil!\nI will Defeat you!", this.styleDoddy);
+			this.currentText.anchor.setTo(.5, 1);
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 1: {
+			this.cutsceneIndex = 0;
+			this.inCutscene = false;
+			this.currentText.kill();
+			break;
+		}
+	}
+}
 
 
 
