@@ -617,6 +617,8 @@ levelOneState.prototype.mouseDown = function() {
 }
 
 levelOneState.prototype.startCutscene = function(player, trigger) {
+	this.checkX = trigger.x;
+	this.checkY = 256;
 	trigger.kill();
 	this.inCutscene = true;
 	this.player.animations.play("idle");
@@ -627,7 +629,7 @@ levelOneState.prototype.startCutscene = function(player, trigger) {
 levelOneState.prototype.playCutscene = function() {
 	switch(this.cutsceneIndex) {
 		case 0: {
-			this.currentText = game.add.text(this.doomsday.x - 48, this.doomsday.y, " Ah, we meet again, Doddy! I see you've discovered my devious idea!", this.styleDoomsday);
+			this.currentText = game.add.text(this.doomsday.x - 48, this.doomsday.y, "Ah, we meet again, Doddy! I see you've discovered my devious idea!", this.styleDoomsday);
 			this.currentText.anchor.setTo(.5, 1);
 			this.cutsceneIndex += 1;
 			let result = this.gameFunctions.findObjectsByType('cam1',this.map,'objectlayer');
@@ -652,12 +654,12 @@ levelOneState.prototype.playCutscene = function() {
 			break;
 		}
 		case 4: { 
-			this.currentText.setText("Soon all of the Cinematic Universe will be converted, and all of the civilians bones will be crushed and painfully distorted, in the name of artistic progress! ")
+			this.currentText.setText("Soon all of the Cinematic Universe will be converted, and all of the civilians bones will be crushed and painfully distorted, in the name of artistic progress!");
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 5: { 
-			this.currentText.setText("And there's nothing you can do to stop me. That platform is far too high for you to jump!")
+			this.currentText.setText("And there's nothing you can do to stop me. That platform is far too high for you to jump!");
 			this.cutsceneIndex += 1;
 			break;
 		}
@@ -667,7 +669,7 @@ levelOneState.prototype.playCutscene = function() {
 			break;
 		}
 		case 7: {
-			this.cutsceneIndex = 0;
+			this.cutsceneIndex += 1;
 			this.inCutscene = false;
 			this.currentText.kill();
 			this.camSpot.kill();
@@ -675,6 +677,38 @@ levelOneState.prototype.playCutscene = function() {
 			this.doomsday.body.velocity.x = -300;
 			this.doomsday.body.gravity.x = 800;
 			this.doomsday.body.gravity.y = -100;
+			break;
+		} 
+		case 8: {
+			this.currentText = game.add.text(this.player.x, this.player.y - 64, '"So, you did manage to get past the jump..."', this.styleDoomsday);
+			this.currentText.anchor.setTo(.5, 1);
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 9: { 
+			this.currentText.setText('"So be it. But the Dimension Invention has already started to work it\'s magic here, and I am long gone, without a trace!"');
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 10: { 
+			this.currentText.setText('"So unless you\'re lookin\' to lose your head, you best stay away, partner!"');
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 11: { 
+			this.currentText.setText('"Go ahead. Make my day."');
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 12: { 
+			this.currentText.setText("But Doddy knew exactly where Dr. Doomsday had gone!");
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 13: {
+			this.cutsceneIndex += 1;
+			this.inCutscene = false;
+			this.currentText.kill();
 			break;
 		} 
 	}
