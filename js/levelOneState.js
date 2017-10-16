@@ -1,6 +1,17 @@
 let levelOneState = function() {
 	let sideFacing = true;
 	let played = false;
+	let mouseDown = false;
+	let tapMade = false;
+	let goingLeft = false;
+	let goingRight = false;
+	
+	let pressX = 0;
+	let pressY = 0;
+	let liftX = 0;
+	let liftY = 0;
+
+	let pressDuration = 0;
 	this.rotationTimer = 0;
 	
 	this.checkX = 0;
@@ -188,7 +199,7 @@ levelOneState.prototype.update = function() {
 	// Do parallax
 	this.doParallax(this);
 		
-	
+	/*
 	this.player.body.velocity.x = 0;
 	if (!this.inCutscene) {
 		if(this.player.body.velocity.y > 0) {
@@ -226,6 +237,81 @@ levelOneState.prototype.update = function() {
 			//this.player.frame = 2;
 			this.player.body.velocity.y = -400;
 		}
+		*/
+		
+		
+		// mouseDown should only record the first position
+	if (game.input.mousePointer.isDown) {
+		if (!(this.mouseDown)) {
+			this.pressX = game.input.mousePointer.screenX;
+			this.pressY = game.input.mousePointer.screenY;
+		}
+		this.mouseDown = true;
+		this.tapMade = true;
+		this.pressDuration = game.input.mousePointer.duration;
+	}
+	else if (game.input.mousePointer.isUp) {
+		// A tap (click/drag was made)
+		if (this.tapMade) {
+			this.liftX = game.input.mousePointer.screenX;
+			this.liftY = game.input.mousePointer.screenY;
+			// Click
+			if (this.pressDuration < 100 && this.pressDuration > 0) {
+				// Checks if click is on player
+				if (this.liftX >= (this.player.x - 100) && this.liftX <= (this.player.x + 100)) {
+					this.player.body.velocity.x = 0;
+					//game.physics.arcade.accelerateToPointer(this.player, game.input.mousePointer, 0, 0);
+					this.player.animations.play("idle");
+				}
+			}
+			
+			// Drag
+			else {
+				// Swipe right
+				if (this.liftX > this.pressX) {
+					this.player.scale.x = 1;
+					// Jump
+					if ((this.liftY - this.pressY) < 0 && Math.abs(this.liftY - this.pressY) > (this.liftX - this.pressX)) {
+						this.player.animations.play("jump");
+						this.player.frame = 2;
+						this.player.body.velocity.y = -400;
+					}
+					game.debug.text( "STOOOOOOOOOOOOOOOp", 100, 450 );
+					this.player.body.velocity.x = 300;
+					this.player.animations.play("walk");
+				}
+				// Swipe left
+				else if (this.liftX < this.pressX) {
+					this.player.scale.x = -1;
+					// Jump
+					if ((this.liftY - this.pressY) < 0 && Math.abs(this.liftY - this.pressY) > Math.abs(this.liftX - this.pressX)) {
+						this.player.animations.play("jump");
+						this.player.frame = 2;
+						this.player.body.velocity.y = -400;
+					}
+					this.player.body.velocity.x = -300;
+					this.player.animations.play("walk");
+				}
+				// Swipe directly up
+				else {
+					// Jump
+					if ((this.liftY - this.pressY) < 0) {
+						this.player.animations.play("jump");
+						this.player.frame = 2;
+						this.player.body.velocity.y = -400;
+					}
+				}
+			}
+		}
+		this.pressDuration = 0;
+		this.tapMade = false;
+		this.mouseDown = false;
+	}
+	else {
+		this.pressDuration = 0;
+	}
+		
+		
 		
 		//begin platform code
 		let dir = 0; //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
@@ -271,9 +357,9 @@ levelOneState.prototype.update = function() {
 		}
 		
 		//end switching level code
-		
+
 	}
-}
+//}
 
 /*
 levelOneState.prototype.render = function() {
