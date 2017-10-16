@@ -42,9 +42,9 @@ levelOneState.prototype.create = function() {
 	//This finds where the player start is in tiled and gets the position
 	let playerpos = this.gameFunctions.findObjectsByType('playerstart',this.map,'objectlayer'); //EDITED TAKE NOTE
 	
-	this.player = game.add.sprite(playerpos[0].x, playerpos[0].y, "doddy");
-	this.checkX = playerpos[0].x;
-	this.checkY = playerpos[0].y;
+	this.player = game.add.sprite(playerpos[0].x + 32, playerpos[0].y + 64, "doddy");
+	this.checkX = playerpos[0].x + 32;
+	this.checkY = playerpos[0].y + 64;
 	game.physics.arcade.enable(this.player);
 	this.player.body.gravity.y = 400;
 	//this.player.body.bounce.y = 0.15;
@@ -65,7 +65,7 @@ levelOneState.prototype.create = function() {
 	console.log(result[0]);
 	for(let i = 0;i < result.length;i++)
 	{
-		let tempPlatform3D = this.platform3DGroup.create(result[i].x, result[i].y, "platform3D");
+		let tempPlatform3D = this.platform3DGroup.create(result[i].x + 128, result[i].y + 128, "platform3D");
 		
 		//animations from XbyY
 		tempPlatform3D.animations.add("XbyYtoZbyYLeft", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 25, false); //rotate by 90
@@ -100,6 +100,7 @@ levelOneState.prototype.create = function() {
 		
 		game.physics.arcade.enable(tempPlatform3D);
 		tempPlatform3D.body.immovable = true;
+		tempPlatform3D.state = (result[i].properties.orientation);
 		this.setPlatformPhysics(result[i].properties.orientation);
 		switch(result[i].properties.orientation) {
 			case this.state3D.XbyY: {
@@ -133,7 +134,9 @@ levelOneState.prototype.create = function() {
 			}
 		}
 		tempPlatform3D.anchor.setTo(.5,.5);
+		console.log(tempPlatform3D.state);
 	}
+	
 	
 	game.physics.arcade.enable(this.platform3DGroup);
 	//end platform code
@@ -215,8 +218,7 @@ levelOneState.prototype.update = function() {
 		this.rotating = true;
 	}
 	if(this.rotating && this.rotationTimer == 0) {
-		for(let i = 0;i < this.platform3DGroup.length;i++)
-			this.rotatePlatform(i, dir);
+		this.platform3DGroup.forEach(this.rotatePlatform, this, true, dir);
 		this.rotationTimer = game.time.totalElapsedSeconds();
 	}
 	if((game.time.totalElapsedSeconds() - this.rotationTimer) >= 2)
@@ -239,33 +241,41 @@ levelOneState.prototype.update = function() {
 	//end switching level code
 }
 
-levelOneState.prototype.rotatePlatform = function(pos, input) { //change to receive platform, then place in separate file
+levelOneState.prototype.render = function() {
+	game.debug.body(this.player);
+	
+	for (let i = 0; i < this.platform3DGroup.length; i++) {
+		game.debug.body(this.platform3DGroup.children[i]);
+	}
+}
+
+levelOneState.prototype.rotatePlatform = function(plat, input) {
 	let caseFailure = false;
-	switch(this.platformStates[pos]) {
+	switch(plat.state) {
 		case this.state3D.XbyY: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("XbyYtoXbyZLeft", false);
-					this.platformStates[pos] = this.state3D.XbyZ;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("XbyYtoXbyZLeft", false);
+					plat.state = this.state3D.XbyZ;
+					plat.angle = 180;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("XbyYtoZbyYRight", false);
-					this.platformStates[pos] = this.state3D.ZbyY;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("XbyYtoZbyYRight", false);
+					plat.state = this.state3D.ZbyY;
+					plat.angle = 90;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("XbyYtoXbyZRight", false);
-					this.platformStates[pos] = this.state3D.XbyZ;
-					this.platform3DGroup.children[pos].angle = 0;
+					plat.animations.play("XbyYtoXbyZRight", false);
+					plat.state = this.state3D.XbyZ;
+					plat.angle = 0;
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("XbyYtoZbyYLeft", false);
-					this.platformStates[pos] = this.state3D.ZbyY;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("XbyYtoZbyYLeft", false);
+					plat.state = this.state3D.ZbyY;
+					plat.angle = 270;
 					break;
 				}
 				default: {
@@ -278,27 +288,27 @@ levelOneState.prototype.rotatePlatform = function(pos, input) { //change to rece
 		case this.state3D.ZbyY: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("ZbyYtoZbyXLeft", false);
-					this.platformStates[pos] = this.state3D.ZbyX;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("ZbyYtoZbyXLeft", false);
+					plat.state = this.state3D.ZbyX;
+					plat.angle = 270;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("ZbyYtoXbyYRight", false);
-					this.platformStates[pos] = this.state3D.XbyY;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("ZbyYtoXbyYRight", false);
+					plat.state = this.state3D.XbyY;
+					plat.angle = 270;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("ZbyYtoZbyXRight", false);
-					this.platformStates[pos] = this.state3D.ZbyX;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("ZbyYtoZbyXRight", false);
+					plat.state = this.state3D.ZbyX;
+					plat.angle = 90;
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("ZbyYtoXbyYLeft", false);
-					this.platformStates[pos] = this.state3D.XbyY;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("ZbyYtoXbyYLeft", false);
+					plat.state = this.state3D.XbyY;
+					plat.angle = 90;
 					break;
 				}
 				default: {
@@ -311,25 +321,25 @@ levelOneState.prototype.rotatePlatform = function(pos, input) { //change to rece
 		case this.state3D.XbyZ: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("XbyZtoXbyYLeft", false);
-					this.platformStates[pos] = this.state3D.XbyY;
+					plat.animations.play("XbyZtoXbyYLeft", false);
+					plat.state = this.state3D.XbyY;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("XbyZtoYbyZRight", false);
-					this.platformStates[pos] = this.state3D.YbyZ;
+					plat.animations.play("XbyZtoYbyZRight", false);
+					plat.state = this.state3D.YbyZ;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("XbyZtoXbyYRight", false);
-					this.platformStates[pos] = this.state3D.XbyY;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("XbyZtoXbyYRight", false);
+					plat.state = this.state3D.XbyY;
+					plat.angle = 180;
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("XbyZtoYbyZLeft", false);
-					this.platformStates[pos] = this.state3D.YbyZ;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("XbyZtoYbyZLeft", false);
+					plat.state = this.state3D.YbyZ;
+					plat.angle = 180;
 					break;
 				}
 				default: {
@@ -342,28 +352,28 @@ levelOneState.prototype.rotatePlatform = function(pos, input) { //change to rece
 		case this.state3D.YbyX: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("YbyXtoYbyZLeft", false);
-					this.platformStates[pos] = this.state3D.YbyZ;
-					this.platform3DGroup.children[pos].angle = 0;
+					plat.animations.play("YbyXtoYbyZLeft", false);
+					plat.state = this.state3D.YbyZ;
+					plat.angle = 0;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("YbyXtoZbyXRight", false);
-					this.platformStates[pos] = this.state3D.ZbyX;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("YbyXtoZbyXRight", false);
+					plat.state = this.state3D.ZbyX;
+					plat.angle = 270;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("YbyXtoYbyZRight", false);
-					this.platformStates[pos] = this.state3D.YbyZ;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("YbyXtoYbyZRight", false);
+					plat.state = this.state3D.YbyZ;
+					plat.angle = 180;
 					
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("YbyXtoZbyXLeft", false);
-					this.platformStates[pos] = this.state3D.ZbyX;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("YbyXtoZbyXLeft", false);
+					plat.state = this.state3D.ZbyX;
+					plat.angle = 90;
 					break;
 				}
 				default: {
@@ -376,27 +386,27 @@ levelOneState.prototype.rotatePlatform = function(pos, input) { //change to rece
 		case this.state3D.YbyZ: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("YbyZtoYbyXLeft", false);
-					this.platformStates[pos] = this.state3D.YbyX;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("YbyZtoYbyXLeft", false);
+					plat.state = this.state3D.YbyX;
+					plat.angle = 180;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("YbyZtoXbyZRight", false);
-					this.platformStates[pos] = this.state3D.XbyZ;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("YbyZtoXbyZRight", false);
+					plat.state = this.state3D.XbyZ;
+					plat.angle = 180;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("YbyZtoYbyXRight", false);
-					this.platformStates[pos] = this.state3D.YbyX;
-					this.platform3DGroup.children[pos].angle = 0;
+					plat.animations.play("YbyZtoYbyXRight", false);
+					plat.state = this.state3D.YbyX;
+					plat.angle = 0;
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("YbyZtoXbyZLeft", false);
-					this.platformStates[pos] = this.state3D.XbyZ;
-					this.platform3DGroup.children[pos].angle = 0;
+					plat.animations.play("YbyZtoXbyZLeft", false);
+					plat.state = this.state3D.XbyZ;
+					plat.angle = 0;
 					break;
 				}
 				default: {
@@ -409,27 +419,27 @@ levelOneState.prototype.rotatePlatform = function(pos, input) { //change to rece
 		case this.state3D.ZbyX: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("ZbyXtoZbyYLeft", false);
-					this.platformStates[pos] = this.state3D.ZbyY;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("ZbyXtoZbyYLeft", false);
+					plat.state = this.state3D.ZbyY;
+					plat.angle = 90;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("ZbyXtoYbyXRight", false);
-					this.platformStates[pos] = this.state3D.YbyX;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("ZbyXtoYbyXRight", false);
+					plat.state = this.state3D.YbyX;
+					plat.angle = 90;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("ZbyXtoZbyYRight", false);
-					this.platformStates[pos] = this.state3D.ZbyY;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("ZbyXtoZbyYRight", false);
+					plat.state = this.state3D.ZbyY;
+					plat.angle = 270;
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("ZbyXtoYbyXLeft", false);
-					this.platformStates[pos] = this.state3D.YbyX;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("ZbyXtoYbyXLeft", false);
+					plat.state = this.state3D.YbyX;
+					plat.angle = 270;
 					break;
 				}
 				default: {
@@ -449,41 +459,41 @@ levelOneState.prototype.rotatePlatform = function(pos, input) { //change to rece
 		alert("CASE FAIL");
 	}
 	else
-		this.setPlatformPhysics(pos);
+		this.setPlatformPhysics(plat);
 }
 
-levelOneState.prototype.setPlatformPhysics = function(pos) { //change to receive platform, then place in separate file
-		state = this.platformStates[pos];
-		switch(state) {
-			case this.state3D.XbyY: {
-				this.platform3DGroup.children[pos].body.setSize(256,64,0,96);
-				break;
-			}
-			case this.state3D.ZbyY: {
-				this.platform3DGroup.children[pos].body.setSize(128,64,64,96);
-				break;
-			}
-			case this.state3D.XbyZ: {
-				this.platform3DGroup.children[pos].body.setSize(256,128,0,64);
-				break;
-			}
-			case this.state3D.YbyX: {
-				this.platform3DGroup.children[pos].body.setSize(64,256,96,0);
-				break;
-			}
-			case this.state3D.YbyZ: {
-				this.platform3DGroup.children[pos].body.setSize(64,128,96,64);
-				break;
-			}
-			case this.state3D.ZbyX: {
-				this.platform3DGroup.children[pos].body.setSize(128,256,64,0);
-				break;
-			}
-			default: {
-				break;
-			}
+levelOneState.prototype.setPlatformPhysics = function(plat) {
+	platState = plat.state;
+	switch(platState) {
+		case this.state3D.XbyY: {
+			plat.body.setSize(256,64,0,96);
+			break;
+		}
+		case this.state3D.ZbyY: {
+			plat.body.setSize(128,64,64,96);
+			break;
+		}
+		case this.state3D.XbyZ: {
+			plat.body.setSize(256,128,0,64);
+			break;
+		}
+		case this.state3D.YbyX: {
+			plat.body.setSize(64,256,96,0);
+			break;
+		}
+		case this.state3D.YbyZ: {
+			plat.body.setSize(64,128,96,64);
+			break;
+		}
+		case this.state3D.ZbyX: {
+			plat.body.setSize(128,256,64,0);
+			break;
+		}
+		default: {
+			break;
 		}
 	}
+}
 
 
 levelOneState.prototype.createBackground = function() {
