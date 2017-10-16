@@ -205,7 +205,6 @@ levelOneState.prototype.update = function() {
 	
 	this.player.body.onCollide = new Phaser.Signal();
 	this.player.body.onCollide.add(this.onGround, this);
-		
 	// mouseDown should only record the first position
 	if (game.input.mousePointer.isDown) {
 		if (!(this.mouseDown)) {
