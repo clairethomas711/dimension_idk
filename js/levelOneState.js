@@ -40,11 +40,11 @@ levelOneState.prototype.create = function() {
 	
 	
 	//This finds where the player start is in tiled and gets the position
-	let result = this.gameFunctions.findObjectsByType('playerstart',this.map,'objectlayer'); //EDITED TAKE NOTE
+	let playerpos = this.gameFunctions.findObjectsByType('playerstart',this.map,'objectlayer'); //EDITED TAKE NOTE
 	
-	this.player = game.add.sprite(result[0].x, result[0].y, "doddy");
-	this.checkX = result[0].x;
-	this.checkY = result[0].y;
+	this.player = game.add.sprite(playerpos[0].x, playerpos[0].y, "doddy");
+	this.checkX = playerpos[0].x;
+	this.checkY = playerpos[0].y;
 	game.physics.arcade.enable(this.player);
 	this.player.body.gravity.y = 400;
 	//this.player.body.bounce.y = 0.15;
@@ -60,9 +60,12 @@ levelOneState.prototype.create = function() {
 	
 	//begin platform code
 	this.platform3DGroup = game.add.group();
-	for(let i = 0;i < 4;i++)
+	let result = this.gameFunctions.findObjectsByType('platform',this.map,'objectlayer');
+	console.log(result.length);
+	console.log(result[0]);
+	for(let i = 0;i < result.length;i++)
 	{
-		let tempPlatform3D = this.platform3DGroup.create(this.platformsX[i], this.platformsY[i], "platform3D");
+		let tempPlatform3D = this.platform3DGroup.create(result[i].x, result[i].y, "platform3D");
 		
 		//animations from XbyY
 		tempPlatform3D.animations.add("XbyYtoZbyYLeft", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 25, false); //rotate by 90
@@ -97,8 +100,8 @@ levelOneState.prototype.create = function() {
 		
 		game.physics.arcade.enable(tempPlatform3D);
 		tempPlatform3D.body.immovable = true;
-		this.setPlatformPhysics(i);
-		switch(this.platformStates[i]) {
+		this.setPlatformPhysics(result[i].properties.orientation);
+		switch(result[i].properties.orientation) {
 			case this.state3D.XbyY: {
 				this.platform3DGroup.children[i].frame = 0;
 				break;
@@ -212,7 +215,7 @@ levelOneState.prototype.update = function() {
 		this.rotating = true;
 	}
 	if(this.rotating && this.rotationTimer == 0) {
-		for(let i = 0;i < 4;i++)
+		for(let i = 0;i < this.platform3DGroup.length;i++)
 			this.rotatePlatform(i, dir);
 		this.rotationTimer = game.time.totalElapsedSeconds();
 	}
