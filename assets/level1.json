@@ -62,20 +62,20 @@
                  "name":"platform",
                  "properties":
                     {
-                     "orientation":"4",
+                     "orientation":3,
                      "type":"platform"
                     },
                  "propertytypes":
                     {
-                     "orientation":"string",
+                     "orientation":"int",
                      "type":"string"
                     },
                  "rotation":0,
                  "type":"platform",
                  "visible":true,
                  "width":256,
-                 "x":320,
-                 "y":512
+                 "x":2624,
+                 "y":768
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -83,7 +83,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":5,
+ "nextobjectid":6,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.0.3",
