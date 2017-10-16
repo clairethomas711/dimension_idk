@@ -5,6 +5,7 @@ let preloadOneState = function() {
 preloadOneState.prototype.preload = function() {
 	game.load.spritesheet("platform3D", "assets/FantasyPlatform3D.png", 256, 256);
 	game.load.spritesheet("doddy", "assets/Doddy.png", 96, 132);
+	game.load.spritesheet("doomsday", "assets/DrDoomsday.png", 96, 132);
 	
 	// Load the background
 	game.load.image("fantasy_bg1", "Backgrounds/level1/Background_Fantasy_1.png");
