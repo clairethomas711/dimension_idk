@@ -36,8 +36,8 @@ let levelOneState = function() {
 	// Cutscene stuff
 	this.inCutscene = false;
 	this.cutsceneIndex = 0;
-	this.styleDoddy = { font: "16px Arial", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 192 };
-	this.styleDoomsday = { font: "16px Arial", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 192 };
+	this.styleDoddy = { font: "32px Arial", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 300 };
+	this.styleDoomsday = { font: "32px Misfits", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 500 };
 }
 
 levelOneState.prototype.preload = function() {
