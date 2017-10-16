@@ -22,3 +22,10 @@ preloadState.prototype.update = function()
 
 };
 
+preloadState.prototype.create = function() {
+	game.state.start("Gameplay");
+}
+
+preloadState.prototype.update = function() {
+	
+}
