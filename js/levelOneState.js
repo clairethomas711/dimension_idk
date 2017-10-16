@@ -5,7 +5,7 @@
 	let tapMade = false;
 	let goingLeft = false;
 	let goingRight = false;
-	let midJump = false;
+	let stopped = true;
 	
 	let pressX = 0;
 	let pressY = 0;
@@ -41,7 +41,7 @@
 }
 
 levelOneState.prototype.preload = function() {
-	
+	this.stopped = true;
 }
 
 levelOneState.prototype.create = function() {
@@ -196,8 +196,8 @@ levelOneState.prototype.create = function() {
 
 levelOneState.prototype.update = function() {
 	
-	game.physics.arcade.collide(this.player, this.walls);
-	game.physics.arcade.collide(this.player, this.platform3DGroup);
+	game.physics.arcade.collide(this.player, this.walls, this.onGround, null, this);
+	game.physics.arcade.collide(this.player, this.platform3DGroup, this.onGround);
 	game.physics.arcade.collide(this.player, this.danger, this.gameFunctions.kill, null, this);
 	game.physics.arcade.overlap(this.player, this.triggerGroup, this.startCutscene, null, this);
 	
@@ -208,8 +208,9 @@ levelOneState.prototype.update = function() {
 	// Do parallax
 	this.doParallax(this);
 	
-	this.player.body.onCollide = new Phaser.Signal();
-	this.player.body.onCollide.add(this.onGround, this);
+	//this.player.body.onCollide = new Phaser.Signal();
+	//this.player.body.onCollide.add(this.onGround, this);
+	
 	// mouseDown should only record the first position
 	if (game.input.mousePointer.isDown) {
 		if (!(this.mouseDown)) {
@@ -232,48 +233,55 @@ levelOneState.prototype.update = function() {
 					this.player.scale.x = 1;
 					// Jump
 					if ((this.liftY - this.pressY) < 0 && Math.abs(this.liftY - this.pressY) > (this.liftX - this.pressX)) {
-						//if (!this.midJump) {
+						if (this.player.body.onFloor()) {
 							this.player.animations.play("jump");
-							this.player.frame = 2;
 							this.player.body.velocity.y = -400;
 							this.player.body.velocity.x = 300;
-							this.midJump = true;
-						//}
+						}
+						else {
+							this.player.body.velocity.x = 300;
+						}
 					}
 					else {
-						game.debug.text( "STOOOOOOOOOOOOOOOp", 100, 450 );
 						this.player.body.velocity.x = 300;
 						this.player.animations.play("walk");
 					}
+					this.stopped = false;
 				}
 				// Swipe left
 				else if (this.liftX < this.pressX) {
 					this.player.scale.x = -1;
 					// Jump
 					if ((this.liftY - this.pressY) < 0 && Math.abs(this.liftY - this.pressY) > Math.abs(this.liftX - this.pressX)) {
-						//if (!this.midJump) {
+						if (this.player.body.onFloor()) {
 							this.player.animations.play("jump");
-							this.player.frame = 2;
 							this.player.body.velocity.y = -400;
-							this.player.body.velocity.x = 300;
-							this.midJump = true;
-						//}
+							this.player.body.velocity.x = -300;
+						}
+						else {
+							this.player.body.velocity.x = -300;
+						}
 					}
-					this.player.body.velocity.x = -300;
-					this.player.animations.play("walk");
+					else {
+						this.player.body.velocity.x = -300;
+						this.player.animations.play("walk");
+					}
+					this.stopped = false;
 				}
-				// Swipe directly up
+				// Swipe directly up...if you can get it perfectly
 				else {
 					// Jump
 					if ((this.liftY - this.pressY) < 0) {
-						//if (!this.midJump) {
+						if (this.player.body.onFloor()) {
 							this.player.animations.play("jump");
-							this.player.frame = 2;
 							this.player.body.velocity.y = -400;
-							this.player.body.velocity.x = 300;
-							this.midJump = true;
-						//}
+							this.player.body.velocity.x = 0;
+						}
+						else {
+							this.player,body.velocity.x = 0;
+						}
 					}
+					this.stopped = false;
 				}
 			}
 		}
@@ -777,11 +785,16 @@ levelOneState.prototype.playCutscene = function() {
 
 levelOneState.prototype.clickPlayer = function() {
 	this.player.body.velocity.x = 0;
-	//game.physics.arcade.accelerateToPointer(this.player, game.input.mousePointer, 0, 0);
+	this.stopped = true;
 	this.player.animations.play("idle");
 }
 
-levelOneState.prototype.onGround = function() {
-	this.midJump = false;
+levelOneState.prototype.onGround = function(player, wall) {
+	if (!this.stopped) {
+		player.animations.play("walk");
+	}
+	else {
+		player.animations.play("idle");
+	}
 }
 
