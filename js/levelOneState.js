@@ -1,4 +1,4 @@
-let levelOneState = function() {
+	let levelOneState = function() {
 	let sideFacing = true;
 	let played = false;
 	let mouseDown = false;
@@ -45,6 +45,11 @@ levelOneState.prototype.preload = function() {
 }
 
 levelOneState.prototype.create = function() {
+	
+	this.music = game.add.audio('FantasyMusic');
+	this.music.loop = true;
+    this.music.play();
+	
 	this.gameFunctions = new gameplayFunctions(); //THIS LINE IS IMPORTANT
 	game.world.setBounds(0, 0, 5000, 900); //enable to see how camera works
 	sideFacing = true;

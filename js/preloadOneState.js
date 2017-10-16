@@ -21,6 +21,8 @@ preloadOneState.prototype.preload = function() {
 	//Load the Credits
 	game.load.text("Credits", "assets/credits.txt");
 	
+	game.load.audio("FantasyMusic", "assets/sound/FantasyMusic.ogg");
+	
 }
 
 preloadOneState.prototype.create = function() {

@@ -12,6 +12,8 @@ preloadMenuState.prototype.preload = function() {
 	//load the play button
 	game.load.image("play", "assets/PlayButton.png");
 	
+	game.load.audio('MainMusic', 'assets/sound/TitleMusic.ogg');
+	
 }
 
 preloadMenuState.prototype.create = function() {
