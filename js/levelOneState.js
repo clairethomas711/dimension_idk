@@ -672,8 +672,8 @@ levelOneState.prototype.mouseDown = function() {
 }
 
 levelOneState.prototype.startCutscene = function(player, trigger) {
-	this.checkX = trigger.x;
-	this.checkY = 256;
+	this.checkX = trigger.position.x;
+	this.checkY = 900 - (132 + 129);
 	trigger.kill();
 	this.inCutscene = true;
 	this.player.animations.play("idle");

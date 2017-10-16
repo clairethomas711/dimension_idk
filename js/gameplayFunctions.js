@@ -261,8 +261,6 @@ gameplayFunctions.prototype.setPlatformPhysics = function(plat) {
 	}
 	
 gameplayFunctions.prototype.kill = function(player) {
-	player.position.x = this.checkX;
-	player.position.x = this.checkY;
+	player.x = this.checkX;
+	player.y = this.checkY;
 }
-	
-	
