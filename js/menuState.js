@@ -13,6 +13,10 @@ menuState.prototype.create = function() {
 	
 	this.screen = game.add.sprite(0,0,"dust");
 	this.screen.animations.add("constant", [0,1,2,3,4,5], 10, true);
+	
+	this.music = game.add.audio('MainMusic');
+	this.music.loop = true;
+    this.music.play();
 }
 
 menuState.prototype.update = function() {
@@ -22,7 +26,8 @@ menuState.prototype.update = function() {
 }
 
 menuState.prototype.playOnClick = function() {
-		game.state.start("PreloadOneState");
+	this.music.stop();
+	game.state.start("PreloadOneState");
 }
 
 
