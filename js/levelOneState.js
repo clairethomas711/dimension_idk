@@ -328,7 +328,7 @@ levelOneState.prototype.rotatePlatform = function(plat, input) {
 				case 0: {
 					plat.animations.play("ZbyYtoZbyXLeft", false);
 					plat.state = this.state3D.ZbyX;
-					plat.angle = 270;
+					plat.angle = 90;
 					break;
 				}
 				case 1: {
@@ -340,7 +340,7 @@ levelOneState.prototype.rotatePlatform = function(plat, input) {
 				case 2: {
 					plat.animations.play("ZbyYtoZbyXRight", false);
 					plat.state = this.state3D.ZbyX;
-					plat.angle = 90;
+					plat.angle = 270;
 					break;
 				}
 				case 3: {
@@ -459,7 +459,7 @@ levelOneState.prototype.rotatePlatform = function(plat, input) {
 				case 0: {
 					plat.animations.play("ZbyXtoZbyYLeft", false);
 					plat.state = this.state3D.ZbyY;
-					plat.angle = 90;
+					plat.angle = 270;
 					break;
 				}
 				case 1: {
@@ -471,7 +471,7 @@ levelOneState.prototype.rotatePlatform = function(plat, input) {
 				case 2: {
 					plat.animations.play("ZbyXtoZbyYRight", false);
 					plat.state = this.state3D.ZbyY;
-					plat.angle = 270;
+					plat.angle = 90;
 					break;
 				}
 				case 3: {
