@@ -238,8 +238,17 @@
  "tileheight":64,
  "tilesets":[
         {
+         "columns":12,
          "firstgid":1,
-         "source":"..\/..\/..\/Dropbox\/DIMENSION\/AlienTiles.tsx"
+         "image":"Tilemap\/AlienTiles.png",
+         "imageheight":384,
+         "imagewidth":768,
+         "margin":0,
+         "name":"AlienTiles",
+         "spacing":0,
+         "tilecount":72,
+         "tileheight":64,
+         "tilewidth":64
         }],
  "tilewidth":64,
  "type":"map",

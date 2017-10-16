@@ -24,7 +24,8 @@ let levelOneState = function() {
 	// Cutscene stuff
 	this.inCutscene = false;
 	this.cutsceneIndex = 0;
-	this.styleDoddy = { font: "16px Arial", fill: "#000000", align: "center"};
+	this.styleDoddy = { font: "16px Arial", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 192 };
+	this.styleDoomsday = { font: "16px Arial", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 192 };
 }
 
 levelOneState.prototype.preload = function() {
@@ -108,29 +109,29 @@ levelOneState.prototype.create = function() {
 		this.setPlatformPhysics(result[i].properties.orientation);
 		switch(result[i].properties.orientation) {
 			case this.state3D.XbyY: {
-				this.platform3DGroup.children[i].frame = 0;
+				tempPlatform3D.frame = 0;
 				break;
 			}
 			case this.state3D.ZbyY: {
-				this.platform3DGroup.children[i].frame = 29;
-				this.platform3DGroup.children[i].angle = 90;
+				tempPlatform3D.frame = 29;
+				tempPlatform3D.angle = 90;
 				break;
 			}
 			case this.state3D.XbyZ: {
-				this.platform3DGroup.children[i].frame = 14;
+				tempPlatform3D.frame = 14;
 				break;
 			}
 			case this.state3D.YbyX: {
-				this.platform3DGroup.children[i].frame = 44;
+				tempPlatform3D.frame = 44;
 				break;
 			}
 			case this.state3D.YbyZ: {
-				this.platform3DGroup.children[i].frame = 29;
+				tempPlatform3D.frame = 29;
 				break;
 			}
 			case this.state3D.ZbyX: {
-				this.platform3DGroup.children[i].frame = 14;
-				this.platform3DGroup.children[i].angle = 90;
+				tempPlatform3D.frame = 14;
+				tempPlatform3D.angle = 90;
 				break;
 			}
 			default: {
@@ -156,19 +157,34 @@ levelOneState.prototype.create = function() {
 	game.input.onDown.add(this.mouseDown, this);
 	//game.input.onUp.add(this.mouseUp, this);
 	
+	this.triggerGroup = game.add.group();
+	let triggers = this.gameFunctions.findObjectsByType('cutscene',this.map,'objectlayer');
+	console.log(triggers.length);
+	for(let i = 0;i < triggers.length;i++) {
+		let tempTrigger = this.triggerGroup.create(triggers[i].x, triggers[i].y);
+		game.physics.arcade.enable(tempTrigger);
+		tempTrigger.body.setSize(64,750,0,0);
+	}
+	result = this.gameFunctions.findObjectsByType('doomsday',this.map,'objectlayer');
+	this.doomsday = game.add.sprite(result[0].x, result[0].y, "doomsday");
+	this.doomsday.animations.add("idle", [1, 2, 3, 4, 5, 6, 7, 8], 10, true);
+	this.doomsday.animations.play("idle");
+	this.doomsday.scale.x = -1;
+	game.physics.arcade.enable(this.doomsday);
 	
 }
 
 levelOneState.prototype.update = function() {
 	
-	
-	
-	
-	
 	game.physics.arcade.collide(this.player, this.walls);
 	game.physics.arcade.collide(this.player, this.platform3DGroup);
 	game.physics.arcade.collide(this.player, this.danger, this.gameFunctions.kill, null, this);
-		
+	game.physics.arcade.overlap(this.player, this.triggerGroup, this.startCutscene, null, this);
+	
+	if (this.doomsday.x > 4000) {
+		this.doomsday.kill();
+	}
+	
 	// Do parallax
 	this.doParallax(this);
 		
@@ -259,13 +275,17 @@ levelOneState.prototype.update = function() {
 	}
 }
 
+/*
 levelOneState.prototype.render = function() {
 	game.debug.body(this.player);
 	
 	for (let i = 0; i < this.platform3DGroup.length; i++) {
 		game.debug.body(this.platform3DGroup.children[i]);
 	}
-}
+	for (let i = 0; i < this.triggerGroup.length; i++) {
+		game.debug.body(this.triggerGroup.children[i]);
+	}
+} */
 
 levelOneState.prototype.rotatePlatform = function(plat, input) {
 	let caseFailure = false;
@@ -592,27 +612,71 @@ levelOneState.prototype.mouseDown = function() {
 	if (this.inCutscene) {
 		this.playCutscene();
 	} else {
-		this.inCutscene = true;
-		this.player.animations.play("idle")
-		this.player.body.velocity.y = 0;
-		this.playCutscene();
+		
 	}
+}
+
+levelOneState.prototype.startCutscene = function(player, trigger) {
+	trigger.kill();
+	this.inCutscene = true;
+	this.player.animations.play("idle");
+	this.player.body.velocity.y = 0;
+	this.playCutscene();
 }
 
 levelOneState.prototype.playCutscene = function() {
 	switch(this.cutsceneIndex) {
 		case 0: {
-			this.currentText = game.add.text(this.player.x, this.player.y - 64, "You Dastardly Devil!\nI will Defeat you!", this.styleDoddy);
+			this.currentText = game.add.text(this.doomsday.x - 48, this.doomsday.y, " Ah, we meet again, Doddy! I see you've discovered my devious idea!", this.styleDoomsday);
 			this.currentText.anchor.setTo(.5, 1);
+			this.cutsceneIndex += 1;
+			let result = this.gameFunctions.findObjectsByType('cam1',this.map,'objectlayer');
+			this.camSpot = game.add.sprite(result[0].x, result[0].y);
+			game.camera.follow(this.camSpot, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+			break;
+		}
+		case 1: { 
+			this.currentText.setText("Don't you like it? It was delightfully converted from it's original form using my diabolical DIMENSION INVENTION!")
 			this.cutsceneIndex += 1;
 			break;
 		}
-		case 1: {
+		case 2: { 
+			this.currentText.setText("Why? Don't you see, you dense dimwit? 3D movies make MONEY!")
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 3: { 
+			this.currentText.setText("I mean, look at those 3D effects!")
+			this.cutsceneIndex += 1;
+			this.rotatePlatform(this.platform3DGroup.children[0], 2);
+			break;
+		}
+		case 4: { 
+			this.currentText.setText("Soon all of the Cinematic Universe will be converted, and all of the civilians bones will be crushed and painfully distorted, in the name of artistic progress! ")
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 5: { 
+			this.currentText.setText("And there's nothing you can do to stop me. That platform is far too high for you to jump!")
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 6: { 
+			this.currentText.setText("So long, you daft hero! HAHAHA!")
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 7: {
 			this.cutsceneIndex = 0;
 			this.inCutscene = false;
 			this.currentText.kill();
+			this.camSpot.kill();
+			game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+			this.doomsday.body.velocity.x = -300;
+			this.doomsday.body.gravity.x = 800;
+			this.doomsday.body.gravity.y = -100;
 			break;
-		}
+		} 
 	}
 }
 

@@ -137,6 +137,63 @@
                  "width":64,
                  "x":2368,
                  "y":0
+                }, 
+                {
+                 "height":704,
+                 "id":9,
+                 "name":"cutscene",
+                 "properties":
+                    {
+                     "type":"cutscene"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"cutscene",
+                 "visible":true,
+                 "width":64,
+                 "x":5056,
+                 "y":0
+                }, 
+                {
+                 "height":64,
+                 "id":10,
+                 "name":"cam1",
+                 "properties":
+                    {
+                     "type":"cam1"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"cam1",
+                 "visible":true,
+                 "width":64,
+                 "x":2752,
+                 "y":512
+                }, 
+                {
+                 "height":64,
+                 "id":11,
+                 "name":"doomsday",
+                 "properties":
+                    {
+                     "type":"doomsday"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"doomsday",
+                 "visible":true,
+                 "width":64,
+                 "x":2944,
+                 "y":256
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -144,7 +201,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":9,
+ "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.0.3",
