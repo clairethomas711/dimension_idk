@@ -330,6 +330,25 @@
                  "width":64,
                  "x":4224,
                  "y":576
+                }, 
+                {
+                 "height":256,
+                 "id":16,
+                 "name":"diminv",
+                 "properties":
+                    {
+                     "type":"diminv"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"diminv",
+                 "visible":true,
+                 "width":256,
+                 "x":4544,
+                 "y":576
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -337,7 +356,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":16,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.0.3",
@@ -352,7 +371,7 @@
          "margin":0,
          "name":"AlienTiles",
          "spacing":0,
-         "tilecount":72,
+         "tilecount":18,
          "tileheight":64,
          "tilewidth":64
         }],
