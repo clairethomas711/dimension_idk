@@ -26,6 +26,11 @@ preloadOneState.prototype.preload = function() {
 	game.load.audio("FantasyMusic", "assets/sound/FantasyMusic.ogg");
 	game.load.audio("PlatSound", "assets/sound/Platform.ogg");
 	
+	game.load.image("rotatePreventionY", "assets/yRotationPrevention.png");
+	
+	game.load.image("rotatePreventionX", "assets/xRotationPrevention.png");
+	
+	game.load.image("rotatePreventionS", "assets/sRotationPrevention.png");
 }
 
 preloadOneState.prototype.create = function() {

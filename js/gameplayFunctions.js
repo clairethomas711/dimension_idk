@@ -1,6 +1,13 @@
 //This file will hold all functions not dependent upon levels
 let gameplayFunctions = function() {
-	
+	this.state3D = { //this is important
+		XbyY: 0, //X is along the screen X axis and Y is along the screen Y axis
+		ZbyY: 1, //Z is along the screen X axis and Y is along the screen Y axis
+		XbyZ: 2, //X is along the screen X axis and Z is along the screen Y axis
+		YbyX: 3, //Y is along the screen X axis and X is along the screen Y axis
+		YbyZ: 4, //Y is along the screen X axis and Z is along the screen Y axis
+		ZbyX: 5 //Z is along the screen X axis and X is along the screen Y axis
+	};
 }
 
 gameplayFunctions.prototype.findObjectsByType = function(type, map, layer) {
@@ -13,9 +20,8 @@ gameplayFunctions.prototype.findObjectsByType = function(type, map, layer) {
     return result;
 }
 
-gameplayFunctions.prototype.rotatePlatform = function(plat, input) {
+gameplayFunctions.prototype.rotatePlatform = function(plat, input, player) {
 	let caseFailure = false;
-	
 	switch(plat.state) {
 		case this.state3D.XbyY: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west

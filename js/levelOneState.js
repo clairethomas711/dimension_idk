@@ -89,6 +89,13 @@ levelOneState.prototype.create = function() {
 	this.slowToZero = true;
 	this.directionWalking = true;
 	
+	this.rotatePreventerX = game.add.sprite(-1000, -1000, "rotatePreventionX");
+	game.physics.arcade.enable(this.rotatePreventerX);
+	this.rotatePreventerY = game.add.sprite(-1000, -1000, "rotatePreventionY");
+	game.physics.arcade.enable(this.rotatePreventerY);
+	this.rotatePreventerS = game.add.sprite(-1000, -1000, "rotatePreventionS"); //make sure player isn't standing on block
+	game.physics.arcade.enable(this.rotatePreventerS);
+	
 	// Controls Stuff
 	game.input.onUp.add(this.mouseUp, this);
     game.input.onDown.add(this.mouseDown, this);
@@ -346,29 +353,37 @@ levelOneState.prototype.update = function() {
 	//Same, but for platforms
 	let dir = 0;
 	if (this.selectedPlatform && game.input.activePointer.leftButton.isDown && !this.rotating) {
+		this.rotatePreventerX.position.x = this.player.position.x - (128 - 20);
+		this.rotatePreventerX.position.y = this.player.position.y - (128 - 64);
+		this.rotatePreventerY.position.x = this.player.position.x - (128 - 96);
+		this.rotatePreventerY.position.y = this.player.position.y - 128;
 		if (game.input.x - this.pressX > 100) {
 			dir = 1;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			this.rotatePlatform(this.currentSelectedPlat, dir);
+			if(!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat))
+				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 		if (game.input.x - this.pressX < (-100)) {
 			dir = 3;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			this.rotatePlatform(this.currentSelectedPlat, dir);
+			if(!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat))
+				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 		if (game.input.y - this.pressY > 100) {
 			dir = 2;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			this.rotatePlatform(this.currentSelectedPlat, dir);
+			if(!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat))
+				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 		if (game.input.y - this.pressY < (-100)) {
 			dir = 0;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			this.rotatePlatform(this.currentSelectedPlat, dir);
+			if(!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat))
+				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 	}
 	
