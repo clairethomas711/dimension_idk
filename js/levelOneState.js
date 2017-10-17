@@ -80,6 +80,7 @@ levelOneState.prototype.create = function() {
 	this.player.animations.add("idle", [0, 1, 2, 3, 4, 5], 10, true);
 	this.player.animations.add("jump", [6, 7], 10, false);
 	this.player.inputEnabled = true;
+	this.player.animations.play("idle");
 	
 	// Controls Stuff
 	game.input.onUp.add(this.mouseUp, this);
@@ -352,7 +353,7 @@ levelOneState.prototype.update = function() {
 }
 
 
-
+/*
 levelOneState.prototype.render = function() {
 	game.debug.body(this.player);
 	game.debug.body(this.tapInput);
@@ -363,7 +364,7 @@ levelOneState.prototype.render = function() {
 	for (let i = 0; i < this.triggerGroup.length; i++) {
 		game.debug.body(this.triggerGroup.children[i]);
 	}
-} 
+} */
 
 levelOneState.prototype.rotatePlatform = function(plat, input) {
 	let caseFailure = false;
