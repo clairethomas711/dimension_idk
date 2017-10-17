@@ -746,6 +746,8 @@ levelOneState.prototype.startCutscene = function(player, trigger) {
 	this.player.animations.play("idle");
 	this.player.body.velocity.y = 0;
 	this.slowToZero = true;
+	this.isJumping = false;
+	this.isWalking = false;
 	this.playCutscene();
 }
 
