@@ -726,7 +726,7 @@ levelTwoState.prototype.playCutscene = function() {
 		case 0: {
 			this.textbox = game.add.sprite(this.doomsday.x - 48, this.doomsday.y + 3, "textbox");
 			this.textbox.anchor.setTo(.5, 1);
-			this.currentText = game.add.text(this.doomsday.x - 48, this.doomsday.y, "How did you find me? You dispicible devil!", this.styleDoomsday);
+			this.currentText = game.add.text(this.doomsday.x - 48, this.doomsday.y, "How did you find me? You despicable devil!", this.styleDoomsday);
 			this.currentText.anchor.setTo(.5, 1);
 			this.textbox.height = this.currentText.height + 6;
 			this.textbox.width = this.currentText.width + 6;
