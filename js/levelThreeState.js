@@ -720,6 +720,8 @@ levelThreeState.prototype.startCutscene = function(player, trigger) {
 	this.player.animations.play("idle");
 	this.player.body.velocity.y = 0;
 	this.player.body.velocity.x = 0;
+	this.isJumping = false;
+	this.isWalking = false;
 	this.playCutscene();
 }
 
