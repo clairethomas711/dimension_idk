@@ -1,4 +1,3 @@
-
 CREDITS
 
 Director - Dave DoomsDay
@@ -9,12 +8,14 @@ Doddy - Doddy
 
 ART
 Claire
-Kalvin 
-CJ
+Kalvin
 
 PROGRAMMING
 Owen
 Elaine
+CJ
+
+MUSIC
 CJ
 
 

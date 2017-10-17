@@ -7,6 +7,7 @@ preloadOneState.prototype.preload = function() {
 	game.load.spritesheet("doddy", "assets/Fantasy_Doddy.png", 96, 132);
 	game.load.spritesheet("doomsday", "assets/DrDoomsday.png", 96, 132);
 	game.load.spritesheet("transition", "assets/TransitionAnimation.png", 1334, 750);
+	game.load.image("textbox", "assets/Textbox.png");
 	
 	// Load the background
 	game.load.image("fantasy_bg1", "Backgrounds/level1/Background_Fantasy_1.png");
@@ -23,6 +24,7 @@ preloadOneState.prototype.preload = function() {
 	game.load.text("Credits", "assets/credits.txt");
 	
 	game.load.audio("FantasyMusic", "assets/sound/FantasyMusic.ogg");
+	game.load.audio("PlatSound", "assets/sound/Platform.ogg");
 	
 }
 

@@ -41,6 +41,7 @@ let levelThreeState = function() {
 	this.cutsceneIndex = 0;
 	this.styleDoddy = { font: "32px Arial", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 300 };
 	this.styleDoomsday = { font: "32px Misfits", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 500 };
+	this.levelDone = false;
 }
 
 levelThreeState.prototype.preload = function() {
@@ -52,6 +53,7 @@ levelThreeState.prototype.create = function() {
 	this.music = game.add.audio('AlienMusic');
 	this.music.loop = true;
     this.music.play();
+	this.platSound = game.add.audio('PlatSound');
 	
 	this.gameFunctions = new gameplayFunctions(); //THIS LINE IS IMPORTANT
 	game.world.setBounds(0, 0, 5000, 900); //enable to see how camera works
@@ -203,7 +205,7 @@ levelThreeState.prototype.create = function() {
 	
 	this.transition = game.add.sprite(0, 0, "transition");
 	this.transition.animations.add("open", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], 20, false);
-	this.transition.animations.add("close", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], 20, false);
+	this.transition.animations.add("close", [23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0], 20, false);
 	this.transition.fixedToCamera = true;
 	this.transition.animations.play("open");
 }
@@ -348,13 +350,9 @@ levelThreeState.prototype.update = function() {
 	//end platform code
 	
 	//begin switching level code
-	this.az = 0;
-	if(this.az == 1)//UPON REACH END
+	if(this.levelDone && this.transition.animations.currentFrame.index === 0)//UPON REACH END
 	{
-		//StateManager sm = new StateManager(this);
-		game.state.start("PreloadTwoState");
-		//sm.start("Preload2State");
-		this.az++;
+		game.state.start("Credits");
 	}
 	
 	//end switching level code
@@ -580,8 +578,10 @@ levelThreeState.prototype.rotatePlatform = function(plat, input) {
 		let i = 0;
 		alert("CASE FAIL");
 	}
-	else
+	else {
 		this.setPlatformPhysics(plat);
+		this.platSound.play();
+	}
 }
 
 levelThreeState.prototype.setPlatformPhysics = function(plat) {
@@ -749,8 +749,12 @@ levelThreeState.prototype.pressButton = function(player, button) {
 levelThreeState.prototype.playCutscene = function() {
 	switch(this.cutsceneIndex) {
 		case 0: {
+			this.textbox = game.add.sprite(this.player.x, this.player.y - 61, "textbox");
+			this.textbox.anchor.setTo(.5, 1);
 			this.currentText = game.add.text(this.player.x, this.player.y - 64, "I can sense great power nearby. It must be the Dimension Invention!", this.styleDoomsday);
 			this.currentText.anchor.setTo(.5, 1);
+			this.textbox.height = this.currentText.height + 6;
+			this.textbox.width = this.currentText.width + 6;
 			this.cutsceneIndex += 1;
 			this.player.animations.play("idle");
 			this.player.body.velocity.y = 0;
@@ -759,13 +763,18 @@ levelThreeState.prototype.playCutscene = function() {
 		}
 		case 1: { 
 			this.currentText.kill ();
+			this.textbox.kill();
 			this.inCutscene = false;
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 2: { 
+			this.textbox = game.add.sprite(this.doomsday.x - 48, this.doomsday.y + 3, "textbox");
+			this.textbox.anchor.setTo(.5, 1);
 			this.currentText = game.add.text(this.doomsday.x - 48, this.doomsday.y, "No! Uh...", this.styleDoomsday);
 			this.currentText.anchor.setTo(.5, 1);
+			this.textbox.height = this.currentText.height + 6;
+			this.textbox.width = this.currentText.width + 6;
 			this.cutsceneIndex += 1;
 			let result = this.gameFunctions.findObjectsByType('cam1',this.map,'objectlayer');
 			this.camSpot = game.add.sprite(result[0].x, result[0].y);
@@ -777,32 +786,44 @@ levelThreeState.prototype.playCutscene = function() {
 		}
 		case 3: { 
 			this.currentText.setText("Pay no attention to that big red button!");
+			this.textbox.height = this.currentText.height + 6;
+			this.textbox.width = this.currentText.width + 6;
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 4: { 
 			this.currentText.setText("Don't you dare push that button!");
+			this.textbox.height = this.currentText.height + 6;
+			this.textbox.width = this.currentText.width + 6;
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 5: { 
 			this.currentText.setText("No! NO! DON'T!");
+			this.textbox.height = this.currentText.height + 6;
+			this.textbox.width = this.currentText.width + 6;
 			this.player.body.velocity.x = 300;
 			this.player.animations.play("walk");
 			break;
 		}
 		case 6: { 
 			this.currentText.setText("NOOOOOOOO!");
+			this.textbox.height = this.currentText.height + 6;
+			this.textbox.width = this.currentText.width + 6;
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 7: { 
 			this.currentText.setText("You may have defeated my idea this day, Doddy, but I'll decimate you next time!");
+			this.textbox.height = this.currentText.height + 6;
+			this.textbox.width = this.currentText.width + 6;
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 8: { 
 			this.currentText.setText("THERE'S ALWAYS A SEQUEL!");
+			this.textbox.height = this.currentText.height + 6;
+			this.textbox.width = this.currentText.width + 6;
 			this.doomsday.body.velocity.x = -300;
 			this.doomsday.body.gravity.x = 800;
 			this.doomsday.body.gravity.y = -100;
@@ -810,7 +831,10 @@ levelThreeState.prototype.playCutscene = function() {
 			break;
 		}
 		case 9: { 
-			game.state.start("Credits");
+			this.textbox.kill();
+			this.currentText.kill();
+			this.levelDone = true;
+			this.transition.animations.play("close");
 			break;
 		}
 	}
