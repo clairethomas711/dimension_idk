@@ -1,4 +1,4 @@
-	let levelOneState = function() {
+let levelOneState = function() {
 	let sideFacing = true;
 	let played = false;
 	let mouseDown = false;
@@ -7,12 +7,15 @@
 	let goingRight = false;
 	let stopped = true;
 	
-	let pressX = 0;
-	let pressY = 0;
-	let liftX = 0;
-	let liftY = 0;
-
-	let pressDuration = 0;
+	this.pressX = 0;
+	this.pressY = 0;
+	this.playerDirection = 0;
+	this.willCheckOverlap = false;
+	this.checkOverlap = false;
+	this.selectedPlayer = false;
+	this.selectedPlatform = false;
+	this.currentSelectedPlat;
+	
 	this.rotationTimer = 0;
 	
 	this.checkX = 0;
@@ -70,11 +73,22 @@ levelOneState.prototype.create = function() {
 	this.checkX = playerpos[0].x + 32;
 	this.checkY = playerpos[0].y + 64;
 	game.physics.arcade.enable(this.player);
-	this.player.body.gravity.y = 400;
-	//this.player.body.bounce.y = 0.15;
+	this.player.body.gravity.y = 1200;
 	this.player.anchor.setTo(.5,.5);
 	this.player.body.setSize(60,120,24,12);
-	//this.player.body.collideWorldBounds = true;
+	this.player.animations.add("walk", [8, 9, 10, 11, 12, 13, 14, 15], 10, true);
+	this.player.animations.add("idle", [0, 1, 2, 3, 4, 5], 10, true);
+	this.player.animations.add("jump", [6, 7], 10, false);
+	this.player.inputEnabled = true;
+	
+	// Controls Stuff
+	game.input.onUp.add(this.mouseUp, this);
+    game.input.onDown.add(this.mouseDown, this);
+	this.tapInput = game.add.sprite(0, 0);
+	this.tapInput.anchor.setTo(.5, .5);
+	game.physics.arcade.enable(this.tapInput);
+	this.tapInput.body.setSize(70,40,-15,0);
+	game.input.mouse.capture = true;
 	
 	//begin temp cam code
 	
@@ -155,27 +169,18 @@ levelOneState.prototype.create = function() {
 				break;
 			}
 		}
+		this.setPlatformPhysics(tempPlatform3D);
 		tempPlatform3D.anchor.setTo(.5,.5);
 	}
 	
 	
 	game.physics.arcade.enable(this.platform3DGroup);
 	//end platform code
-	this.player.animations.add("walk", [8, 9, 10, 11, 12, 13, 14, 15], 10, true);
-	//this.player.animations.add("right", [5, 6, 7, 8], 10, true);
-	this.player.animations.add("idle", [0, 1, 2, 3, 4, 5], 10, true);
-	this.player.animations.add("jump", [6, 7], 10, false);
 	
-	this.player.inputEnabled = true;
-	this.player.events.onInputDown.add(this.clickPlayer, this);
-	
-	this.cursors = game.input.keyboard.createCursorKeys();
 	
 	///////////////////
 	// Cutscene Code //
 	///////////////////
-	game.input.onDown.add(this.mouseDown, this);
-	//game.input.onUp.add(this.mouseUp, this);
 	
 	this.triggerGroup = game.add.group();
 	let triggers = this.gameFunctions.findObjectsByType('cutscene',this.map,'objectlayer');
@@ -208,144 +213,149 @@ levelOneState.prototype.update = function() {
 	// Do parallax
 	this.doParallax(this);
 	
-	//this.player.body.onCollide = new Phaser.Signal();
-	//this.player.body.onCollide.add(this.onGround, this);
+	/////////////////////
+	// Player controls //
+	/////////////////////
 	
-	// mouseDown should only record the first position
-	if (game.input.mousePointer.isDown) {
-		if (!(this.mouseDown)) {
-			this.pressX = game.input.mousePointer.screenX;
-			this.pressY = game.input.mousePointer.screenY;
-		}
-		this.mouseDown = true;
-		this.tapMade = true;
-		this.pressDuration = game.input.mousePointer.duration;
+	// First, some animation and polish stuff
+	if (this.isJumping && (this.player.body.blocked.down || this.player.body.touching.down)) {
+		this.isJumping = false;
+		this.player.animations.play("walk");
+		this.isWalking = true;
 	}
-	else if (game.input.mousePointer.isUp) {
-		// A tap (click/drag was made)
-		if (this.tapMade) {
-			this.liftX = game.input.mousePointer.screenX;
-			this.liftY = game.input.mousePointer.screenY;
-			// Drag
-			if (this.pressDuration > 100) {
-				// Swipe right
-				if (this.liftX > this.pressX) {
-					this.player.scale.x = 1;
-					// Jump
-					if ((this.liftY - this.pressY) < 0 && Math.abs(this.liftY - this.pressY) > (this.liftX - this.pressX)) {
-						if (this.player.body.onFloor()) {
-							this.player.animations.play("jump");
-							this.player.body.velocity.y = -400;
-							this.player.body.velocity.x = 300;
-						}
-						else {
-							this.player.body.velocity.x = 300;
-						}
-					}
-					else {
-						this.player.body.velocity.x = 300;
-						this.player.animations.play("walk");
-					}
-					this.stopped = false;
-				}
-				// Swipe left
-				else if (this.liftX < this.pressX) {
-					this.player.scale.x = -1;
-					// Jump
-					if ((this.liftY - this.pressY) < 0 && Math.abs(this.liftY - this.pressY) > Math.abs(this.liftX - this.pressX)) {
-						if (this.player.body.onFloor()) {
-							this.player.animations.play("jump");
-							this.player.body.velocity.y = -400;
-							this.player.body.velocity.x = -300;
-						}
-						else {
-							this.player.body.velocity.x = -300;
-						}
-					}
-					else {
-						this.player.body.velocity.x = -300;
-						this.player.animations.play("walk");
-					}
-					this.stopped = false;
-				}
-				// Swipe directly up...if you can get it perfectly
-				else {
-					// Jump
-					if ((this.liftY - this.pressY) < 0) {
-						if (this.player.body.onFloor()) {
-							this.player.animations.play("jump");
-							this.player.body.velocity.y = -400;
-							this.player.body.velocity.x = 0;
-						}
-						else {
-							this.player,body.velocity.x = 0;
-						}
-					}
-					this.stopped = false;
-				}
+	if (this.isJumping && (this.player.body.blocked.right || this.player.body.blocked.left || this.player.body.touching.right || this.player.body.touching.left)) {
+		if (sideFacing) {
+			this.player.body.velocity.x = 300;
+		} else {
+			this.player.body.velocity.x = -300;
+		}
+	}
+	if (this.isWalking && this.player.body.velocity.x == 0) {
+		this.isWalking = false;
+		this.player.animations.play("idle");
+	}
+	if (this.isWalking && this.player.body.velocity.y > 10) {
+		this.isJumping = true;
+		this.player.animations.stop();
+		this.player.frame = 7;
+		this.isWalking = false;
+	}
+	if (this.player.body.velocity.y > 10) {
+		this.isJumping = true;
+		this.player.animations.stop();
+		this.player.frame = 7;
+		this.isWalking = false;
+	}
+	
+	// Ok this looks weird but basically i need to wait 1 frame before checking if we tapped something,
+	// so this is my rube goldberg tap-checking machine.
+	if (this.checkOverlap) {
+		this.checkOverlap = false;
+		game.physics.arcade.overlap(this.player, this.tapInput, this.tapPlayer, null, this)
+		if (!this.selectedPlayer) {
+			game.physics.arcade.overlap(this.tapInput, this.platform3DGroup, this.tapPlatform, null, this)
+		}
+	}
+	if (this.willCheckOverlap) {
+		this.willCheckOverlap = false;
+		this.checkOverlap = true;
+	}
+	
+	//Check if we swiped any direction, and do stuff if we did.
+	if (this.selectedPlayer && game.input.activePointer.leftButton.isDown) {
+		if (game.input.x - this.pressX > 100) {
+			this.player.scale.x = 1;
+			this.player.animations.play("walk");
+			this.player.body.velocity.x = 300;
+			sideFacing = true;
+			this.selectedPlayer = false;
+			this.isWalking = true;
+		} else if (game.input.x - this.pressX < (-100)) {
+			this.player.scale.x = -1;
+			this.player.animations.play("walk");
+			this.player.body.velocity.x = -300;
+			sideFacing = false;
+			this.selectedPlayer = false;
+			this.isWalking = true;
+		} else if ((game.input.y - this.pressY < (-100)) && (this.player.body.blocked.down || this.player.body.touching.down)) {
+			this.player.animations.stop();
+			this.player.frame = 6;
+			if (sideFacing) {
+				this.player.body.velocity.x = 300;
+			} else {
+				this.player.body.velocity.x = -300;
 			}
+			this.player.body.velocity.y = -600;
+			this.selectedPlayer = false;
+			this.isJumping = true;
 		}
-		this.pressDuration = 0;
-		this.tapMade = false;
-		this.mouseDown = false;
 	}
-	else {
-		this.pressDuration = 0;
-	}
-		
-		
-		
-		//begin platform code
-		let dir = 0; //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
-		if(this.cursors.up.isDown && !this.rotating)
-		{
-			dir = 0;
-			this.rotating = true;
-		}
-		if(this.cursors.right.isDown && !this.rotating)
-		{
+	
+	//Same, but for platforms
+	let dir = 0;
+	if (this.selectedPlatform && game.input.activePointer.leftButton.isDown && !this.rotating) {
+		if (game.input.x - this.pressX > 100) {
 			dir = 1;
 			this.rotating = true;
+			this.selectedPlatform = false;
+			this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
-		if(this.cursors.down.isDown && !this.rotating)
-		{
-			dir = 2;
-			this.rotating = true;
-		}
-		if(this.cursors.left.isDown && !this.rotating)
-		{
+		if (game.input.x - this.pressX < (-100)) {
 			dir = 3;
 			this.rotating = true;
+			this.selectedPlatform = false;
+			this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
-		if(this.rotating && this.rotationTimer == 0) {
-			this.platform3DGroup.forEach(this.rotatePlatform, this, true, dir);
-			this.rotationTimer = game.time.totalElapsedSeconds();
+		if (game.input.y - this.pressY > 100) {
+			dir = 2;
+			this.rotating = true;
+			this.selectedPlatform = false;
+			this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
-		if((game.time.totalElapsedSeconds() - this.rotationTimer) >= 2)
-		{
-			this.rotating = false;
-			this.rotationTimer = 0;
+		if (game.input.y - this.pressY < (-100)) {
+			dir = 0;
+			this.rotating = true;
+			this.selectedPlatform = false;
+			this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
-		//end platform code
-		
-		//begin switching level code
-		this.az = 0;
-		if(this.az == 1)//UPON REACH END
-		{
-			//StateManager sm = new StateManager(this);
-			game.state.start("PreloadTwoState");
-			//sm.start("Preload2State");
-			this.az++;
-		}
-		
-		//end switching level code
-
 	}
-//}
+	
+	//////////////////
+	// End Controls //
+	//////////////////
+		
+		
+		
+	//begin platform code
+	if(this.rotating && this.rotationTimer == 0) {
+		this.rotationTimer = game.time.totalElapsedSeconds();
+	}
+	if((game.time.totalElapsedSeconds() - this.rotationTimer) >= 0.5)
+	{
+		this.rotating = false;
+		this.rotationTimer = 0;
+	}
+	//end platform code
+	
+	//begin switching level code
+	this.az = 0;
+	if(this.az == 1)//UPON REACH END
+	{
+		//StateManager sm = new StateManager(this);
+		game.state.start("PreloadTwoState");
+		//sm.start("Preload2State");
+		this.az++;
+	}
+	
+	//end switching level code
 
-/*
+}
+
+
+
 levelOneState.prototype.render = function() {
 	game.debug.body(this.player);
+	game.debug.body(this.tapInput);
 	
 	for (let i = 0; i < this.platform3DGroup.length; i++) {
 		game.debug.body(this.platform3DGroup.children[i]);
@@ -353,7 +363,7 @@ levelOneState.prototype.render = function() {
 	for (let i = 0; i < this.triggerGroup.length; i++) {
 		game.debug.body(this.triggerGroup.children[i]);
 	}
-} */
+} 
 
 levelOneState.prototype.rotatePlatform = function(plat, input) {
 	let caseFailure = false;
@@ -663,25 +673,20 @@ levelOneState.prototype.createLevel = function() {
 }
 
 
-
-/*levelOneState.prototype.findObjectsByType = function(type, map, layer) {
-    let result = new Array();
-    map.objects[layer].forEach(function(element){
-      if(element.properties.type === type) {
-        element.y -= map.tileHeight;
-        result.push(element);
-      }      
-    });
-    return result;
-}*/
-
-
 levelOneState.prototype.mouseDown = function() {
 	if (this.inCutscene) {
 		this.playCutscene();
 	} else {
-		
+		this.tapInput.x = game.input.x + game.camera.x;
+		this.tapInput.y = game.input.y + game.camera.y;
+		this.pressX = game.input.x;
+		this.pressY = game.input.y;
+		this.willCheckOverlap = true;
 	}
+}
+levelOneState.prototype.mouseUp = function() {
+	this.selectedPlayer = false;
+	this.selectedPlatform = false;
 }
 
 levelOneState.prototype.startCutscene = function(player, trigger) {
@@ -691,7 +696,21 @@ levelOneState.prototype.startCutscene = function(player, trigger) {
 	this.inCutscene = true;
 	this.player.animations.play("idle");
 	this.player.body.velocity.y = 0;
+	this.player.body.velocity.x = 0;
 	this.playCutscene();
+}
+
+levelOneState.prototype.tapPlayer = function() {
+	this.player.body.velocity.x = 0;
+	this.selectedPlayer = true;
+	if (this.player.body.blocked.down)
+	this.player.animations.play("idle");
+
+}
+
+levelOneState.prototype.tapPlatform = function(tap, platform) {
+	this.selectedPlatform = true;
+	this.currentSelectedPlat = platform;
 }
 
 levelOneState.prototype.playCutscene = function() {
@@ -703,6 +722,9 @@ levelOneState.prototype.playCutscene = function() {
 			let result = this.gameFunctions.findObjectsByType('cam1',this.map,'objectlayer');
 			this.camSpot = game.add.sprite(result[0].x, result[0].y);
 			game.camera.follow(this.camSpot, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+			this.player.animations.play("idle");
+			this.player.body.velocity.y = 0;
+			this.player.body.velocity.x = 0;
 			break;
 		}
 		case 1: { 
@@ -783,18 +805,4 @@ levelOneState.prototype.playCutscene = function() {
 }
 
 
-levelOneState.prototype.clickPlayer = function() {
-	this.player.body.velocity.x = 0;
-	this.stopped = true;
-	this.player.animations.play("idle");
-}
-
-levelOneState.prototype.onGround = function(player, wall) {
-	if (!this.stopped) {
-		player.animations.play("walk");
-	}
-	else {
-		player.animations.play("idle");
-	}
-}
 
