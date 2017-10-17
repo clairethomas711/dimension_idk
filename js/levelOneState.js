@@ -86,6 +86,8 @@ levelOneState.prototype.create = function() {
 	this.player.animations.add("jump", [6, 7], 10, false);
 	this.player.inputEnabled = true;
 	this.player.animations.play("idle");
+	this.slowToZero = true;
+	this.directionWalking = true;
 	
 	// Controls Stuff
 	game.input.onUp.add(this.mouseUp, this);
@@ -235,12 +237,18 @@ levelOneState.prototype.update = function() {
 	}
 	if (this.isJumping && (this.player.body.blocked.right || this.player.body.blocked.left || this.player.body.touching.right || this.player.body.touching.left)) {
 		if (sideFacing) {
-			this.player.body.velocity.x = 300;
+			this.slowToZero = false;
+			this.player.body.velocity.x += 20;
+			if (this.player.body.velocity.x > 300)
+				this.player.body.velocity.x = 300;
 		} else {
-			this.player.body.velocity.x = -300;
+			this.slowToZero = false;
+			this.player.body.velocity.x -= 20;
+			if (this.player.body.velocity.x < -300)
+				this.player.body.velocity.x = -300;
 		}
 	}
-	if (this.isWalking && this.player.body.velocity.x == 0) {
+	if (this.isWalking && this.slowToZero) {
 		this.isWalking = false;
 		this.player.animations.play("idle");
 	}
@@ -255,6 +263,32 @@ levelOneState.prototype.update = function() {
 		this.player.animations.stop();
 		this.player.frame = 7;
 		this.isWalking = false;
+	}
+	
+	if(this.slowToZero) //add a slowing animation, probably just walking animation but slower
+	{
+		if(this.player.body.velocity.x > 0)
+			this.player.body.velocity.x -= 10;
+		else
+			this.player.body.velocity.x += 10;
+		
+		if(this.player.body.velocity.x < 30 && this.player.body.velocity.x > -30)
+			this.player.body.velocity.x = 0;
+	}
+	else
+	{
+		if (this.directionWalking)
+		{
+			this.player.body.velocity.x += 20;
+			if (this.player.body.velocity.x > 300)
+				this.player.body.velocity.x = 300;
+		}
+		else
+		{
+			this.player.body.velocity.x -= 20;
+			if (this.player.body.velocity.x < -300)
+				this.player.body.velocity.x = -300;
+		}
 	}
 	
 	// Ok this looks weird but basically i need to wait 1 frame before checking if we tapped something,
@@ -276,14 +310,16 @@ levelOneState.prototype.update = function() {
 		if (game.input.x - this.pressX > 100) {
 			this.player.scale.x = 1;
 			this.player.animations.play("walk");
-			this.player.body.velocity.x = 300;
+			this.slowToZero = false;
+			this.directionWalking = true; //true for right
 			sideFacing = true;
 			this.selectedPlayer = false;
 			this.isWalking = true;
 		} else if (game.input.x - this.pressX < (-100)) {
 			this.player.scale.x = -1;
 			this.player.animations.play("walk");
-			this.player.body.velocity.x = -300;
+			this.slowToZero = false;
+			this.directionWalking = false; //false for left
 			sideFacing = false;
 			this.selectedPlayer = false;
 			this.isWalking = true;
@@ -291,9 +327,15 @@ levelOneState.prototype.update = function() {
 			this.player.animations.stop();
 			this.player.frame = 6;
 			if (sideFacing) {
-				this.player.body.velocity.x = 300;
+				this.slowToZero = false;
+				this.player.body.velocity.x += 20;
+				if (this.player.body.velocity.x > 300)
+					this.player.body.velocity.x = 300;
 			} else {
-				this.player.body.velocity.x = -300;
+				this.slowToZero = false;
+				this.player.body.velocity.x -= 20;
+				if (this.player.body.velocity.x < -300)
+					this.player.body.velocity.x = -300;
 			}
 			this.player.body.velocity.y = -600;
 			this.selectedPlayer = false;
@@ -703,12 +745,12 @@ levelOneState.prototype.startCutscene = function(player, trigger) {
 	this.inCutscene = true;
 	this.player.animations.play("idle");
 	this.player.body.velocity.y = 0;
-	this.player.body.velocity.x = 0;
+	this.slowToZero = true;
 	this.playCutscene();
 }
 
 levelOneState.prototype.tapPlayer = function() {
-	this.player.body.velocity.x = 0;
+	this.slowToZero = true;
 	this.selectedPlayer = true;
 	if (this.player.body.blocked.down)
 	this.player.animations.play("idle");
@@ -736,7 +778,7 @@ levelOneState.prototype.playCutscene = function() {
 			game.camera.follow(this.camSpot, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 			this.player.animations.play("idle");
 			this.player.body.velocity.y = 0;
-			this.player.body.velocity.x = 0;
+			this.slowToZero = true;
 			break;
 		}
 		case 1: { 
@@ -826,6 +868,7 @@ levelOneState.prototype.playCutscene = function() {
 			break;
 		}
 		case 12: { 
+			this.currentText.setStyle(this.styleDoddy);
 			this.currentText.setText("But Doddy knew exactly where Dr. Doomsday had gone!");
 			this.textbox.height = this.currentText.height + 6;
 			this.textbox.width = this.currentText.width + 6;
