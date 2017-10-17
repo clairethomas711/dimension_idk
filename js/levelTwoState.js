@@ -1,7 +1,25 @@
 let levelTwoState = function() {
 	let sideFacing = true;
 	let played = false;
+	let mouseDown = false;
+	let tapMade = false;
+	let goingLeft = false;
+	let goingRight = false;
+	let stopped = true;
+	
+	this.pressX = 0;
+	this.pressY = 0;
+	this.playerDirection = 0;
+	this.willCheckOverlap = false;
+	this.checkOverlap = false;
+	this.selectedPlayer = false;
+	this.selectedPlatform = false;
+	this.currentSelectedPlat;
+	
 	this.rotationTimer = 0;
+	
+	this.checkX = 0;
+	this.checkY = 0;
 	
 	//begin enum and stuff coding
 	this.state3D = { //this is important
@@ -16,13 +34,26 @@ let levelTwoState = function() {
 	this.platformsX = [100,200,300,400];
 	this.platformsY = [100,200,300,400];
 	//end enum and stuff coding
+	
+	
+	// Cutscene stuff
+	this.inCutscene = false;
+	this.cutsceneIndex = 0;
+	this.styleDoddy = { font: "32px Arial", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 300 };
+	this.styleDoomsday = { font: "32px Misfits", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 500 };
 }
 
 levelTwoState.prototype.preload = function() {
-	
+	this.stopped = true;
 }
 
 levelTwoState.prototype.create = function() {
+	
+	this.music = game.add.audio('WeastMusic');
+	this.music.loop = true;
+    this.music.play();
+	
+	this.gameFunctions = new gameplayFunctions(); //THIS LINE IS IMPORTANT
 	game.world.setBounds(0, 0, 5000, 900); //enable to see how camera works
 	sideFacing = true;
 	//game.add.sprite(0, 0, "sky");
@@ -36,28 +67,42 @@ levelTwoState.prototype.create = function() {
 	
 	
 	//This finds where the player start is in tiled and gets the position
-	let result = this.findObjectsByType('playerstart',this.map,'objectlayer');
+	let playerpos = this.gameFunctions.findObjectsByType('playerstart',this.map,'objectlayer'); //EDITED TAKE NOTE
 	
-	this.player = game.add.sprite(result[0].x, result[0].y, "doddy");
+	this.player = game.add.sprite(playerpos[0].x + 32, playerpos[0].y + 64, "doddy");
+	this.checkX = playerpos[0].x + 32;
+	this.checkY = playerpos[0].y + 64;
 	game.physics.arcade.enable(this.player);
-	this.player.body.gravity.y = 400;
-	this.player.body.bounce.y = 0.15;
+	this.player.body.gravity.y = 1200;
 	this.player.anchor.setTo(.5,.5);
-	this.player.body.setSize(60,120,18,6);
-	//this.player.body.collideWorldBounds = true;
+	this.player.body.setSize(60,120,24,12);
+	this.player.animations.add("walk", [8, 9, 10, 11, 12, 13, 14, 15], 10, true);
+	this.player.animations.add("idle", [0, 1, 2, 3, 4, 5], 10, true);
+	this.player.animations.add("jump", [6, 7], 10, false);
+	this.player.inputEnabled = true;
+	this.player.animations.play("idle");
+	
+	// Controls Stuff
+	game.input.onUp.add(this.mouseUp, this);
+    game.input.onDown.add(this.mouseDown, this);
+	this.tapInput = game.add.sprite(0, 0);
+	this.tapInput.anchor.setTo(.5, .5);
+	game.physics.arcade.enable(this.tapInput);
+	this.tapInput.body.setSize(70,40,-15,0);
+	game.input.mouse.capture = true;
 	
 	//begin temp cam code
 	
 	game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 	
-	this.az = 0;
 	//end temp cam code
 	
 	//begin platform code
 	this.platform3DGroup = game.add.group();
-	for(let i = 0;i < 4;i++)
+	let result = this.gameFunctions.findObjectsByType('platform',this.map,'objectlayer');
+	for(let i = 0;i < result.length;i++)
 	{
-		let tempPlatform3D = this.platform3DGroup.create(this.platformsX[i], this.platformsY[i], "platform3D");
+		let tempPlatform3D = this.platform3DGroup.create(result[i].x + 128, result[i].y + 128, "platform3D");
 		
 		//animations from XbyY
 		tempPlatform3D.animations.add("XbyYtoZbyYLeft", [44,43,42,41,40,39,38,37,36,35,34,33,32,31,30], 25, false); //rotate by 90
@@ -92,115 +137,201 @@ levelTwoState.prototype.create = function() {
 		
 		game.physics.arcade.enable(tempPlatform3D);
 		tempPlatform3D.body.immovable = true;
-		this.setPlatformPhysics(i);
-		switch(this.platformStates[i]) {
+		tempPlatform3D.state = (result[i].properties.orientation);
+		this.setPlatformPhysics(result[i].properties.orientation);
+		console.log(result[i].properties.orientation);
+		switch(result[i].properties.orientation) {
 			case this.state3D.XbyY: {
-				this.platform3DGroup.children[i].frame = 0;
+				tempPlatform3D.frame = 0;
 				break;
 			}
 			case this.state3D.ZbyY: {
-				this.platform3DGroup.children[i].frame = 29;
-				this.platform3DGroup.children[i].angle = 90;
+				tempPlatform3D.frame = 29;
+				tempPlatform3D.angle = 90;
 				break;
 			}
 			case this.state3D.XbyZ: {
-				this.platform3DGroup.children[i].frame = 14;
+				tempPlatform3D.frame = 14;
 				break;
 			}
 			case this.state3D.YbyX: {
-				this.platform3DGroup.children[i].frame = 44;
+				tempPlatform3D.frame = 44;
 				break;
 			}
 			case this.state3D.YbyZ: {
-				this.platform3DGroup.children[i].frame = 29;
+				tempPlatform3D.frame = 29;
 				break;
 			}
 			case this.state3D.ZbyX: {
-				this.platform3DGroup.children[i].frame = 14;
-				this.platform3DGroup.children[i].angle = 90;
+				tempPlatform3D.frame = 14;
+				tempPlatform3D.angle = 90;
 				break;
 			}
 			default: {
 				break;
 			}
 		}
+		this.setPlatformPhysics(tempPlatform3D);
 		tempPlatform3D.anchor.setTo(.5,.5);
 	}
 	
+	
 	game.physics.arcade.enable(this.platform3DGroup);
 	//end platform code
-	this.player.animations.add("walk", [7, 8, 9, 10, 11, 12, 13, 14], 10, true);
-	//this.player.animations.add("right", [5, 6, 7, 8], 10, true);
-	this.player.animations.add("idle", [0, 1, 2, 3, 4, 5], 10, true);
-	this.player.animations.add("jump", [6], 10, false);
 	
-	this.cursors = game.input.keyboard.createCursorKeys();
+	
+	///////////////////
+	// Cutscene Code //
+	///////////////////
+	
+	this.triggerGroup = game.add.group();
+	let triggers = this.gameFunctions.findObjectsByType('cutscene',this.map,'objectlayer');
+	console.log(triggers.length);
+	for(let i = 0;i < triggers.length;i++) {
+		let tempTrigger = this.triggerGroup.create(triggers[i].x, triggers[i].y);
+		game.physics.arcade.enable(tempTrigger);
+		tempTrigger.body.setSize(64,750,0,0);
+	}
+	result = this.gameFunctions.findObjectsByType('doomsday',this.map,'objectlayer');
+	this.doomsday = game.add.sprite(result[0].x, result[0].y, "doomsday");
+	this.doomsday.animations.add("idle", [1, 2, 3, 4, 5, 6, 7, 8], 10, true);
+	this.doomsday.animations.play("idle");
+	this.doomsday.scale.x = -1;
+	game.physics.arcade.enable(this.doomsday);
+	
 }
 
 levelTwoState.prototype.update = function() {
+	
 	game.physics.arcade.collide(this.player, this.walls);
 	game.physics.arcade.collide(this.player, this.platform3DGroup);
+	game.physics.arcade.overlap(this.player, this.triggerGroup, this.startCutscene, null, this);
+	
+	if (this.doomsday.x > 4000) {
+		this.doomsday.kill();
+	}
 	
 	// Do parallax
 	this.doParallax(this);
 	
+	/////////////////////
+	// Player controls //
+	/////////////////////
 	
-	this.player.body.velocity.x = 0;
-	
-	if(this.cursors.left.isDown) {
-		this.player.scale.x = -1;
+	// First, some animation and polish stuff
+	if (this.isJumping && (this.player.body.blocked.down || this.player.body.touching.down)) {
+		this.isJumping = false;
 		this.player.animations.play("walk");
-		this.player.body.velocity.x = -300;
-		sideFacing = false;
+		this.isWalking = true;
 	}
-	else if(this.cursors.right.isDown) {
-		this.player.scale.x = 1;
-		this.player.animations.play("walk");
-		this.player.body.velocity.x = 300;
-		sideFacing = true;
+	if (this.isJumping && (this.player.body.blocked.right || this.player.body.blocked.left || this.player.body.touching.right || this.player.body.touching.left)) {
+		if (sideFacing) {
+			this.player.body.velocity.x = 300;
+		} else {
+			this.player.body.velocity.x = -300;
+		}
 	}
-	else {
+	if (this.isWalking && this.player.body.velocity.x == 0) {
+		this.isWalking = false;
 		this.player.animations.play("idle");
-		//if(!sideFacing)
-			//this.player.frame = 0;
-		//else
-			//this.player.frame = 5
+	}
+	if (this.isWalking && this.player.body.velocity.y > 10) {
+		this.isJumping = true;
+		this.player.animations.stop();
+		this.player.frame = 7;
+		this.isWalking = false;
+	}
+	if (this.player.body.velocity.y > 10) {
+		this.isJumping = true;
+		this.player.animations.stop();
+		this.player.frame = 7;
+		this.isWalking = false;
 	}
 	
-	if(this.cursors.up.isDown) {
-		this.player.animations.play("jump");
-		this.player.frame = 2;
-		this.player.body.velocity.y = -400;
+	// Ok this looks weird but basically i need to wait 1 frame before checking if we tapped something,
+	// so this is my rube goldberg tap-checking machine.
+	if (this.checkOverlap) {
+		this.checkOverlap = false;
+		game.physics.arcade.overlap(this.player, this.tapInput, this.tapPlayer, null, this)
+		if (!this.selectedPlayer) {
+			game.physics.arcade.overlap(this.tapInput, this.platform3DGroup, this.tapPlatform, null, this)
+		}
+	}
+	if (this.willCheckOverlap) {
+		this.willCheckOverlap = false;
+		this.checkOverlap = true;
 	}
 	
-	//begin platform code
+	//Check if we swiped any direction, and do stuff if we did.
+	if (this.selectedPlayer && game.input.activePointer.leftButton.isDown) {
+		if (game.input.x - this.pressX > 100) {
+			this.player.scale.x = 1;
+			this.player.animations.play("walk");
+			this.player.body.velocity.x = 300;
+			sideFacing = true;
+			this.selectedPlayer = false;
+			this.isWalking = true;
+		} else if (game.input.x - this.pressX < (-100)) {
+			this.player.scale.x = -1;
+			this.player.animations.play("walk");
+			this.player.body.velocity.x = -300;
+			sideFacing = false;
+			this.selectedPlayer = false;
+			this.isWalking = true;
+		} else if ((game.input.y - this.pressY < (-100)) && (this.player.body.blocked.down || this.player.body.touching.down)) {
+			this.player.animations.stop();
+			this.player.frame = 6;
+			if (sideFacing) {
+				this.player.body.velocity.x = 300;
+			} else {
+				this.player.body.velocity.x = -300;
+			}
+			this.player.body.velocity.y = -600;
+			this.selectedPlayer = false;
+			this.isJumping = true;
+		}
+	}
+	
+	//Same, but for platforms
 	let dir = 0;
-	if(this.cursors.up.isDown && !this.rotating) //INSERT TIME DELAY AAAAAAA
-	{
-		dir = 0;
-		this.rotating = true;
+	if (this.selectedPlatform && game.input.activePointer.leftButton.isDown && !this.rotating) {
+		if (game.input.x - this.pressX > 100) {
+			dir = 1;
+			this.rotating = true;
+			this.selectedPlatform = false;
+			this.rotatePlatform(this.currentSelectedPlat, dir);
+		}
+		if (game.input.x - this.pressX < (-100)) {
+			dir = 3;
+			this.rotating = true;
+			this.selectedPlatform = false;
+			this.rotatePlatform(this.currentSelectedPlat, dir);
+		}
+		if (game.input.y - this.pressY > 100) {
+			dir = 2;
+			this.rotating = true;
+			this.selectedPlatform = false;
+			this.rotatePlatform(this.currentSelectedPlat, dir);
+		}
+		if (game.input.y - this.pressY < (-100)) {
+			dir = 0;
+			this.rotating = true;
+			this.selectedPlatform = false;
+			this.rotatePlatform(this.currentSelectedPlat, dir);
+		}
 	}
-	if(this.cursors.right.isDown && !this.rotating)
-	{
-		dir = 1;
-		this.rotating = true;
-	}
-	if(this.cursors.down.isDown && !this.rotating)
-	{
-		dir = 2;
-		this.rotating = true;
-	}
-	if(this.cursors.left.isDown && !this.rotating)
-	{
-		dir = 3;
-		this.rotating = true;
-	}
+	
+	//////////////////
+	// End Controls //
+	//////////////////
+		
+		
+		
+	//begin platform code
 	if(this.rotating && this.rotationTimer == 0) {
-		for(let i = 0;i < 4;i++)
-			this.rotatePlatform(i, dir);
 		this.rotationTimer = game.time.totalElapsedSeconds();
 	}
-	if((game.time.totalElapsedSeconds() - this.rotationTimer) >= 2)
+	if((game.time.totalElapsedSeconds() - this.rotationTimer) >= 0.5)
 	{
 		this.rotating = false;
 		this.rotationTimer = 0;
@@ -208,42 +339,56 @@ levelTwoState.prototype.update = function() {
 	//end platform code
 	
 	//begin switching level code
-	if(this.az == 0)//UPON REACH END
+	this.az = 0;
+	if(this.az == 1)//UPON REACH END
 	{
-		alert("DOGS ARE COOL");
+		//StateManager sm = new StateManager(this);
+		game.state.start("PreloadTwoState");
+		//sm.start("Preload2State");
 		this.az++;
 	}
 	
 	//end switching level code
-}
 
-levelTwoState.prototype.rotatePlatform = function(pos, input) {
+}
+/*
+levelTwoState.prototype.render = function() {
+	game.debug.body(this.tapInput);
+	game.debug.body(this.player);
+	
+	for (let i = 0; i < this.platform3DGroup.length; i++) {
+		game.debug.body(this.platform3DGroup.children[i]);
+	}
+}
+*/
+
+levelTwoState.prototype.rotatePlatform = function(plat, input) {
 	let caseFailure = false;
-	switch(this.platformStates[pos]) {
+	switch(plat.state) {
 		case this.state3D.XbyY: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("XbyYtoXbyZLeft", false);
-					this.platformStates[pos] = this.state3D.XbyZ;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("XbyYtoXbyZLeft", false);
+					plat.state = this.state3D.XbyZ;
+					plat.angle = 180;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("XbyYtoZbyYRight", false);
-					this.platformStates[pos] = this.state3D.ZbyY;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("XbyYtoZbyYRight", false);
+					plat.state = this.state3D.ZbyY;
+					plat.angle = 90;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("XbyYtoXbyZRight", false);
-					this.platformStates[pos] = this.state3D.XbyZ;
-					this.platform3DGroup.children[pos].angle = 0;
+					plat.animations.play("XbyYtoXbyZRight", false);
+					plat.state = this.state3D.XbyZ;
+					plat.angle = 0;
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("XbyYtoZbyYLeft", false);
-					this.platformStates[pos] = this.state3D.ZbyY;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("XbyYtoZbyYLeft", false);
+					plat.state = this.state3D.ZbyY;
+					plat.angle = 270;
 					break;
 				}
 				default: {
@@ -256,27 +401,27 @@ levelTwoState.prototype.rotatePlatform = function(pos, input) {
 		case this.state3D.ZbyY: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("ZbyYtoZbyXLeft", false);
-					this.platformStates[pos] = this.state3D.ZbyX;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("ZbyYtoZbyXLeft", false);
+					plat.state = this.state3D.ZbyX;
+					plat.angle = 90;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("ZbyYtoXbyYRight", false);
-					this.platformStates[pos] = this.state3D.XbyY;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("ZbyYtoXbyYRight", false);
+					plat.state = this.state3D.XbyY;
+					plat.angle = 270;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("ZbyYtoZbyXRight", false);
-					this.platformStates[pos] = this.state3D.ZbyX;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("ZbyYtoZbyXRight", false);
+					plat.state = this.state3D.ZbyX;
+					plat.angle = 270;
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("ZbyYtoXbyYLeft", false);
-					this.platformStates[pos] = this.state3D.XbyY;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("ZbyYtoXbyYLeft", false);
+					plat.state = this.state3D.XbyY;
+					plat.angle = 90;
 					break;
 				}
 				default: {
@@ -289,25 +434,25 @@ levelTwoState.prototype.rotatePlatform = function(pos, input) {
 		case this.state3D.XbyZ: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("XbyZtoXbyYLeft", false);
-					this.platformStates[pos] = this.state3D.XbyY;
+					plat.animations.play("XbyZtoXbyYLeft", false);
+					plat.state = this.state3D.XbyY;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("XbyZtoYbyZRight", false);
-					this.platformStates[pos] = this.state3D.YbyZ;
+					plat.animations.play("XbyZtoYbyZRight", false);
+					plat.state = this.state3D.YbyZ;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("XbyZtoXbyYRight", false);
-					this.platformStates[pos] = this.state3D.XbyY;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("XbyZtoXbyYRight", false);
+					plat.state = this.state3D.XbyY;
+					plat.angle = 180;
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("XbyZtoYbyZLeft", false);
-					this.platformStates[pos] = this.state3D.YbyZ;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("XbyZtoYbyZLeft", false);
+					plat.state = this.state3D.YbyZ;
+					plat.angle = 180;
 					break;
 				}
 				default: {
@@ -320,28 +465,28 @@ levelTwoState.prototype.rotatePlatform = function(pos, input) {
 		case this.state3D.YbyX: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("YbyXtoYbyZLeft", false);
-					this.platformStates[pos] = this.state3D.YbyZ;
-					this.platform3DGroup.children[pos].angle = 0;
+					plat.animations.play("YbyXtoYbyZLeft", false);
+					plat.state = this.state3D.YbyZ;
+					plat.angle = 0;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("YbyXtoZbyXRight", false);
-					this.platformStates[pos] = this.state3D.ZbyX;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("YbyXtoZbyXRight", false);
+					plat.state = this.state3D.ZbyX;
+					plat.angle = 270;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("YbyXtoYbyZRight", false);
-					this.platformStates[pos] = this.state3D.YbyZ;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("YbyXtoYbyZRight", false);
+					plat.state = this.state3D.YbyZ;
+					plat.angle = 180;
 					
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("YbyXtoZbyXLeft", false);
-					this.platformStates[pos] = this.state3D.ZbyX;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("YbyXtoZbyXLeft", false);
+					plat.state = this.state3D.ZbyX;
+					plat.angle = 90;
 					break;
 				}
 				default: {
@@ -354,27 +499,27 @@ levelTwoState.prototype.rotatePlatform = function(pos, input) {
 		case this.state3D.YbyZ: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("YbyZtoYbyXLeft", false);
-					this.platformStates[pos] = this.state3D.YbyX;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("YbyZtoYbyXLeft", false);
+					plat.state = this.state3D.YbyX;
+					plat.angle = 180;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("YbyZtoXbyZRight", false);
-					this.platformStates[pos] = this.state3D.XbyZ;
-					this.platform3DGroup.children[pos].angle = 180;
+					plat.animations.play("YbyZtoXbyZRight", false);
+					plat.state = this.state3D.XbyZ;
+					plat.angle = 180;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("YbyZtoYbyXRight", false);
-					this.platformStates[pos] = this.state3D.YbyX;
-					this.platform3DGroup.children[pos].angle = 0;
+					plat.animations.play("YbyZtoYbyXRight", false);
+					plat.state = this.state3D.YbyX;
+					plat.angle = 0;
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("YbyZtoXbyZLeft", false);
-					this.platformStates[pos] = this.state3D.XbyZ;
-					this.platform3DGroup.children[pos].angle = 0;
+					plat.animations.play("YbyZtoXbyZLeft", false);
+					plat.state = this.state3D.XbyZ;
+					plat.angle = 0;
 					break;
 				}
 				default: {
@@ -387,27 +532,27 @@ levelTwoState.prototype.rotatePlatform = function(pos, input) {
 		case this.state3D.ZbyX: {
 			switch(input) { //0 = up/north, 1 = right/east, 2 = down/south, 3 = left/west
 				case 0: {
-					this.platform3DGroup.children[pos].animations.play("ZbyXtoZbyYLeft", false);
-					this.platformStates[pos] = this.state3D.ZbyY;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("ZbyXtoZbyYLeft", false);
+					plat.state = this.state3D.ZbyY;
+					plat.angle = 270;
 					break;
 				}
 				case 1: {
-					this.platform3DGroup.children[pos].animations.play("ZbyXtoYbyXRight", false);
-					this.platformStates[pos] = this.state3D.YbyX;
-					this.platform3DGroup.children[pos].angle = 90;
+					plat.animations.play("ZbyXtoYbyXRight", false);
+					plat.state = this.state3D.YbyX;
+					plat.angle = 90;
 					break;
 				}
 				case 2: {
-					this.platform3DGroup.children[pos].animations.play("ZbyXtoZbyYRight", false);
-					this.platformStates[pos] = this.state3D.ZbyY;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("ZbyXtoZbyYRight", false);
+					plat.state = this.state3D.ZbyY;
+					plat.angle = 90;
 					break;
 				}
 				case 3: {
-					this.platform3DGroup.children[pos].animations.play("ZbyXtoYbyXLeft", false);
-					this.platformStates[pos] = this.state3D.YbyX;
-					this.platform3DGroup.children[pos].angle = 270;
+					plat.animations.play("ZbyXtoYbyXLeft", false);
+					plat.state = this.state3D.YbyX;
+					plat.angle = 270;
 					break;
 				}
 				default: {
@@ -427,122 +572,215 @@ levelTwoState.prototype.rotatePlatform = function(pos, input) {
 		alert("CASE FAIL");
 	}
 	else
-		this.setPlatformPhysics(pos);
+		this.setPlatformPhysics(plat);
 }
 
-levelTwoState.prototype.setPlatformPhysics = function(pos) {
-		state = this.platformStates[pos];
-		switch(state) {
-			case this.state3D.XbyY: {
-				this.platform3DGroup.children[pos].body.setSize(256,64,0,96);
-				break;
-			}
-			case this.state3D.ZbyY: {
-				this.platform3DGroup.children[pos].body.setSize(128,64,64,96);
-				break;
-			}
-			case this.state3D.XbyZ: {
-				this.platform3DGroup.children[pos].body.setSize(256,128,0,64);
-				break;
-			}
-			case this.state3D.YbyX: {
-				this.platform3DGroup.children[pos].body.setSize(64,256,96,0);
-				break;
-			}
-			case this.state3D.YbyZ: {
-				this.platform3DGroup.children[pos].body.setSize(64,128,96,64);
-				break;
-			}
-			case this.state3D.ZbyX: {
-				this.platform3DGroup.children[pos].body.setSize(128,256,64,0);
-				break;
-			}
-			default: {
-				break;
-			}
+levelTwoState.prototype.setPlatformPhysics = function(plat) {
+	platState = plat.state;
+	switch(platState) {
+		case this.state3D.XbyY: {
+			plat.body.setSize(256,64,17,113);
+			break;
+		}
+		case this.state3D.ZbyY: {
+			plat.body.setSize(128,64,81,113);
+			break;
+		}
+		case this.state3D.XbyZ: {
+			plat.body.setSize(256,128,17,81);
+			break;
+		}
+		case this.state3D.YbyX: {
+			plat.body.setSize(64,256,113,17);
+			break;
+		}
+		case this.state3D.YbyZ: {
+			plat.body.setSize(64,128,113,81);
+			break;
+		}
+		case this.state3D.ZbyX: {
+			plat.body.setSize(128,256,81,17);
+			break;
+		}
+		default: {
+			break;
 		}
 	}
+}
 
 
 levelTwoState.prototype.createBackground = function() {
-	this.sky = this.game.add.tileSprite(0,
-        this.game.height - this.game.cache.getImage('fantasy_bg1').height,
+	this.bg1 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('weast_bg1').height,
         this.game.width,
-        this.game.cache.getImage('fantasy_bg1').height,
-        'fantasy_bg1'
+        this.game.cache.getImage('weast_bg1').height,
+        'weast_bg1'
     );
-	this.mtn1 = this.game.add.tileSprite(0,
-        this.game.height - this.game.cache.getImage('fantasy_bg2').height,
+	this.bg4 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('weast_bg4').height,
         this.game.width,
-        this.game.cache.getImage('fantasy_bg2').height,
-        'fantasy_bg2'
+        this.game.cache.getImage('weast_bg4').height,
+        'weast_bg4'
     );
-	this.mtn2 = this.game.add.tileSprite(0,
-        this.game.height - this.game.cache.getImage('fantasy_bg3').height,
+	this.bg2 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('weast_bg2').height,
         this.game.width,
-        this.game.cache.getImage('fantasy_bg3').height,
-        'fantasy_bg3'
+        this.game.cache.getImage('weast_bg2').height,
+        'weast_bg2'
     );
-	this.tree1 = this.game.add.tileSprite(0,
-        this.game.height - this.game.cache.getImage('fantasy_bg4').height,
+	this.bg3 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('weast_bg3').height,
         this.game.width,
-        this.game.cache.getImage('fantasy_bg4').height,
-        'fantasy_bg4'
+        this.game.cache.getImage('weast_bg3').height,
+        'weast_bg3'
     );
-	this.tree2 = this.game.add.tileSprite(0,
-        this.game.height - this.game.cache.getImage('fantasy_bg5').height,
+	this.bg5 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('weast_bg5').height,
         this.game.width,
-        this.game.cache.getImage('fantasy_bg5').height,
-        'fantasy_bg5'
+        this.game.cache.getImage('weast_bg5').height,
+        'weast_bg5'
     );
-	this.sky.fixedToCamera = true;
-	this.mtn1.fixedToCamera = true;
-	this.mtn2.fixedToCamera = true;
-	this.tree1.fixedToCamera = true;
-	this.tree2.fixedToCamera = true;
+	this.bg6 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('weast_bg6').height,
+        this.game.width,
+        this.game.cache.getImage('weast_bg6').height,
+        'weast_bg6'
+    );
+	this.bg1.fixedToCamera = true;
+	this.bg2.fixedToCamera = true;
+	this.bg3.fixedToCamera = true;
+	this.bg4.fixedToCamera = true;
+	this.bg5.fixedToCamera = true;
+	this.bg6.fixedToCamera = true;
 	
 }
 
 levelTwoState.prototype.doParallax = function() {
-	this.sky.tilePosition.x -= 0.2;
-	this.mtn1.tilePosition.x = game.camera.x * -0.2;
-	this.mtn2.tilePosition.x = game.camera.x * -0.35;
-	this.tree1.tilePosition.x = game.camera.x * -0.5;
-	this.tree2.tilePosition.x = game.camera.x * -0.7;
+	this.bg4.tilePosition.x -= 0.2;
+	this.bg2.tilePosition.x = game.camera.x * -0.2;
+	this.bg3.tilePosition.x = game.camera.x * -0.35;
+	this.bg5.tilePosition.x = game.camera.x * -0.5;
+	this.bg6.tilePosition.x = game.camera.x * -0.7;
 	
 }
 
 levelTwoState.prototype.createLevel = function() {
-	this.map = this.game.add.tilemap('level1');
-	this.map.addTilesetImage('FantasyTiles', 'level1tiles');
+	this.map = this.game.add.tilemap('level2');
+	this.map.addTilesetImage('WeastTiles', 'level2tiles');
 	
 	this.background = this.map.createLayer('background');
     this.walls = this.map.createLayer('walls');
-	this.map.setCollisionBetween(1, 100, true, 'walls');
+	this.map.setCollisionBetween(1, 1000, true, 'walls');
 	this.walls.resizeWorld();
 }
 
-levelTwoState.prototype.findObjectsByType = function(type, map, layer) {
-    let result = new Array();
-    map.objects[layer].forEach(function(element){
-      if(element.properties.type === type) {
-        element.y -= map.tileHeight;
-        result.push(element);
-      }      
-    });
-    return result;
+
+levelTwoState.prototype.mouseDown = function() {
+	if (this.inCutscene) {
+		this.playCutscene();
+	} else {
+		this.tapInput.x = game.input.x + game.camera.x;
+		this.tapInput.y = game.input.y + game.camera.y;
+		this.pressX = game.input.x;
+		this.pressY = game.input.y;
+		this.willCheckOverlap = true;
+	}
 }
 
+levelTwoState.prototype.mouseUp = function() {
+	this.selectedPlayer = false;
+	this.selectedPlatform = false;
+}
 
+levelTwoState.prototype.startCutscene = function(player, trigger) {
+	this.checkX = trigger.position.x;
+	this.checkY = 900 - (132 + 129);
+	trigger.kill();
+	this.inCutscene = true;
+	this.player.animations.play("idle");
+	this.player.body.velocity.y = 0;
+	this.player.body.velocity.x = 0;
+	this.playCutscene();
+}
 
+levelTwoState.prototype.tapPlayer = function() {
+	this.player.body.velocity.x = 0;
+	this.selectedPlayer = true;
+	if (this.player.body.blocked.down)
+	this.player.animations.play("idle");
 
+}
 
+levelTwoState.prototype.tapPlatform = function(tap, platform) {
+	this.selectedPlatform = true;
+	this.currentSelectedPlat = platform;
+}
 
-
-
-
-
-
-
+levelTwoState.prototype.playCutscene = function() {
+	switch(this.cutsceneIndex) {
+		case 0: {
+			this.currentText = game.add.text(this.doomsday.x - 48, this.doomsday.y, "How did you find me? You dispicible devil!", this.styleDoomsday);
+			this.currentText.anchor.setTo(.5, 1);
+			this.cutsceneIndex += 1;
+			let result = this.gameFunctions.findObjectsByType('cam1',this.map,'objectlayer');
+			this.camSpot = game.add.sprite(result[0].x, result[0].y);
+			game.camera.follow(this.camSpot, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+			this.player.animations.play("idle");
+			this.player.body.velocity.y = 0;
+			this.player.body.velocity.x = 0;
+			break;
+		}
+		case 1: { 
+			this.currentText.setText("No matter! You're far too late now! My Dimension Invention is already done with it's duty!")
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 2: { 
+			this.currentText.setText("HAHAHAHAHA!")
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 3: { 
+			this.cutsceneIndex += 1;
+			this.inCutscene = false;
+			this.currentText.kill();
+			this.camSpot.kill();
+			game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+			this.doomsday.body.velocity.x = -300;
+			this.doomsday.body.gravity.x = 800;
+			this.doomsday.body.gravity.y = -100;
+			break;
+		}
+		case 4: { 
+			this.currentText = game.add.text(this.player.x, this.player.y - 64, '"So you\'ve managed to find me, but you will never catch me again! I am already far, far away!"', this.styleDoomsday);
+			this.currentText.anchor.setTo(.5, 1);
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 5: { 
+			this.currentText.setText('"You cannot stop the change, any more than you can stop the suns from setting!"');
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 6: { 
+			this.currentText.setText('"Now, young Skywalker, you will die!"')
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 7: {
+			this.currentText.setText('"... Ooops."')
+			this.cutsceneIndex += 1;
+			break;
+		} 
+		case 8: {
+			this.cutsceneIndex += 1;
+			this.inCutscene = false;
+			this.currentText.kill();
+			this.music.stop();
+			game.state.start("PreloadThreeState");
+			break;
+		}
+	}
+}
 
 

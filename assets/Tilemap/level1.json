@@ -83,7 +83,7 @@
                  "name":"platform",
                  "properties":
                     {
-                     "orientation":5,
+                     "orientation":3,
                      "type":"platform"
                     },
                  "propertytypes":
@@ -104,7 +104,7 @@
                  "name":"platform",
                  "properties":
                     {
-                     "orientation":3,
+                     "orientation":2,
                      "type":"platform"
                     },
                  "propertytypes":

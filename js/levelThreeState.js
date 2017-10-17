@@ -1,4 +1,4 @@
-let levelOneState = function() {
+let levelThreeState = function() {
 	let sideFacing = true;
 	let played = false;
 	let mouseDown = false;
@@ -43,13 +43,13 @@ let levelOneState = function() {
 	this.styleDoomsday = { font: "32px Misfits", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 500 };
 }
 
-levelOneState.prototype.preload = function() {
+levelThreeState.prototype.preload = function() {
 	this.stopped = true;
 }
 
-levelOneState.prototype.create = function() {
+levelThreeState.prototype.create = function() {
 	
-	this.music = game.add.audio('FantasyMusic');
+	this.music = game.add.audio('AlienMusic');
 	this.music.loop = true;
     this.music.play();
 	
@@ -201,14 +201,14 @@ levelOneState.prototype.create = function() {
 	
 }
 
-levelOneState.prototype.update = function() {
+levelThreeState.prototype.update = function() {
 	
 	game.physics.arcade.collide(this.player, this.walls, this.onGround, null, this);
 	game.physics.arcade.collide(this.player, this.platform3DGroup, this.onGround);
 	game.physics.arcade.collide(this.player, this.danger, this.gameFunctions.kill, null, this);
 	game.physics.arcade.overlap(this.player, this.triggerGroup, this.startCutscene, null, this);
 	
-	if (this.doomsday.x > 4000) {
+	if (this.doomsday.x > 8000) {
 		this.doomsday.kill();
 	}
 	
@@ -353,7 +353,7 @@ levelOneState.prototype.update = function() {
 
 }
 
-levelOneState.prototype.render = function() {
+levelThreeState.prototype.render = function() {
 	game.debug.body(this.tapInput);
 	game.debug.body(this.player);
 	
@@ -362,7 +362,7 @@ levelOneState.prototype.render = function() {
 	}
 }
 
-levelOneState.prototype.rotatePlatform = function(plat, input) {
+levelThreeState.prototype.rotatePlatform = function(plat, input) {
 	let caseFailure = false;
 	switch(plat.state) {
 		case this.state3D.XbyY: {
@@ -575,31 +575,31 @@ levelOneState.prototype.rotatePlatform = function(plat, input) {
 		this.setPlatformPhysics(plat);
 }
 
-levelOneState.prototype.setPlatformPhysics = function(plat) {
+levelThreeState.prototype.setPlatformPhysics = function(plat) {
 	platState = plat.state;
 	switch(platState) {
 		case this.state3D.XbyY: {
-			plat.body.setSize(256,64,30,126);
+			plat.body.setSize(256,64,26,122);
 			break;
 		}
 		case this.state3D.ZbyY: {
-			plat.body.setSize(128,64,94,126);
+			plat.body.setSize(128,64,90,122);
 			break;
 		}
 		case this.state3D.XbyZ: {
-			plat.body.setSize(256,128,30,94);
+			plat.body.setSize(256,128,26,90);
 			break;
 		}
 		case this.state3D.YbyX: {
-			plat.body.setSize(64,256,126,30);
+			plat.body.setSize(64,256,122,26);
 			break;
 		}
 		case this.state3D.YbyZ: {
-			plat.body.setSize(64,128,126,94);
+			plat.body.setSize(64,128,122,90);
 			break;
 		}
 		case this.state3D.ZbyX: {
-			plat.body.setSize(128,256,94,30);
+			plat.body.setSize(128,256,90,26);
 			break;
 		}
 		default: {
@@ -609,57 +609,73 @@ levelOneState.prototype.setPlatformPhysics = function(plat) {
 }
 
 
-levelOneState.prototype.createBackground = function() {
-	this.sky = this.game.add.tileSprite(0,
-        this.game.height - this.game.cache.getImage('fantasy_bg1').height,
+levelThreeState.prototype.createBackground = function() {
+	this.bg1 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('alien_bg1').height,
         this.game.width,
-        this.game.cache.getImage('fantasy_bg1').height,
-        'fantasy_bg1'
+        this.game.cache.getImage('alien_bg1').height,
+        'alien_bg1'
     );
-	this.mtn1 = this.game.add.tileSprite(0,
-        this.game.height - this.game.cache.getImage('fantasy_bg2').height,
+	
+	this.bg2 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('alien_bg2').height,
         this.game.width,
-        this.game.cache.getImage('fantasy_bg2').height,
-        'fantasy_bg2'
+        this.game.cache.getImage('alien_bg2').height,
+        'alien_bg2'
     );
-	this.mtn2 = this.game.add.tileSprite(0,
-        this.game.height - this.game.cache.getImage('fantasy_bg3').height,
+	this.bg3 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('alien_bg3').height,
         this.game.width,
-        this.game.cache.getImage('fantasy_bg3').height,
-        'fantasy_bg3'
+        this.game.cache.getImage('alien_bg3').height,
+        'alien_bg3'
     );
-	this.tree1 = this.game.add.tileSprite(0,
-        this.game.height - this.game.cache.getImage('fantasy_bg4').height,
+	this.bg4 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('alien_bg4').height,
         this.game.width,
-        this.game.cache.getImage('fantasy_bg4').height,
-        'fantasy_bg4'
+        this.game.cache.getImage('alien_bg4').height,
+        'alien_bg4'
     );
-	this.tree2 = this.game.add.tileSprite(0,
-        this.game.height - this.game.cache.getImage('fantasy_bg5').height,
+	this.bg5 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('alien_bg5').height,
         this.game.width,
-        this.game.cache.getImage('fantasy_bg5').height,
-        'fantasy_bg5'
+        this.game.cache.getImage('alien_bg5').height,
+        'alien_bg5'
     );
-	this.sky.fixedToCamera = true;
-	this.mtn1.fixedToCamera = true;
-	this.mtn2.fixedToCamera = true;
-	this.tree1.fixedToCamera = true;
-	this.tree2.fixedToCamera = true;
+	this.bg6 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('alien_bg6').height,
+        this.game.width,
+        this.game.cache.getImage('alien_bg6').height,
+        'alien_bg6'
+    );
+	this.bg7 = this.game.add.tileSprite(0,
+        this.game.height - this.game.cache.getImage('alien_bg7').height,
+        this.game.width,
+        this.game.cache.getImage('alien_bg7').height,
+        'alien_bg7'
+    );
+	this.bg1.fixedToCamera = true;
+	this.bg2.fixedToCamera = true;
+	this.bg3.fixedToCamera = true;
+	this.bg4.fixedToCamera = true;
+	this.bg5.fixedToCamera = true;
+	this.bg6.fixedToCamera = true;
+	this.bg7.fixedToCamera = true;
 	
 }
 
-levelOneState.prototype.doParallax = function() {
-	this.sky.tilePosition.x -= 0.2;
-	this.mtn1.tilePosition.x = game.camera.x * -0.2;
-	this.mtn2.tilePosition.x = game.camera.x * -0.35;
-	this.tree1.tilePosition.x = game.camera.x * -0.5;
-	this.tree2.tilePosition.x = game.camera.x * -0.7;
+levelThreeState.prototype.doParallax = function() {
+	this.bg2.tilePosition.x -= 0.2;
+	this.bg3.tilePosition.x = game.camera.x * -0.2;
+	this.bg4.tilePosition.x = game.camera.x * -0.3;
+	this.bg5.tilePosition.x = game.camera.x * -0.4;
+	this.bg6.tilePosition.x = game.camera.x * -0.5;
+	this.bg7.tilePosition.x = game.camera.x * -0.6;
 	
 }
 
-levelOneState.prototype.createLevel = function() {
-	this.map = this.game.add.tilemap('level1');
-	this.map.addTilesetImage('FantasyTiles', 'level1tiles');
+levelThreeState.prototype.createLevel = function() {
+	this.map = this.game.add.tilemap('level3');
+	this.map.addTilesetImage('AlienTiles', 'level3tiles');
 	
 	this.background = this.map.createLayer('background');
 	this.danger = this.map.createLayer('danger');
@@ -670,7 +686,7 @@ levelOneState.prototype.createLevel = function() {
 }
 
 
-levelOneState.prototype.mouseDown = function() {
+levelThreeState.prototype.mouseDown = function() {
 	if (this.inCutscene) {
 		this.playCutscene();
 	} else {
@@ -682,12 +698,12 @@ levelOneState.prototype.mouseDown = function() {
 	}
 }
 
-levelOneState.prototype.mouseUp = function() {
+levelThreeState.prototype.mouseUp = function() {
 	this.selectedPlayer = false;
 	this.selectedPlatform = false;
 }
 
-levelOneState.prototype.startCutscene = function(player, trigger) {
+levelThreeState.prototype.startCutscene = function(player, trigger) {
 	this.checkX = trigger.position.x;
 	this.checkY = 900 - (132 + 129);
 	trigger.kill();
@@ -698,7 +714,7 @@ levelOneState.prototype.startCutscene = function(player, trigger) {
 	this.playCutscene();
 }
 
-levelOneState.prototype.tapPlayer = function() {
+levelThreeState.prototype.tapPlayer = function() {
 	this.player.body.velocity.x = 0;
 	this.selectedPlayer = true;
 	if (this.player.body.blocked.down)
@@ -706,15 +722,30 @@ levelOneState.prototype.tapPlayer = function() {
 
 }
 
-levelOneState.prototype.tapPlatform = function(tap, platform) {
+levelThreeState.prototype.tapPlatform = function(tap, platform) {
 	this.selectedPlatform = true;
 	this.currentSelectedPlat = platform;
 }
 
-levelOneState.prototype.playCutscene = function() {
+levelThreeState.prototype.playCutscene = function() {
 	switch(this.cutsceneIndex) {
 		case 0: {
-			this.currentText = game.add.text(this.doomsday.x - 48, this.doomsday.y, "Ah, we meet again, Doddy! I see you've discovered my devious idea!", this.styleDoomsday);
+			this.currentText = game.add.text(this.player.x, this.player.y - 64, "I can sense great power nearby. It must be the Dimension Invention!", this.styleDoomsday);
+			this.currentText.anchor.setTo(.5, 1);
+			this.cutsceneIndex += 1;
+			this.player.animations.play("idle");
+			this.player.body.velocity.y = 0;
+			this.player.body.velocity.x = 0;
+			break;
+		}
+		case 1: { 
+			this.currentText.kill ();
+			this.inCutscene = false;
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 2: { 
+			this.currentText = game.add.text(this.doomsday.x - 48, this.doomsday.y, "No! Uh...", this.styleDoomsday);
 			this.currentText.anchor.setTo(.5, 1);
 			this.cutsceneIndex += 1;
 			let result = this.gameFunctions.findObjectsByType('cam1',this.map,'objectlayer');
@@ -725,84 +756,37 @@ levelOneState.prototype.playCutscene = function() {
 			this.player.body.velocity.x = 0;
 			break;
 		}
-		case 1: { 
-			this.currentText.setText("Don't you like it? It was delightfully converted from it's original form using my diabolical DIMENSION INVENTION!")
-			this.cutsceneIndex += 1;
-			break;
-		}
-		case 2: { 
-			this.currentText.setText("Why? Don't you see, you dense dimwit? 3D movies make MONEY!")
-			this.cutsceneIndex += 1;
-			break;
-		}
 		case 3: { 
-			this.currentText.setText("I mean, look at those 3D effects!")
+			this.currentText.setText("Pay no attention to that big red button!")
 			this.cutsceneIndex += 1;
-			this.rotatePlatform(this.platform3DGroup.children[0], 2);
 			break;
 		}
 		case 4: { 
-			this.currentText.setText("Soon all of the Cinematic Universe will be converted, and all of the civilians bones will be crushed and painfully distorted, in the name of artistic progress!");
+			this.currentText.setText("Don't you dare push that button!")
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 5: { 
-			this.currentText.setText("And there's nothing you can do to stop me. That platform is far too high for you to jump!");
+			this.currentText.setText("No! NO! DON'T!")
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 6: { 
-			this.currentText.setText("So long, you daft hero! HAHAHA!")
+			this.currentText.setText("NOOOOOOOO!")
 			this.cutsceneIndex += 1;
 			break;
 		}
-		case 7: {
-			this.cutsceneIndex += 1;
-			this.inCutscene = false;
-			this.currentText.kill();
-			this.camSpot.kill();
-			game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
-			this.doomsday.body.velocity.x = -300;
-			this.doomsday.body.gravity.x = 800;
-			this.doomsday.body.gravity.y = -100;
-			break;
-		} 
-		case 8: {
-			this.currentText = game.add.text(this.player.x, this.player.y - 64, '"So, you did manage to get past the jump..."', this.styleDoomsday);
-			this.currentText.anchor.setTo(.5, 1);
+		case 7: { 
+			this.currentText.setText("You may have defeated my idea this day, Doddy, but I'll decimate you next time!")
 			this.cutsceneIndex += 1;
 			break;
 		}
-		case 9: { 
-			this.currentText.setText('"So be it. But the Dimension Invention has already started to work it\'s magic here, and I am long gone, without a trace!"');
+		case 8: { 
+			this.currentText.setText("THERE'S ALWAYS A SEQUEL!")
 			this.cutsceneIndex += 1;
 			break;
 		}
-		case 10: { 
-			this.currentText.setText('"So unless you\'re lookin\' to lose your head, you best stay away, partner!"');
-			this.cutsceneIndex += 1;
-			break;
-		}
-		case 11: { 
-			this.currentText.setText('"Go ahead. Make my day."');
-			this.cutsceneIndex += 1;
-			break;
-		}
-		case 12: { 
-			this.currentText.setText("But Doddy knew exactly where Dr. Doomsday had gone!");
-			this.cutsceneIndex += 1;
-			break;
-		}
-		case 13: {
-			this.cutsceneIndex += 1;
-			this.inCutscene = false;
-			this.currentText.kill();
-			this.music.stop();
-			game.state.start("PreloadTwoState");
-			break;
-		} 
 	}
 }
-
 
 

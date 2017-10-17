@@ -3,23 +3,22 @@ let preloadTwoState = function() {
 }
 
 preloadTwoState.prototype.preload = function() {
-	game.load.spritesheet("platform3D", "assets/FantasyPlatform3D.png", 290, 290);
-	game.load.spritesheet("doddy", "assets/Doddy.png", 96, 132);
+	game.load.spritesheet("platform3D", "assets/WestPlatform3D.png", 290, 290);
 	
 	// Load the background
-	game.load.image("fantasy_bg1", "Backgrounds/level1/Background_Fantasy_1.png");
-	game.load.image("fantasy_bg2", "Backgrounds/level1/Background_Fantasy_2.png");
-	game.load.image("fantasy_bg3", "Backgrounds/level1/Background_Fantasy_3.png");
-	game.load.image("fantasy_bg4", "Backgrounds/level1/Background_Fantasy_4.png");
-	game.load.image("fantasy_bg5", "Backgrounds/level1/Background_Fantasy_5.png");
+	game.load.image("weast_bg1", "Backgrounds/level2/Background_Weast_1.png");
+	game.load.image("weast_bg2", "Backgrounds/level2/Background_Weast_2.png");
+	game.load.image("weast_bg3", "Backgrounds/level2/Background_Weast_3.png");
+	game.load.image("weast_bg4", "Backgrounds/level2/Background_Weast_4.png");
+	game.load.image("weast_bg5", "Backgrounds/level2/Background_Weast_5.png");
+	game.load.image("weast_bg6", "Backgrounds/level2/Background_Weast_6.png");
+	
 	
 	// Load the levels and tilesets
-	game.load.tilemap('level1', 'assets/level1.json', null, Phaser.Tilemap.TILED_JSON);
-	this.load.image('level1tiles', 'assets/FantasyTIles.png');
+	game.load.tilemap('level2', 'assets/Tilemap/level2.json', null, Phaser.Tilemap.TILED_JSON);
+	this.load.image('level2tiles', 'assets/Tilemap/WeastTiles.png');
 	
-	//Load the Credits
-	game.load.text("Credits", "assets/credits.txt");
-	
+	game.load.audio("WeastMusic", "assets/sound/WeastMusic.ogg");
 }
 
 preloadTwoState.prototype.create = function() {
