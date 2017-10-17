@@ -3,7 +3,7 @@ let preloadOneState = function() {
 }
 
 preloadOneState.prototype.preload = function() {
-	game.load.spritesheet("platform3D", "assets/FantasyPlatform3D.png", 256, 256);
+	game.load.spritesheet("platform3D", "assets/FantasyPlatform3D.png", 316, 316);
 	game.load.spritesheet("doddy", "assets/Doddy.png", 96, 132);
 	game.load.spritesheet("doomsday", "assets/DrDoomsday.png", 96, 132);
 	

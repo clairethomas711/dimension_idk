@@ -3,7 +3,7 @@ let preloadTwoState = function() {
 }
 
 preloadTwoState.prototype.preload = function() {
-	game.load.spritesheet("platform3D", "assets/FantasyPlatform3D.png", 256, 256);
+	game.load.spritesheet("platform3D", "assets/FantasyPlatform3D.png", 290, 290);
 	game.load.spritesheet("doddy", "assets/Doddy.png", 96, 132);
 	
 	// Load the background
