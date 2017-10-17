@@ -353,6 +353,7 @@ levelOneState.prototype.update = function() {
 
 }
 
+/*
 levelOneState.prototype.render = function() {
 	game.debug.body(this.tapInput);
 	game.debug.body(this.player);
@@ -360,7 +361,7 @@ levelOneState.prototype.render = function() {
 	for (let i = 0; i < this.platform3DGroup.length; i++) {
 		game.debug.body(this.platform3DGroup.children[i]);
 	}
-}
+} */
 
 levelOneState.prototype.rotatePlatform = function(plat, input) {
 	let caseFailure = false;
