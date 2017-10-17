@@ -139,7 +139,6 @@ levelThreeState.prototype.create = function() {
 		tempPlatform3D.body.immovable = true;
 		tempPlatform3D.state = (result[i].properties.orientation);
 		this.setPlatformPhysics(result[i].properties.orientation);
-		console.log(result[i].properties.orientation);
 		switch(result[i].properties.orientation) {
 			case this.state3D.XbyY: {
 				tempPlatform3D.frame = 0;
@@ -186,7 +185,6 @@ levelThreeState.prototype.create = function() {
 	
 	this.triggerGroup = game.add.group();
 	let triggers = this.gameFunctions.findObjectsByType('cutscene',this.map,'objectlayer');
-	console.log(triggers.length);
 	for(let i = 0;i < triggers.length;i++) {
 		let tempTrigger = this.triggerGroup.create(triggers[i].x, triggers[i].y);
 		game.physics.arcade.enable(tempTrigger);
@@ -199,6 +197,9 @@ levelThreeState.prototype.create = function() {
 	this.doomsday.scale.x = -1;
 	game.physics.arcade.enable(this.doomsday);
 	
+	result = this.gameFunctions.findObjectsByType('diminv',this.map,'objectlayer');
+	this.invention = game.add.sprite(result[0].x, result[0].y, "diminv");
+	game.physics.arcade.enable(this.invention);
 }
 
 levelThreeState.prototype.update = function() {
@@ -207,6 +208,7 @@ levelThreeState.prototype.update = function() {
 	game.physics.arcade.collide(this.player, this.platform3DGroup, this.onGround);
 	game.physics.arcade.collide(this.player, this.danger, this.gameFunctions.kill, null, this);
 	game.physics.arcade.overlap(this.player, this.triggerGroup, this.startCutscene, null, this);
+	game.physics.arcade.overlap(this.player, this.invention, this.pressButton, null, this);
 	
 	if (this.doomsday.x > 8000) {
 		this.doomsday.kill();
@@ -353,15 +355,15 @@ levelThreeState.prototype.update = function() {
 
 }
 
-/*
+
 levelThreeState.prototype.render = function() {
 	game.debug.body(this.tapInput);
 	game.debug.body(this.player);
 	
-	for (let i = 0; i < this.platform3DGroup.length; i++) {
-		game.debug.body(this.platform3DGroup.children[i]);
+	for (let i = 0; i < this.triggerGroup.length; i++) {
+		game.debug.body(this.triggerGroup.children[i]);
 	}
-} */
+} 
 
 levelThreeState.prototype.rotatePlatform = function(plat, input) {
 	let caseFailure = false;
@@ -728,6 +730,16 @@ levelThreeState.prototype.tapPlatform = function(tap, platform) {
 	this.currentSelectedPlat = platform;
 }
 
+levelThreeState.prototype.pressButton = function(player, button) {
+	button.kill();
+	this.inCutscene = true;
+	this.player.animations.play("idle");
+	this.player.body.velocity.y = 0;
+	this.player.body.velocity.x = 0;
+	this.cutsceneIndex += 1;
+	this.playCutscene();
+}
+
 levelThreeState.prototype.playCutscene = function() {
 	switch(this.cutsceneIndex) {
 		case 0: {
@@ -769,7 +781,8 @@ levelThreeState.prototype.playCutscene = function() {
 		}
 		case 5: { 
 			this.currentText.setText("No! NO! DON'T!")
-			this.cutsceneIndex += 1;
+			this.player.body.velocity.x = 300;
+			this.player.animations.play("walk");
 			break;
 		}
 		case 6: { 
@@ -785,6 +798,10 @@ levelThreeState.prototype.playCutscene = function() {
 		case 8: { 
 			this.currentText.setText("THERE'S ALWAYS A SEQUEL!")
 			this.cutsceneIndex += 1;
+			break;
+		}
+		case 9: { 
+			game.state.start("Credits");
 			break;
 		}
 	}
