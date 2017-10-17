@@ -139,7 +139,6 @@ levelTwoState.prototype.create = function() {
 		tempPlatform3D.body.immovable = true;
 		tempPlatform3D.state = (result[i].properties.orientation);
 		this.setPlatformPhysics(result[i].properties.orientation);
-		console.log(result[i].properties.orientation);
 		switch(result[i].properties.orientation) {
 			case this.state3D.XbyY: {
 				tempPlatform3D.frame = 0;
@@ -186,7 +185,6 @@ levelTwoState.prototype.create = function() {
 	
 	this.triggerGroup = game.add.group();
 	let triggers = this.gameFunctions.findObjectsByType('cutscene',this.map,'objectlayer');
-	console.log(triggers.length);
 	for(let i = 0;i < triggers.length;i++) {
 		let tempTrigger = this.triggerGroup.create(triggers[i].x, triggers[i].y);
 		game.physics.arcade.enable(tempTrigger);
@@ -198,6 +196,12 @@ levelTwoState.prototype.create = function() {
 	this.doomsday.animations.play("idle");
 	this.doomsday.scale.x = -1;
 	game.physics.arcade.enable(this.doomsday);
+	
+	this.transition = game.add.sprite(0, 0, "transition");
+	this.transition.animations.add("open", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], 20, false);
+	this.transition.animations.add("close", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], 20, false);
+	this.transition.fixedToCamera = true;
+	this.transition.animations.play("open");
 	
 }
 
