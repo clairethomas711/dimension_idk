@@ -89,7 +89,7 @@
                  "name":"platform",
                  "properties":
                     {
-                     "orientation":3,
+                     "orientation":5,
                      "type":"platform"
                     },
                  "propertytypes":
@@ -110,7 +110,7 @@
                  "name":"platform",
                  "properties":
                     {
-                     "orientation":3,
+                     "orientation":5,
                      "type":"platform"
                     },
                  "propertytypes":
@@ -131,7 +131,7 @@
                  "name":"platform",
                  "properties":
                     {
-                     "orientation":3,
+                     "orientation":2,
                      "type":"platform"
                     },
                  "propertytypes":
@@ -152,7 +152,7 @@
                  "name":"platform",
                  "properties":
                     {
-                     "orientation":3,
+                     "orientation":2,
                      "type":"platform"
                     },
                  "propertytypes":
@@ -194,7 +194,7 @@
                  "name":"platform",
                  "properties":
                     {
-                     "orientation":3,
+                     "orientation":2,
                      "type":"platform"
                     },
                  "propertytypes":

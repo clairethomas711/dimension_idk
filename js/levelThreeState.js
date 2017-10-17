@@ -200,6 +200,12 @@ levelThreeState.prototype.create = function() {
 	result = this.gameFunctions.findObjectsByType('diminv',this.map,'objectlayer');
 	this.invention = game.add.sprite(result[0].x, result[0].y, "diminv");
 	game.physics.arcade.enable(this.invention);
+	
+	this.transition = game.add.sprite(0, 0, "transition");
+	this.transition.animations.add("open", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], 20, false);
+	this.transition.animations.add("close", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], 20, false);
+	this.transition.fixedToCamera = true;
+	this.transition.animations.play("open");
 }
 
 levelThreeState.prototype.update = function() {
@@ -355,7 +361,7 @@ levelThreeState.prototype.update = function() {
 
 }
 
-
+/*
 levelThreeState.prototype.render = function() {
 	game.debug.body(this.tapInput);
 	game.debug.body(this.player);
@@ -363,7 +369,7 @@ levelThreeState.prototype.render = function() {
 	for (let i = 0; i < this.triggerGroup.length; i++) {
 		game.debug.body(this.triggerGroup.children[i]);
 	}
-} 
+} */
 
 levelThreeState.prototype.rotatePlatform = function(plat, input) {
 	let caseFailure = false;
@@ -770,33 +776,36 @@ levelThreeState.prototype.playCutscene = function() {
 			break;
 		}
 		case 3: { 
-			this.currentText.setText("Pay no attention to that big red button!")
+			this.currentText.setText("Pay no attention to that big red button!");
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 4: { 
-			this.currentText.setText("Don't you dare push that button!")
+			this.currentText.setText("Don't you dare push that button!");
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 5: { 
-			this.currentText.setText("No! NO! DON'T!")
+			this.currentText.setText("No! NO! DON'T!");
 			this.player.body.velocity.x = 300;
 			this.player.animations.play("walk");
 			break;
 		}
 		case 6: { 
-			this.currentText.setText("NOOOOOOOO!")
+			this.currentText.setText("NOOOOOOOO!");
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 7: { 
-			this.currentText.setText("You may have defeated my idea this day, Doddy, but I'll decimate you next time!")
+			this.currentText.setText("You may have defeated my idea this day, Doddy, but I'll decimate you next time!");
 			this.cutsceneIndex += 1;
 			break;
 		}
 		case 8: { 
-			this.currentText.setText("THERE'S ALWAYS A SEQUEL!")
+			this.currentText.setText("THERE'S ALWAYS A SEQUEL!");
+			this.doomsday.body.velocity.x = -300;
+			this.doomsday.body.gravity.x = 800;
+			this.doomsday.body.gravity.y = -100;
 			this.cutsceneIndex += 1;
 			break;
 		}
