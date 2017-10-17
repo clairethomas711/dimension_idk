@@ -269,4 +269,6 @@ gameplayFunctions.prototype.setPlatformPhysics = function(plat) {
 gameplayFunctions.prototype.kill = function(player) {
 	player.x = this.checkX;
 	player.y = this.checkY;
+	player.body.velocity.x = 0;
+	player.body.velocity.y = 0;
 }
