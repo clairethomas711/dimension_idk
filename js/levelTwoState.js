@@ -399,7 +399,7 @@ levelTwoState.prototype.update = function() {
 			this.aWAY = false;
 			this.awayCount = 0;
 			this.currentText.kill();
-			this.textbox.kill();
+			this.textboxAWAY.kill();
 		}
 	}
 
@@ -777,13 +777,13 @@ levelTwoState.prototype.stepAway = function() {
 	this.aWAY = true;
 	this.awayStart = game.time.totalElapsedSeconds();
 	if(this.cutsceneIndex > 0)
-		this.textbox.kill();
-	this.textbox = game.add.sprite(this.player.x, this.player.y - 61, "textbox");
-	this.textbox.anchor.setTo(.5, 1);
+		this.textboxAWAY.kill();
+	this.textboxAWAY = game.add.sprite(this.player.x, this.player.y - 61, "textbox");
+	this.textboxAWAY.anchor.setTo(.5, 1);
 	this.currentText = game.add.text(this.player.x, this.player.y - 64, 'I should step away from the platform to rotate it.', this.styleDoddy);
 	this.currentText.anchor.setTo(.5, 1);
-	this.textbox.height = this.currentText.height + 6;
-	this.textbox.width = this.currentText.width + 6;
+	this.textboxAWAY.height = this.currentText.height + 6;
+	this.textboxAWAY.width = this.currentText.width + 6;
 }
 
 levelTwoState.prototype.playCutscene = function() {
