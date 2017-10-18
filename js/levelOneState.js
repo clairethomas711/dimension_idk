@@ -245,14 +245,10 @@ levelOneState.prototype.update = function() {
 	if (this.isJumping && (this.player.body.blocked.right || this.player.body.blocked.left || this.player.body.touching.right || this.player.body.touching.left)) {
 		if (sideFacing) {
 			this.slowToZero = false;
-			this.player.body.velocity.x += 20;
-			if (this.player.body.velocity.x > 300)
-				this.player.body.velocity.x = 300;
+			this.player.body.velocity.x = 300;
 		} else {
 			this.slowToZero = false;
-			this.player.body.velocity.x -= 20;
-			if (this.player.body.velocity.x < -300)
-				this.player.body.velocity.x = -300;
+			this.player.body.velocity.x = -300;
 		}
 	}
 	if (this.isWalking && this.slowToZero) {
@@ -274,27 +270,17 @@ levelOneState.prototype.update = function() {
 	
 	if(this.slowToZero) //add a slowing animation, probably just walking animation but slower
 	{
-		if(this.player.body.velocity.x > 0)
-			this.player.body.velocity.x -= 10;
-		else
-			this.player.body.velocity.x += 10;
-		
-		if(this.player.body.velocity.x < 30 && this.player.body.velocity.x > -30)
-			this.player.body.velocity.x = 0;
+		this.player.body.velocity.x = 0;
 	}
 	else
 	{
 		if (this.directionWalking)
 		{
-			this.player.body.velocity.x += 20;
-			if (this.player.body.velocity.x > 300)
-				this.player.body.velocity.x = 300;
+			this.player.body.velocity.x = 300;
 		}
 		else
 		{
-			this.player.body.velocity.x -= 20;
-			if (this.player.body.velocity.x < -300)
-				this.player.body.velocity.x = -300;
+			this.player.body.velocity.x = -300;
 		}
 	}
 	
@@ -335,14 +321,10 @@ levelOneState.prototype.update = function() {
 			this.player.frame = 6;
 			if (sideFacing) {
 				this.slowToZero = false;
-				this.player.body.velocity.x += 20;
-				if (this.player.body.velocity.x > 300)
-					this.player.body.velocity.x = 300;
+				this.player.body.velocity.x = 300;
 			} else {
 				this.slowToZero = false;
-				this.player.body.velocity.x -= 20;
-				if (this.player.body.velocity.x < -300)
-					this.player.body.velocity.x = -300;
+				this.player.body.velocity.x = -300;
 			}
 			this.player.body.velocity.y = -600;
 			this.selectedPlayer = false;
