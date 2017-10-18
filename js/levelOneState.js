@@ -237,7 +237,6 @@ levelOneState.prototype.update = function() {
 	/////////////////////
 	
 	// First, some animation and polish stuff
-	// First, some animation and polish stuff
 	if (this.isJumping && (this.player.body.blocked.down || this.player.body.touching.down)) {
 		this.isJumping = false;
 		this.player.animations.play("walk");
@@ -727,14 +726,14 @@ levelOneState.prototype.startCutscene = function(player, trigger) {
 	this.inCutscene = true;
 	this.player.animations.play("idle");
 	this.player.body.velocity.y = 0;
-	this.slowToZero = true;
+	this.player.body.velocity.x = 0;
 	this.isJumping = false;
 	this.isWalking = false;
 	this.playCutscene();
 }
 
 levelOneState.prototype.tapPlayer = function() {
-	this.slowToZero = true;
+	this.player.body.velocity.x = 0;
 	this.selectedPlayer = true;
 	if (this.player.body.blocked.down)
 	this.player.animations.play("idle");
