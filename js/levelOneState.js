@@ -251,7 +251,7 @@ levelOneState.prototype.update = function() {
 			this.player.body.velocity.x = -300;
 		}
 	}
-	if (this.isWalking && this.slowToZero) {
+	if (this.isWalking && this.player.body.velocity.x == 0) {
 		this.isWalking = false;
 		this.player.animations.play("idle");
 	}
@@ -339,32 +339,38 @@ levelOneState.prototype.update = function() {
 		this.rotatePreventerX.position.y = this.player.position.y - (128 - 64);
 		this.rotatePreventerY.position.x = this.player.position.x - (128 - 96);
 		this.rotatePreventerY.position.y = this.player.position.y - 128;
+		this.rotatePreventerY.position.x = this.player.position.x - (128 - 96);
+		this.rotatePreventerY.position.y = this.player.position.y - 128;
 		if (game.input.x - this.pressX > 100) {
 			dir = 1;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			if(!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat))
+			if(!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat)
+				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 		if (game.input.x - this.pressX < (-100)) {
 			dir = 3;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			if(!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat))
+			if(!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat)
+				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 		if (game.input.y - this.pressY > 100) {
 			dir = 2;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			if(!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat))
+			if(!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat)
+				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 		if (game.input.y - this.pressY < (-100)) {
 			dir = 0;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			if(!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat))
+			if(!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat)
+				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 	}
