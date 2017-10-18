@@ -41,8 +41,8 @@ let levelOneState = function() {
 	
 	
 	// Cutscene stuff
-	this.inCutscene = false;
-	this.cutsceneIndex = 0;
+	this.inCutscene = true;
+	this.cutsceneIndex = -1;
 	this.styleDoddy = { font: "32px Arial", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 300 };
 	this.styleDoomsday = { font: "32px Misfits", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 500 };
 	this.levelDone = false;
@@ -221,8 +221,9 @@ levelOneState.prototype.create = function() {
 	this.transition.animations.add("open", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 20, false);
 	this.transition.animations.add("close", [23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0], 20, false);
 	this.transition.fixedToCamera = true;
-	this.transition.animations.play("open");
-	
+	this.transition.animations.frame = 0;
+	this.title = game.add.sprite(0, 0, "title");
+	this.title.fixedToCamera = true;
 	
 }
 
@@ -790,6 +791,13 @@ levelOneState.prototype.tapPlatform = function(tap, platform) {
 
 levelOneState.prototype.playCutscene = function() {
 	switch(this.cutsceneIndex) {
+		case -1: {
+			this.title.kill();
+			this.transition.animations.play("open");
+			this.cutsceneIndex += 1;
+			this.inCutscene = false
+			break;
+		}
 		case 0: {
 			this.textbox = game.add.sprite(this.doomsday.x - 48, this.doomsday.y + 3, "textbox");
 			this.textbox.anchor.setTo(.5, 1);
@@ -852,12 +860,11 @@ levelOneState.prototype.playCutscene = function() {
 		}
 		case 7: {
 			this.cutsceneIndex += 1;
-			this.inCutscene = false;
+			
 			this.currentText.setText("Oh, and don't you dare try ROTATING THE PLATFORM.");
 			this.textbox.height = this.currentText.height + 6;
 			this.textbox.width = this.currentText.width + 6;
-			this.camSpot.kill();
-			game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+			
 			this.doomsday.body.velocity.x = -300;
 			this.doomsday.body.gravity.x = 800;
 			this.doomsday.body.gravity.y = -100;
@@ -866,6 +873,13 @@ levelOneState.prototype.playCutscene = function() {
 		case 8: {
 			this.currentText.kill();
 			this.textbox.kill();
+			this.inCutscene = false;
+			this.camSpot.kill();
+			game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+			this.cutsceneIndex += 1;
+			break;
+		}
+		case 9: {
 			this.textbox = game.add.sprite(this.player.x, this.player.y - 61, "textbox");
 			this.textbox.anchor.setTo(.5, 1);
 			this.currentText = game.add.text(this.player.x, this.player.y - 64, '"So, you did manage to get past the jump..."', this.styleDoomsday);
@@ -875,28 +889,28 @@ levelOneState.prototype.playCutscene = function() {
 			this.cutsceneIndex += 1;
 			break;
 		}
-		case 9: { 
+		case 10: { 
 			this.currentText.setText('"So be it. But the Dimension Invention has already started to work it\'s magic here, and I am long gone, without a trace!"');
 			this.textbox.height = this.currentText.height + 6;
 			this.textbox.width = this.currentText.width + 6;
 			this.cutsceneIndex += 1;
 			break;
 		}
-		case 10: { 
+		case 11: { 
 			this.currentText.setText('"So unless you\'re lookin\' to lose your head, you best stay away, partner!"');
 			this.textbox.height = this.currentText.height + 6;
 			this.textbox.width = this.currentText.width + 6;
 			this.cutsceneIndex += 1;
 			break;
 		}
-		case 11: { 
+		case 12: { 
 			this.currentText.setText('"Go ahead. Make my day."');
 			this.textbox.height = this.currentText.height + 6;
 			this.textbox.width = this.currentText.width + 6;
 			this.cutsceneIndex += 1;
 			break;
 		}
-		case 12: { 
+		case 13: { 
 			this.currentText.setStyle(this.styleDoddy);
 			this.currentText.setText("But Doddy knew exactly where Dr. Doomsday had gone!");
 			this.textbox.height = this.currentText.height + 6;
@@ -904,7 +918,7 @@ levelOneState.prototype.playCutscene = function() {
 			this.cutsceneIndex += 1;
 			break;
 		}
-		case 13: {
+		case 14: {
 			this.cutsceneIndex += 1;
 			this.inCutscene = false;
 			this.currentText.kill();

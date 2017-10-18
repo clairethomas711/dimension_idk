@@ -6,6 +6,7 @@ preloadTwoState.prototype.preload = function() {
 	game.load.spritesheet("platform3D", "assets/WestPlatform3D.png", 290, 290);
 	game.load.spritesheet("doddy", "assets/West_Doddy.png", 96, 132);
 	game.load.spritesheet("doomsday", "assets/WEast_Doomsday.png", 96, 160);
+	game.load.image("title", "assets/WEastIntro.png");
 	
 	// Load the background
 	game.load.image("weast_bg1", "Backgrounds/level2/Background_Weast_1.png");

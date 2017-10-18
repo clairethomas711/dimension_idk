@@ -41,8 +41,8 @@ let levelTwoState = function() {
 	
 	
 	// Cutscene stuff
-	this.inCutscene = false;
-	this.cutsceneIndex = 0;
+	this.inCutscene = true;
+	this.cutsceneIndex = -1;
 	this.styleDoddy = { font: "32px Arial", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 300 };
 	this.styleDoomsday = { font: "32px Misfits", fill: "#000000", align: "center", wordWrap: true, wordWrapWidth: 500 };
 	this.levelDone = false;
@@ -214,8 +214,9 @@ levelTwoState.prototype.create = function() {
 	this.transition.animations.add("open", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], 20, false);
 	this.transition.animations.add("close", [23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0], 20, false);
 	this.transition.fixedToCamera = true;
-	this.transition.animations.play("open");
-	
+	this.transition.animations.frame = 0;
+	this.title = game.add.sprite(0, 0, "title");
+	this.title.fixedToCamera = true;
 }
 
 levelTwoState.prototype.update = function() {
@@ -786,6 +787,13 @@ levelTwoState.prototype.stepAway = function() {
 
 levelTwoState.prototype.playCutscene = function() {
 	switch(this.cutsceneIndex) {
+		case -1: {
+			this.title.kill();
+			this.transition.animations.play("open");
+			this.cutsceneIndex += 1;
+			this.inCutscene = false
+			break;
+		}
 		case 0: {
 			this.textbox = game.add.sprite(this.doomsday.x - 48, this.doomsday.y + 3, "textbox");
 			this.textbox.anchor.setTo(.5, 1);
