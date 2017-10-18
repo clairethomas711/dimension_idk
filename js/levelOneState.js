@@ -216,6 +216,8 @@ levelOneState.prototype.create = function() {
 	this.transition.animations.add("close", [23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0], 20, false);
 	this.transition.fixedToCamera = true;
 	this.transition.animations.play("open");
+	
+	this.tutorial = game.add.sprite( 832, 512, "tutorial");
 }
 
 levelOneState.prototype.update = function() {
@@ -318,12 +320,13 @@ levelOneState.prototype.update = function() {
 		this.rotatePreventerY.position.x = this.player.position.x - (128 - 96);
 		this.rotatePreventerY.position.y = this.player.position.y - 128;
 		this.rotatePreventerS.position.x = this.player.position.x - (128 - 96);
-		this.rotatePreventerS.position.y = this.player.position.y - 80;
+		this.rotatePreventerS.position.y = this.player.position.y - 60;
 		if (game.input.x - this.pressX > 100) {
 			dir = 1;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			if(!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat)
+			if((!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat)
+				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.XbyY || this.currentSelectedPlat.state == this.state3D.ZbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
@@ -331,7 +334,8 @@ levelOneState.prototype.update = function() {
 			dir = 3;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			if(!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat)
+			if((!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat)
+				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.XbyY || this.currentSelectedPlat.state == this.state3D.ZbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
@@ -339,7 +343,8 @@ levelOneState.prototype.update = function() {
 			dir = 2;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			if(!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat)
+			if((!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat)
+				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.ZbyX || this.currentSelectedPlat.state == this.state3D.YbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
@@ -347,7 +352,8 @@ levelOneState.prototype.update = function() {
 			dir = 0;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			if(!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat)
+			if((!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat)
+				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.ZbyX || this.currentSelectedPlat.state == this.state3D.YbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
@@ -810,8 +816,9 @@ levelOneState.prototype.playCutscene = function() {
 		case 7: {
 			this.cutsceneIndex += 1;
 			this.inCutscene = false;
-			this.currentText.kill();
-			this.textbox.kill();
+			this.currentText.setText("Oh, and don't you dare try ROTATING THE PLATFORM.");
+			this.textbox.height = this.currentText.height + 6;
+			this.textbox.width = this.currentText.width + 6;
 			this.camSpot.kill();
 			game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 			this.doomsday.body.velocity.x = -300;
@@ -820,6 +827,8 @@ levelOneState.prototype.playCutscene = function() {
 			break;
 		} 
 		case 8: {
+			this.currentText.kill();
+			this.textbox.kill();
 			this.textbox = game.add.sprite(this.player.x, this.player.y - 61, "textbox");
 			this.textbox.anchor.setTo(.5, 1);
 			this.currentText = game.add.text(this.player.x, this.player.y - 64, '"So, you did manage to get past the jump..."', this.styleDoomsday);

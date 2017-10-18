@@ -84,6 +84,13 @@ levelThreeState.prototype.create = function() {
 	this.player.inputEnabled = true;
 	this.player.animations.play("idle");
 	
+	this.rotatePreventerX = game.add.sprite(-1000, -1000, "rotatePreventionX");
+	game.physics.arcade.enable(this.rotatePreventerX);
+	this.rotatePreventerY = game.add.sprite(-1000, -1000, "rotatePreventionY");
+	game.physics.arcade.enable(this.rotatePreventerY);
+	this.rotatePreventerS = game.add.sprite(-1000, -1000, "rotatePreventionS"); //make sure player isn't standing on block
+	game.physics.arcade.enable(this.rotatePreventerS);
+	
 	// Controls Stuff
 	game.input.onUp.add(this.mouseUp, this);
     game.input.onDown.add(this.mouseDown, this);
@@ -306,29 +313,47 @@ levelThreeState.prototype.update = function() {
 	//Same, but for platforms
 	let dir = 0;
 	if (this.selectedPlatform && game.input.activePointer.leftButton.isDown && !this.rotating) {
+		this.rotatePreventerX.position.x = this.player.position.x - (128 - 20);
+		this.rotatePreventerX.position.y = this.player.position.y - (128 - 64);
+		this.rotatePreventerY.position.x = this.player.position.x - (128 - 96);
+		this.rotatePreventerY.position.y = this.player.position.y - 128;
+		this.rotatePreventerS.position.x = this.player.position.x - (128 - 96);
+		this.rotatePreventerS.position.y = this.player.position.y - 60;
 		if (game.input.x - this.pressX > 100) {
 			dir = 1;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			this.rotatePlatform(this.currentSelectedPlat, dir);
+			if((!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat)
+				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.XbyY || this.currentSelectedPlat.state == this.state3D.ZbyX))
+				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
+				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 		if (game.input.x - this.pressX < (-100)) {
 			dir = 3;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			this.rotatePlatform(this.currentSelectedPlat, dir);
+			if((!game.physics.arcade.overlap(this.rotatePreventerX, this.currentSelectedPlat)
+				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.XbyY || this.currentSelectedPlat.state == this.state3D.ZbyX))
+				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
+				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 		if (game.input.y - this.pressY > 100) {
 			dir = 2;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			this.rotatePlatform(this.currentSelectedPlat, dir);
+			if((!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat)
+				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.ZbyX || this.currentSelectedPlat.state == this.state3D.YbyX))
+				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
+				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 		if (game.input.y - this.pressY < (-100)) {
 			dir = 0;
 			this.rotating = true;
 			this.selectedPlatform = false;
-			this.rotatePlatform(this.currentSelectedPlat, dir);
+			if((!game.physics.arcade.overlap(this.rotatePreventerY, this.currentSelectedPlat)
+				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.ZbyX || this.currentSelectedPlat.state == this.state3D.YbyX))
+				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
+				this.rotatePlatform(this.currentSelectedPlat, dir);
 		}
 	}
 	
@@ -753,7 +778,7 @@ levelThreeState.prototype.playCutscene = function() {
 		case 0: {
 			this.textbox = game.add.sprite(this.player.x, this.player.y - 61, "textbox");
 			this.textbox.anchor.setTo(.5, 1);
-			this.currentText = game.add.text(this.player.x, this.player.y - 64, "I can sense great power nearby. It must be the Dimension Invention!", this.styleDoomsday);
+			this.currentText = game.add.text(this.player.x, this.player.y - 64, "I can sense great power nearby. It must be the Dimension Invention!", this.styleDoddy);
 			this.currentText.anchor.setTo(.5, 1);
 			this.textbox.height = this.currentText.height + 6;
 			this.textbox.width = this.currentText.width + 6;
