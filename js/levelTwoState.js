@@ -788,7 +788,7 @@ levelTwoState.prototype.stepAway = function() {
 levelTwoState.prototype.playCutscene = function() {
 	switch(this.cutsceneIndex) {
 		case -1: {
-			this.title.kill();
+			game.add.tween(this.title).to( { alpha: 0 }, 600, Phaser.Easing.Linear.None, true);
 			this.transition.animations.play("open");
 			this.cutsceneIndex += 1;
 			this.inCutscene = false
