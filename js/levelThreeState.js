@@ -16,6 +16,10 @@ let levelThreeState = function() {
 	this.selectedPlatform = false;
 	this.currentSelectedPlat;
 	
+	this.aWAY = false;
+	this.awayCount = 0;
+	this.awayStart = 0;
+	
 	this.rotationTimer = 0;
 	
 	this.checkX = 0;
@@ -327,6 +331,8 @@ levelThreeState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.XbyY || this.currentSelectedPlat.state == this.state3D.ZbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
+			else
+				this.stepAway();
 		}
 		if (game.input.x - this.pressX < (-100)) {
 			dir = 3;
@@ -336,6 +342,8 @@ levelThreeState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.XbyY || this.currentSelectedPlat.state == this.state3D.ZbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
+			else
+				this.stepAway();
 		}
 		if (game.input.y - this.pressY > 100) {
 			dir = 2;
@@ -345,6 +353,8 @@ levelThreeState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.ZbyX || this.currentSelectedPlat.state == this.state3D.YbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
+			else
+				this.stepAway();
 		}
 		if (game.input.y - this.pressY < (-100)) {
 			dir = 0;
@@ -354,6 +364,8 @@ levelThreeState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.ZbyX || this.currentSelectedPlat.state == this.state3D.YbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
+			else
+				this.stepAway();
 		}
 	}
 	
@@ -381,6 +393,19 @@ levelThreeState.prototype.update = function() {
 	}
 	
 	//end switching level code
+
+	
+	if(this.aWAY)
+	{
+		this.awayCount = (game.time.totalElapsedSeconds() - this.awayStart);
+		if(this.awayCount > 1)
+		{
+			this.aWAY = false;
+			this.awayCount = 0;
+			this.currentText.kill();
+			this.textbox.kill();
+		}
+	}
 
 }
 
@@ -763,6 +788,18 @@ levelThreeState.prototype.tapPlatform = function(tap, platform) {
 	this.currentSelectedPlat = platform;
 }
 
+levelOneState.prototype.stepAway = function() {
+	this.aWAY = true;
+	this.awayStart = game.time.totalElapsedSeconds();
+	this.textbox.kill();
+	this.textbox = game.add.sprite(this.player.x, this.player.y - 61, "textbox");
+	this.textbox.anchor.setTo(.5, 1);
+	this.currentText = game.add.text(this.player.x, this.player.y - 64, 'I should step away from the platform to rotate it.', this.styleDoddy);
+	this.currentText.anchor.setTo(.5, 1);
+	this.textbox.height = this.currentText.height + 6;
+	this.textbox.width = this.currentText.width + 6;
+}
+
 levelThreeState.prototype.pressButton = function(player, button) {
 	button.kill();
 	this.inCutscene = true;
@@ -778,7 +815,7 @@ levelThreeState.prototype.playCutscene = function() {
 		case 0: {
 			this.textbox = game.add.sprite(this.player.x, this.player.y - 61, "textbox");
 			this.textbox.anchor.setTo(.5, 1);
-			this.currentText = game.add.text(this.player.x, this.player.y - 64, "I can sense great power nearby. It must be the Dimension Invention!", this.styleDoddy);
+			this.currentText = game.add.text(this.player.x, this.player.y - 64, "I can sense great power nearby. It must be the Dimension Invention!", this.styleDoomsday);
 			this.currentText.anchor.setTo(.5, 1);
 			this.textbox.height = this.currentText.height + 6;
 			this.textbox.width = this.currentText.width + 6;
