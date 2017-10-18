@@ -10,6 +10,7 @@ preloadOneState.prototype.preload = function() {
 	game.load.spritesheet("flicker", "assets/Dust.png", 1334, 750);
 	game.load.image("textbox", "assets/Textbox.png");
 	game.load.image("tutorial", "assets/TutorialText.png");
+	game.load.image("title", "assets/FantasyIntro.png");
 	
 	// Load the background
 	game.load.image("fantasy_bg1", "Backgrounds/level1/Background_Fantasy_1.png");

@@ -7,6 +7,7 @@ preloadThreeState.prototype.preload = function() {
 	game.load.image("diminv", "assets/DimensionInvention.png");
 	game.load.spritesheet("doddy", "assets/Alien_Doddy.png", 96, 132);
 	game.load.spritesheet("doomsday", "assets/DrDoomsday.png", 96, 132);
+	game.load.image("title", "assets/AlienIntro.png");
 	
 	// Load the background
 	game.load.image("alien_bg1", "Backgrounds/level3/Background_Alien_1.png");
