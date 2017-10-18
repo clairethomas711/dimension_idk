@@ -8,6 +8,7 @@ preloadOneState.prototype.preload = function() {
 	game.load.spritesheet("doomsday", "assets/DrDoomsday.png", 96, 132);
 	game.load.spritesheet("transition", "assets/TransitionAnimation.png", 1334, 750);
 	game.load.image("textbox", "assets/Textbox.png");
+	game.load.image("tutorial", "assets/TutorialText.png");
 	
 	// Load the background
 	game.load.image("fantasy_bg1", "Backgrounds/level1/Background_Fantasy_1.png");
