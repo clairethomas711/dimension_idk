@@ -237,6 +237,7 @@ levelOneState.prototype.update = function() {
 	/////////////////////
 	
 	// First, some animation and polish stuff
+	// First, some animation and polish stuff
 	if (this.isJumping && (this.player.body.blocked.down || this.player.body.touching.down)) {
 		this.isJumping = false;
 		this.player.animations.play("walk");
@@ -244,10 +245,8 @@ levelOneState.prototype.update = function() {
 	}
 	if (this.isJumping && (this.player.body.blocked.right || this.player.body.blocked.left || this.player.body.touching.right || this.player.body.touching.left)) {
 		if (sideFacing) {
-			this.slowToZero = false;
 			this.player.body.velocity.x = 300;
 		} else {
-			this.slowToZero = false;
 			this.player.body.velocity.x = -300;
 		}
 	}
@@ -266,22 +265,6 @@ levelOneState.prototype.update = function() {
 		this.player.animations.stop();
 		this.player.frame = 7;
 		this.isWalking = false;
-	}
-	
-	if(this.slowToZero) //add a slowing animation, probably just walking animation but slower
-	{
-		this.player.body.velocity.x = 0;
-	}
-	else
-	{
-		if (this.directionWalking)
-		{
-			this.player.body.velocity.x = 300;
-		}
-		else
-		{
-			this.player.body.velocity.x = -300;
-		}
 	}
 	
 	// Ok this looks weird but basically i need to wait 1 frame before checking if we tapped something,
@@ -303,16 +286,14 @@ levelOneState.prototype.update = function() {
 		if (game.input.x - this.pressX > 100) {
 			this.player.scale.x = 1;
 			this.player.animations.play("walk");
-			this.slowToZero = false;
-			this.directionWalking = true; //true for right
+			this.player.body.velocity.x = 300;
 			sideFacing = true;
 			this.selectedPlayer = false;
 			this.isWalking = true;
 		} else if (game.input.x - this.pressX < (-100)) {
 			this.player.scale.x = -1;
 			this.player.animations.play("walk");
-			this.slowToZero = false;
-			this.directionWalking = false; //false for left
+			this.player.body.velocity.x = -300;
 			sideFacing = false;
 			this.selectedPlayer = false;
 			this.isWalking = true;
@@ -320,10 +301,8 @@ levelOneState.prototype.update = function() {
 			this.player.animations.stop();
 			this.player.frame = 6;
 			if (sideFacing) {
-				this.slowToZero = false;
 				this.player.body.velocity.x = 300;
 			} else {
-				this.slowToZero = false;
 				this.player.body.velocity.x = -300;
 			}
 			this.player.body.velocity.y = -600;
@@ -339,8 +318,8 @@ levelOneState.prototype.update = function() {
 		this.rotatePreventerX.position.y = this.player.position.y - (128 - 64);
 		this.rotatePreventerY.position.x = this.player.position.x - (128 - 96);
 		this.rotatePreventerY.position.y = this.player.position.y - 128;
-		this.rotatePreventerY.position.x = this.player.position.x - (128 - 96);
-		this.rotatePreventerY.position.y = this.player.position.y - 128;
+		this.rotatePreventerS.position.x = this.player.position.x - (128 - 96);
+		this.rotatePreventerS.position.y = this.player.position.y - 80;
 		if (game.input.x - this.pressX > 100) {
 			dir = 1;
 			this.rotating = true;

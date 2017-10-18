@@ -20,6 +20,12 @@ preloadTwoState.prototype.preload = function() {
 	this.load.image('level2tiles', 'assets/Tilemap/WeastTiles.png');
 	
 	game.load.audio("WeastMusic", "assets/sound/WeastMusic.ogg");
+	
+	game.load.image("rotatePreventionY", "assets/yRotationPrevention.png");
+	
+	game.load.image("rotatePreventionX", "assets/xRotationPrevention.png");
+	
+	game.load.image("rotatePreventionS", "assets/sRotationPrevention.png");
 }
 
 preloadTwoState.prototype.create = function() {

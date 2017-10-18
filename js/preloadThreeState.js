@@ -21,6 +21,12 @@ preloadThreeState.prototype.preload = function() {
 	this.load.image('level3tiles', 'assets/Tilemap/AlienTIles.png');
 	
 	game.load.audio("AlienMusic", "assets/sound/AlienMusic.ogg");
+	
+	game.load.image("rotatePreventionY", "assets/yRotationPrevention.png");
+	
+	game.load.image("rotatePreventionX", "assets/xRotationPrevention.png");
+	
+	game.load.image("rotatePreventionS", "assets/sRotationPrevention.png");
 }
 
 preloadThreeState.prototype.create = function() {
