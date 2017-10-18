@@ -331,7 +331,7 @@ levelThreeState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.XbyY || this.currentSelectedPlat.state == this.state3D.ZbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
-			else
+			else if(!this.aWAY)
 				this.stepAway();
 		}
 		if (game.input.x - this.pressX < (-100)) {
@@ -342,7 +342,7 @@ levelThreeState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.XbyY || this.currentSelectedPlat.state == this.state3D.ZbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
-			else
+			else if(!this.aWAY)
 				this.stepAway();
 		}
 		if (game.input.y - this.pressY > 100) {
@@ -353,7 +353,7 @@ levelThreeState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.ZbyX || this.currentSelectedPlat.state == this.state3D.YbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
-			else
+			else if(!this.aWAY)
 				this.stepAway();
 		}
 		if (game.input.y - this.pressY < (-100)) {
@@ -364,7 +364,7 @@ levelThreeState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.ZbyX || this.currentSelectedPlat.state == this.state3D.YbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
-			else
+			else if(!this.aWAY)
 				this.stepAway();
 		}
 	}
@@ -791,7 +791,8 @@ levelThreeState.prototype.tapPlatform = function(tap, platform) {
 levelOneState.prototype.stepAway = function() {
 	this.aWAY = true;
 	this.awayStart = game.time.totalElapsedSeconds();
-	this.textbox.kill();
+	if(this.cutsceneIndex > 0)
+		this.textbox.kill();
 	this.textbox = game.add.sprite(this.player.x, this.player.y - 61, "textbox");
 	this.textbox.anchor.setTo(.5, 1);
 	this.currentText = game.add.text(this.player.x, this.player.y - 64, 'I should step away from the platform to rotate it.', this.styleDoddy);

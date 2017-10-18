@@ -333,7 +333,7 @@ levelOneState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.XbyY || this.currentSelectedPlat.state == this.state3D.ZbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
-			else
+			else if(!this.aWAY)
 				this.stepAway();
 		}
 		if (game.input.x - this.pressX < (-100)) {
@@ -344,7 +344,7 @@ levelOneState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.XbyY || this.currentSelectedPlat.state == this.state3D.ZbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
-			else
+			else if(!this.aWAY)
 				this.stepAway();
 		}
 		if (game.input.y - this.pressY > 100) {
@@ -355,7 +355,7 @@ levelOneState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.ZbyX || this.currentSelectedPlat.state == this.state3D.YbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
-			else
+			else if(!this.aWAY)
 				this.stepAway();
 		}
 		if (game.input.y - this.pressY < (-100)) {
@@ -366,7 +366,7 @@ levelOneState.prototype.update = function() {
 				|| (this.currentSelectedPlat.state == this.state3D.XbyZ || this.currentSelectedPlat.state == this.state3D.ZbyX || this.currentSelectedPlat.state == this.state3D.YbyX))
 				&& !game.physics.arcade.overlap(this.rotatePreventerS, this.currentSelectedPlat))
 				this.rotatePlatform(this.currentSelectedPlat, dir);
-			else
+			else if(!this.aWAY)
 				this.stepAway();
 		}
 	}
