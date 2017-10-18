@@ -788,7 +788,7 @@ levelThreeState.prototype.tapPlatform = function(tap, platform) {
 	this.currentSelectedPlat = platform;
 }
 
-levelOneState.prototype.stepAway = function() {
+levelThreeState.prototype.stepAway = function() {
 	this.aWAY = true;
 	this.awayStart = game.time.totalElapsedSeconds();
 	if(this.cutsceneIndex > 0)
