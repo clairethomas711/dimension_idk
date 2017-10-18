@@ -778,7 +778,7 @@ levelThreeState.prototype.playCutscene = function() {
 		case 0: {
 			this.textbox = game.add.sprite(this.player.x, this.player.y - 61, "textbox");
 			this.textbox.anchor.setTo(.5, 1);
-			this.currentText = game.add.text(this.player.x, this.player.y - 64, "I can sense great power nearby. It must be the Dimension Invention!", this.styleDoomsday);
+			this.currentText = game.add.text(this.player.x, this.player.y - 64, "I can sense great power nearby. It must be the Dimension Invention!", this.styleDoddy);
 			this.currentText.anchor.setTo(.5, 1);
 			this.textbox.height = this.currentText.height + 6;
 			this.textbox.width = this.currentText.width + 6;
