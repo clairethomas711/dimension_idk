@@ -221,6 +221,11 @@ levelThreeState.prototype.create = function() {
 	this.transition.animations.frame = 0;
 	this.title = game.add.sprite(0, 0, "title");
 	this.title.fixedToCamera = true;
+	
+	this.screen = game.add.sprite(0,0,"dust");
+	this.screen.animations.add("constant", [0,1,2,3,4,5], 10, true);
+	this.screen.animations.play("constant");
+	this.screen.fixedToCamera = true;
 }
 
 levelThreeState.prototype.update = function() {
@@ -815,6 +820,7 @@ levelThreeState.prototype.playCutscene = function() {
 	switch(this.cutsceneIndex) {
 		case -1: {
 			game.add.tween(this.title).to( { alpha: 0 }, 600, Phaser.Easing.Linear.None, true);
+			game.add.tween(this.screen).to( { alpha: 0 }, 600, Phaser.Easing.Linear.None, true);
 			this.transition.animations.play("open");
 			this.cutsceneIndex += 1;
 			this.inCutscene = false
