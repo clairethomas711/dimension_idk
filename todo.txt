@@ -1,0 +1,4 @@
+platform hitbox
+overarching code structure
+dialogue
+killing the player upon collision
