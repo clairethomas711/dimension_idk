@@ -7,6 +7,7 @@ preloadOneState.prototype.preload = function() {
 	game.load.spritesheet("doddy", "assets/Fantasy_Doddy.png", 96, 132);
 	game.load.spritesheet("doomsday", "assets/DrDoomsday.png", 96, 132);
 	game.load.spritesheet("transition", "assets/TransitionAnimation.png", 1334, 750);
+	game.load.spritesheet("flicker", "assets/Dust.png", 1334, 750);
 	game.load.image("textbox", "assets/Textbox.png");
 	game.load.image("tutorial", "assets/TutorialText.png");
 	
@@ -16,6 +17,7 @@ preloadOneState.prototype.preload = function() {
 	game.load.image("fantasy_bg3", "Backgrounds/level1/Background_Fantasy_3.png");
 	game.load.image("fantasy_bg4", "Backgrounds/level1/Background_Fantasy_4.png");
 	game.load.image("fantasy_bg5", "Backgrounds/level1/Background_Fantasy_5.png");
+	game.load.image("Title", "assets/FantasyIntro.png");
 	
 	// Load the levels and tilesets
 	game.load.tilemap('level1', 'assets/Tilemap/level1.json', null, Phaser.Tilemap.TILED_JSON);
