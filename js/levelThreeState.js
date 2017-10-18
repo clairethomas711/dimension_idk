@@ -791,8 +791,6 @@ levelThreeState.prototype.tapPlatform = function(tap, platform) {
 levelThreeState.prototype.stepAway = function() {
 	this.aWAY = true;
 	this.awayStart = game.time.totalElapsedSeconds();
-	if(this.cutsceneIndex > 0)
-		this.textboxAWAY.kill();
 	this.textboxAWAY = game.add.sprite(this.player.x, this.player.y - 61, "textbox");
 	this.textboxAWAY.anchor.setTo(.5, 1);
 	this.currentText = game.add.text(this.player.x, this.player.y - 64, 'I should step away from the platform to rotate it.', this.styleDoddy);
